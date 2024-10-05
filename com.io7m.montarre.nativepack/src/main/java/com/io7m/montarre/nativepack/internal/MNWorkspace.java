@@ -476,7 +476,11 @@ public final class MNWorkspace implements MNativeWorkspaceType
     final int mode)
     throws IOException
   {
-    Files.setPosixFilePermissions(outFile, modeToPermissions(mode));
+    try {
+      Files.setPosixFilePermissions(outFile, modeToPermissions(mode));
+    } catch (final UnsupportedOperationException e) {
+      // Nothing we can do about this. Non-POSIX filesystem.
+    }
   }
 
   private static Set<PosixFilePermission> modeToPermissions(
