@@ -67,6 +67,8 @@ public final class MNativeProcesses
     throws MException, InterruptedException
   {
     try {
+      LOG.debug("Execute {}", commandLine);
+
       final var processBuilder = new ProcessBuilder();
       processBuilder.environment().clear();
       processBuilder.environment().putAll(environment);

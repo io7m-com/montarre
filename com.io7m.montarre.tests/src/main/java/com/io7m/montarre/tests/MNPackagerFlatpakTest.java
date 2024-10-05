@@ -20,6 +20,11 @@ package com.io7m.montarre.tests;
 import com.io7m.jmulticlose.core.CloseableCollection;
 import com.io7m.jmulticlose.core.CloseableCollectionType;
 import com.io7m.jmulticlose.core.ClosingResourceFailedException;
+import com.io7m.montarre.api.MFlatpakRuntime;
+import com.io7m.montarre.api.MFlatpakRuntimeRole;
+import com.io7m.montarre.api.MMetadata;
+import com.io7m.montarre.api.MMetadataFlatpak;
+import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.http.MHTTPClientFactoryType;
 import com.io7m.montarre.api.io.MPackageReaderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceType;
@@ -28,8 +33,10 @@ import com.io7m.montarre.api.natives.MNativeWorkspaceType;
 import com.io7m.montarre.io.MPackageReaders;
 import com.io7m.montarre.nativepack.MNWorkspaces;
 import com.io7m.montarre.nativepack.MNativeProcesses;
-import com.io7m.montarre.nativepack.internal.MNPackagerMSIProvider;
+import com.io7m.montarre.nativepack.internal.MNPackagerDebProvider;
+import com.io7m.montarre.nativepack.internal.MNPackagerFlatpakProvider;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,18 +48,20 @@ import java.io.IOException;
 import java.net.http.HttpClient;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public final class MNPackagerMSITest
+public final class MNPackagerFlatpakTest
 {
   private static final Logger LOG =
-    LoggerFactory.getLogger(MNPackagerMSITest.class);
+    LoggerFactory.getLogger(MNPackagerFlatpakTest.class);
 
   private Path inputMpk;
-  private MNPackagerMSIProvider packagers;
+  private MNPackagerFlatpakProvider packagers;
   private MNativeProcesses processes;
   private MNativePackagerServiceType packager;
   private MNWorkspaces workspaces;
@@ -92,7 +101,7 @@ public final class MNPackagerMSITest
     this.processes =
       new MNativeProcesses();
     this.packagers =
-      new MNPackagerMSIProvider();
+      new MNPackagerFlatpakProvider();
     this.packager =
       this.packagers.create(this.processes);
 
@@ -150,35 +159,87 @@ public final class MNPackagerMSITest
 
     final var name = path.getFileName().toString();
     assertTrue(
-      name.contains(this.workspace.architecture().name()),
+      name.contains("com.io7m.montarre"),
       "%s must contain %s".formatted(
-        name, this.workspace.architecture().name()
+        name, "com.io7m.montarre"
       )
     );
     assertTrue(
-      name.contains(this.workspace.operatingSystem().name()),
-      "%s must contain %s".formatted(
-        name, this.workspace.operatingSystem().name()
-      )
-    );
-    assertTrue(
-      name.contains("0.0.1-SNAPSHOT"),
-      "%s must contain %s".formatted(
-        name, "0.0.1-SNAPSHOT"
-      )
-    );
-    assertTrue(
-      name.contains("montarre"),
-      "%s must contain %s".formatted(
-        name, "montarre"
-      )
-    );
-    assertTrue(
-      name.endsWith(".msi"),
-      "%s must end with .msi".formatted(
+      name.endsWith(".flatpak"),
+      "%s must end with .flatpak".formatted(
         name
       )
     );
+  }
+
+  @Test
+  public void testExecuteMissingSDK()
+    throws Exception
+  {
+    Assumptions.assumeTrue(
+      this.packager.unsupportedReason(Optional.empty()).isEmpty(),
+      "Packager is supported on this platform."
+    );
+
+    final var packageDeclaration =
+      this.reader.packageDeclaration();
+
+    final var e =
+      this.packager.unsupportedReason(Optional.of(
+        packageDeclaration
+          .withMetadata(
+            MMetadata.builder()
+              .from(packageDeclaration.metadata())
+              .setFlatpak(
+                MMetadataFlatpak.builder()
+                  .setRuntimes(List.of())
+                  .build()
+              )
+              .build()
+          )
+      ))
+        .orElseThrow();
+
+    assertEquals("error-flatpak-runtimes", e.errorCode());
+    assertTrue(e.message().contains("The flatpak metadata is missing an SDK and/or platform."));
+  }
+
+  @Test
+  public void testExecuteMissingPlatform()
+    throws Exception
+  {
+    Assumptions.assumeTrue(
+      this.packager.unsupportedReason(Optional.empty()).isEmpty(),
+      "Packager is supported on this platform."
+    );
+
+    final var packageDeclaration =
+      this.reader.packageDeclaration();
+
+    final var e =
+      this.packager.unsupportedReason(Optional.of(
+          packageDeclaration
+            .withMetadata(
+              MMetadata.builder()
+                .from(packageDeclaration.metadata())
+                .setFlatpak(
+                  MMetadataFlatpak.builder()
+                    .setRuntimes(List.of(
+                      new MFlatpakRuntime(
+                        "x",
+                        "1.0.0",
+                        MFlatpakRuntimeRole.SDK
+                      )
+                    ))
+                    .build()
+                )
+                .build()
+            )
+        ))
+        .orElseThrow();
+
+    assertEquals("error-flatpak-runtimes", e.errorCode());
+    assertTrue(e.message().contains("The flatpak metadata is missing an SDK and/or platform."));
   }
 
   private void resource(
@@ -189,7 +250,7 @@ public final class MNPackagerMSITest
     final var file =
       "/com/io7m/montarre/tests/" + resourceName;
 
-    try (var stream = MNPackagerMSITest.class.getResourceAsStream(file)) {
+    try (var stream = MNPackagerFlatpakTest.class.getResourceAsStream(file)) {
       Files.write(output, stream.readAllBytes());
     }
   }

@@ -54,6 +54,7 @@
             </goals>
             <phase>package</phase>
             <configuration>
+              <packageName>com.io7m.montarre</packageName>
               <requiredJDKVersion>21</requiredJDKVersion>
               <shortName>montarre</shortName>
               <mainModule>com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain</mainModule>

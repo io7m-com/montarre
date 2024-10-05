@@ -5,117 +5,337 @@
             xmlns:mp="urn:com.io7m.montarre.package:1">
 
   <xsd:simpleType name="VersionType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        An arbitrary version number.
+      </xsd:documentation>
+    </xsd:annotation>
     <xsd:restriction base="xsd:string"/>
   </xsd:simpleType>
 
   <xsd:simpleType name="PackageNameType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A package name; A Lanark dotted name.
+      </xsd:documentation>
+    </xsd:annotation>
     <xsd:restriction base="xsd:string">
       <xsd:pattern value="([a-z][a-z0-9_-]{0,63})(\.[a-z][a-z0-9_-]{0,62}){0,15}"/>
     </xsd:restriction>
   </xsd:simpleType>
 
   <xsd:simpleType name="ShortNameType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A short package name. Used for systems such as Debian packages.
+      </xsd:documentation>
+    </xsd:annotation>
     <xsd:restriction base="xsd:string">
       <xsd:pattern value="[a-z][a-z0-9_-]{0,128}"/>
     </xsd:restriction>
   </xsd:simpleType>
 
   <xsd:simpleType name="HashAlgorithmNameType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A hash algorithm name. See " Java Security Standard Algorithm Names".
+      </xsd:documentation>
+    </xsd:annotation>
     <xsd:restriction base="xsd:string">
       <xsd:pattern value="[A-Z][A-Z0-9_-]{0,128}"/>
     </xsd:restriction>
   </xsd:simpleType>
 
   <xsd:simpleType name="HashValueType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A hex-encoded hash value.
+      </xsd:documentation>
+    </xsd:annotation>
     <xsd:restriction base="xsd:string">
       <xsd:pattern value="[a-f0-9]{2,256}"/>
     </xsd:restriction>
   </xsd:simpleType>
 
   <xsd:simpleType name="OSNameType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        An operating system name.
+      </xsd:documentation>
+    </xsd:annotation>
     <xsd:restriction base="xsd:string">
       <xsd:pattern value="[a-z][a-z0-9_-]{0,32}"/>
     </xsd:restriction>
   </xsd:simpleType>
 
   <xsd:simpleType name="ArchitectureNameType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A hardware architecture name.
+      </xsd:documentation>
+    </xsd:annotation>
     <xsd:restriction base="xsd:string">
       <xsd:pattern value="[a-z][a-z0-9_-]{0,32}"/>
     </xsd:restriction>
   </xsd:simpleType>
 
   <xsd:simpleType name="VendorNameType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A vendor name. Must be a filesystem-safe name as these names can be used as directories in Windows installers.
+      </xsd:documentation>
+    </xsd:annotation>
     <xsd:restriction base="xsd:string">
       <xsd:pattern value="[a-zA-Z][A-Za-z0-9_-]{0,128}"/>
     </xsd:restriction>
   </xsd:simpleType>
 
+  <xsd:simpleType name="FlatpakRuntimeRole">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="PLATFORM"/>
+      <xsd:enumeration value="SDK"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:element name="FlatpakRuntime">
+    <xsd:complexType>
+      <xsd:attribute name="Name"
+                     use="required"
+                     type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            A flatpak runtime such as "org.freedesktop.Platform".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="Version"
+                     use="required"
+                     type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            A flatpak runtime version such as "24.08".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="Role"
+                     use="required"
+                     type="mp:FlatpakRuntimeRole">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            A runtime role such as "PLATFORM" or "SDK".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="Flatpak">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        Metadata specific to Flatpak packages.
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:complexType>
+      <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+        <xsd:element ref="mp:FlatpakRuntime"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
   <xsd:element name="Metadata">
     <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="mp:Flatpak"
+                     minOccurs="0"
+                     maxOccurs="1"/>
+      </xsd:sequence>
+
       <xsd:attribute name="Version"
                      type="mp:VersionType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The package version.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="Name"
                      type="mp:PackageNameType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The package name.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="RequiredJDKVersion"
                      type="xsd:unsignedLong"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The required JDK version.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="Description"
                      type="xsd:string"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            A humanly-readable package description.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="Copyright"
                      type="xsd:string"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            A copyright string such as "Copyright © 2024 Mark Raynsford &lt;code@io7m.com> https://www.io7m.com".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="License"
                      type="xsd:string"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            An SPDX license identifier such as "ISC".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="SiteURL"
                      type="xsd:anyURI"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            A link to the software package site. This should be a human-readable website or a git repository frontend.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="MainModule"
                      type="xsd:string"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The main application module. This should be in a fully-qualified module form such as
+            "com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="ShortName"
                      type="mp:ShortNameType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The package short name.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="VendorName"
                      type="mp:VendorNameType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The vendor name.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
     </xsd:complexType>
   </xsd:element>
 
   <xsd:element name="PlatformDependentModule">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A module that is only used when running on a specific platform.
+      </xsd:documentation>
+    </xsd:annotation>
+
     <xsd:complexType>
       <xsd:attribute name="File"
                      type="xsd:string"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The file name within the package.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="HashAlgorithm"
                      type="mp:HashAlgorithmNameType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The file hash algorithm name.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="HashValue"
                      type="mp:HashValueType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The file hash value.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="OperatingSystem"
                      type="mp:OSNameType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The operating system on which this module is used.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="Architecture"
                      type="mp:ArchitectureNameType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The hardware architecture on which this module is used.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
     </xsd:complexType>
   </xsd:element>
 
   <xsd:element name="Module">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A module that is used on all platforms.
+      </xsd:documentation>
+    </xsd:annotation>
+
     <xsd:complexType>
       <xsd:attribute name="File"
                      type="xsd:string"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The file name within the package.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="HashAlgorithm"
                      type="mp:HashAlgorithmNameType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The file hash algorithm name.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="HashValue"
                      type="mp:HashValueType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The file hash value.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
     </xsd:complexType>
   </xsd:element>
 
@@ -134,19 +354,49 @@
   </xsd:simpleType>
 
   <xsd:element name="Resource">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A metadata resource.
+      </xsd:documentation>
+    </xsd:annotation>
+
     <xsd:complexType>
       <xsd:attribute name="File"
                      type="xsd:string"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The file name within the package.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="HashAlgorithm"
                      type="mp:HashAlgorithmNameType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The file hash algorithm name.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="HashValue"
                      type="mp:HashValueType"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The file hash value.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="Role"
                      type="mp:ResourceRole"
-                     use="required"/>
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The role of the resource.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
     </xsd:complexType>
   </xsd:element>
 

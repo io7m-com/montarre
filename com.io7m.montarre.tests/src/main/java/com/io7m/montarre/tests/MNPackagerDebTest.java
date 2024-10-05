@@ -30,7 +30,6 @@ import com.io7m.montarre.nativepack.MNWorkspaces;
 import com.io7m.montarre.nativepack.MNativeProcesses;
 import com.io7m.montarre.nativepack.internal.MNPackagerDebProvider;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +41,7 @@ import java.io.IOException;
 import java.net.http.HttpClient;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -136,7 +136,7 @@ public final class MNPackagerDebTest
     throws Exception
   {
     Assumptions.assumeTrue(
-      this.packager.unsupportedReason().isEmpty(),
+      this.packager.unsupportedReason(Optional.empty()).isEmpty(),
       "Packager is supported on this platform."
     );
 

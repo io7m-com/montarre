@@ -19,22 +19,18 @@ package com.io7m.montarre.xml.internal.v1;
 
 import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
-import com.io7m.montarre.api.MFileName;
-import com.io7m.montarre.api.MHash;
-import com.io7m.montarre.api.MHashAlgorithm;
-import com.io7m.montarre.api.MHashValue;
-import com.io7m.montarre.api.MResource;
-import com.io7m.montarre.api.MResourceRole;
+import com.io7m.montarre.api.MFlatpakRuntime;
+import com.io7m.montarre.api.MFlatpakRuntimeRole;
 import org.xml.sax.Attributes;
 
 /**
  * A parser.
  */
 
-public final class Mx1Resource
-  implements BTElementHandlerType<Object, MResource>
+public final class Mx1FlatpakRuntime
+  implements BTElementHandlerType<Object, MFlatpakRuntime>
 {
-  private MResource data;
+  private MFlatpakRuntime runtime;
 
   /**
    * A parser.
@@ -42,7 +38,7 @@ public final class Mx1Resource
    * @param context The context
    */
 
-  public Mx1Resource(
+  public Mx1FlatpakRuntime(
     final BTElementParsingContextType context)
   {
 
@@ -53,26 +49,17 @@ public final class Mx1Resource
     final BTElementParsingContextType context,
     final Attributes attributes)
   {
-    this.data = new MResource(
-      new MFileName(attributes.getValue("File")),
-      new MHash(
-        new MHashAlgorithm(
-          attributes.getValue("HashAlgorithm")
-        ),
-        new MHashValue(
-          attributes.getValue("HashValue")
-        )
-      ),
-      MResourceRole.valueOf(
-        attributes.getValue("Role")
-      )
+    this.runtime = new MFlatpakRuntime(
+      attributes.getValue("Name"),
+      attributes.getValue("Version"),
+      MFlatpakRuntimeRole.valueOf(attributes.getValue("Role"))
     );
   }
 
   @Override
-  public MResource onElementFinished(
+  public MFlatpakRuntime onElementFinished(
     final BTElementParsingContextType context)
   {
-    return this.data;
+    return this.runtime;
   }
 }

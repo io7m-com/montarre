@@ -19,10 +19,10 @@ package com.io7m.montarre.nativepack.internal;
 
 import com.io7m.jmulticlose.core.CloseableCollection;
 import com.io7m.jmulticlose.core.ClosingResourceFailedException;
-import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MMetadataType;
 import com.io7m.montarre.api.MOperatingSystemName;
+import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.MShortName;
 import com.io7m.montarre.api.io.MPackageReaderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
@@ -67,8 +67,6 @@ public final class MNPackagerAppImage
     Instant.parse("2010-01-01T00:00:00+00:00");
   private static final FileTime SOURCE_EPOCH_FILETIME =
     FileTime.from(SOURCE_EPOCH);
-  private static final RDottedName NAME =
-    new RDottedName("com.io7m.montarre.app_image");
 
   private static final OpenOption[] OPEN_OPTIONS = {
     StandardOpenOption.WRITE,
@@ -144,7 +142,8 @@ public final class MNPackagerAppImage
   }
 
   @Override
-  public Optional<SStructuredErrorType<String>> unsupportedReason()
+  public Optional<SStructuredErrorType<String>> unsupportedReason(
+    final Optional<MPackageDeclaration> packageV)
   {
     final var toolOpt =
       ToolProvider.findFirst("jpackage");
@@ -312,7 +311,7 @@ public final class MNPackagerAppImage
   {
     for (var file : fileList) {
       if (Files.isRegularFile(file)) {
-        LOG.info("[tar] {}", file);
+        LOG.debug("[tar] {}", file);
 
         final var entry =
           tarOut.createArchiveEntry(
@@ -372,7 +371,7 @@ public final class MNPackagerAppImage
   {
     for (var file : fileList) {
       if (Files.isRegularFile(file)) {
-        LOG.info("[zip] {}", file);
+        LOG.debug("[zip] {}", file);
 
         final var entry =
           new ZipEntry(prefix + "/" + this.appImageRoot.relativize(file));

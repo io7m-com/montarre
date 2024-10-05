@@ -20,6 +20,8 @@ package com.io7m.montarre.cmdline.internal;
 import com.io7m.montarre.api.MArchiveFormat;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.http.MHTTPClients;
+import com.io7m.montarre.api.natives.MNativePackagerDirectoryType;
+import com.io7m.montarre.api.natives.MNativePackagerServiceType;
 import com.io7m.montarre.api.natives.MNativeWorkspaceConfiguration;
 import com.io7m.montarre.io.MPackageReaders;
 import com.io7m.montarre.nativepack.MNPackagers;
@@ -28,6 +30,7 @@ import com.io7m.quarrel.core.QCommandContextType;
 import com.io7m.quarrel.core.QCommandMetadata;
 import com.io7m.quarrel.core.QCommandStatus;
 import com.io7m.quarrel.core.QCommandType;
+import com.io7m.quarrel.core.QParameterNamed0N;
 import com.io7m.quarrel.core.QParameterNamed1;
 import com.io7m.quarrel.core.QParameterNamedType;
 import com.io7m.quarrel.core.QStringType;
@@ -42,8 +45,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.Duration;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -56,6 +61,15 @@ public final class MCNativeCreate implements QCommandType
     LoggerFactory.getLogger(MCNativeCreate.class);
 
   private final QCommandMetadata metadata;
+
+  private static final QParameterNamed0N<String> INCLUDE_PACKAGERS =
+    new QParameterNamed0N<>(
+      "--include-packagers",
+      List.of(),
+      new QStringType.QConstant("Only run the named packagers."),
+      List.of(),
+      String.class
+    );
 
   private static final QParameterNamed1<Path> INPUT_PACKAGE =
     new QParameterNamed1<>(
@@ -129,12 +143,13 @@ public final class MCNativeCreate implements QCommandType
   {
     return Stream.concat(
       Stream.of(
+        INCLUDE_PACKAGERS,
         INPUT_PACKAGE,
-        WORK_DIRECTORY,
-        JAVA_DOWNLOAD_URI,
-        JAVA_DOWNLOAD_SHA256,
         JAVA_DOWNLOAD_FORMAT,
-        OUTPUT_DIRECTORY
+        JAVA_DOWNLOAD_SHA256,
+        JAVA_DOWNLOAD_URI,
+        OUTPUT_DIRECTORY,
+        WORK_DIRECTORY
       ),
       QLogback.parameters().stream()
     ).toList();
@@ -178,7 +193,10 @@ public final class MCNativeCreate implements QCommandType
       Files.createDirectories(outputDirectory);
 
       LOG.info("Creating workspace {}.", workspaceConfig.baseDirectory());
-      try (var workspace = workspaces.open(workspaceConfig, httpClients, packageReader)) {
+      try (var workspace = workspaces.open(
+        workspaceConfig,
+        httpClients,
+        packageReader)) {
         LOG.info("Workspace architecture: {}", workspace.architecture());
         LOG.info("Workspace OS: {}", workspace.operatingSystem());
 
@@ -188,14 +206,20 @@ public final class MCNativeCreate implements QCommandType
         workspace.javaRuntime()
           .get();
 
-        final var packagerList = packagers.packagers().values();
+        final var packagerList =
+          this.getPackagers(newContext, packagers);
         LOG.info("Executing {} packagers.", packagerList.size());
 
+        final var packageDecl = packageReader.packageDeclaration();
         for (var packager : packagerList) {
-          final var unsupportedOpt = packager.unsupportedReason();
+          final var unsupportedOpt =
+            packager.unsupportedReason(Optional.of(packageDecl));
           if (unsupportedOpt.isPresent()) {
             final var unsupported = unsupportedOpt.get();
-            LOG.info("Unsupported: {} {}", packager.name(), unsupported.message());
+            LOG.info(
+              "Unsupported: {} {}",
+              packager.name(),
+              unsupported.message());
             continue;
           }
 
@@ -224,6 +248,24 @@ public final class MCNativeCreate implements QCommandType
     }
 
     return QCommandStatus.SUCCESS;
+  }
+
+  private Collection<MNativePackagerServiceType> getPackagers(
+    final QCommandContextType context,
+    final MNativePackagerDirectoryType packagers)
+  {
+    final var includes =
+      Set.copyOf(context.parameterValues(INCLUDE_PACKAGERS));
+    final var unfiltered =
+      packagers.packagers().values();
+
+    if (includes.isEmpty()) {
+      return unfiltered;
+    }
+
+    return unfiltered.stream()
+      .filter(p -> includes.contains(p.name().value()))
+      .toList();
   }
 
   private void onJavaDownloadProgress(

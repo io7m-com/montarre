@@ -96,6 +96,17 @@ public non-sealed interface MMetadataType
   MVendorName vendorName();
 
   /**
+   * @return The flatpak-specific metadata
+   */
+
+  @Value.Default
+  default MMetadataFlatpakType flatpak()
+  {
+    return MMetadataFlatpak.builder()
+      .build();
+  }
+
+  /**
    * @return A name-based UUID from the package name
    */
 

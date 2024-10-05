@@ -17,6 +17,7 @@
 import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
 import com.io7m.montarre.nativepack.internal.MNPackagerAppImageProvider;
 import com.io7m.montarre.nativepack.internal.MNPackagerDebProvider;
+import com.io7m.montarre.nativepack.internal.MNPackagerFlatpakProvider;
 import com.io7m.montarre.nativepack.internal.MNPackagerMSIProvider;
 
 /**
@@ -30,6 +31,7 @@ module com.io7m.montarre.nativepack
 
   requires com.io7m.montarre.api;
 
+  requires com.io7m.jaffirm.core;
   requires com.io7m.jdownload.core;
   requires com.io7m.jmulticlose.core;
   requires com.io7m.lanark.core;
@@ -37,14 +39,16 @@ module com.io7m.montarre.nativepack
   requires com.io7m.streamtime.core;
   requires com.io7m.verona.core;
   requires java.net.http;
+  requires java.xml;
   requires org.apache.commons.compress;
   requires org.slf4j;
-  requires java.xml;
+  requires org.apache.commons.io;
 
   provides MNativePackagerServiceProviderType
     with MNPackagerAppImageProvider,
       MNPackagerDebProvider,
-      MNPackagerMSIProvider;
+      MNPackagerMSIProvider,
+      MNPackagerFlatpakProvider;
 
   uses MNativePackagerServiceProviderType;
 

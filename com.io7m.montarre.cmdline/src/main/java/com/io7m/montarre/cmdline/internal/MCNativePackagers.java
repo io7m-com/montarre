@@ -86,7 +86,7 @@ public final class MCNativePackagers implements QCommandType
       out.println("Description: " + packager.describe());
 
       final var unsupported =
-        packager.unsupportedReason();
+        packager.unsupportedReason(Optional.empty());
 
       if (unsupported.isPresent()) {
         final var reason = unsupported.get();

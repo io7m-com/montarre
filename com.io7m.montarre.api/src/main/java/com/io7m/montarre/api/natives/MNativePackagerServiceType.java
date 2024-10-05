@@ -19,6 +19,7 @@ package com.io7m.montarre.api.natives;
 
 import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.MException;
+import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.io.MPackageReaderType;
 import com.io7m.seltzer.api.SStructuredErrorType;
 
@@ -50,12 +51,14 @@ public interface MNativePackagerServiceType
    * MSI installers is limited to Windows platforms due to the requirement
    * to run the Windows-only WiX toolkit.
    *
+   * @param packageV The package declaration
    * @return The reason that this service is unsupported
    *
    * @throws InterruptedException On interruption
    */
 
-  Optional<SStructuredErrorType<String>> unsupportedReason()
+  Optional<SStructuredErrorType<String>> unsupportedReason(
+    Optional<MPackageDeclaration> packageV)
     throws InterruptedException;
 
   /**

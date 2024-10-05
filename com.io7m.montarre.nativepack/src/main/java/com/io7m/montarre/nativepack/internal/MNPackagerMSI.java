@@ -19,6 +19,7 @@ package com.io7m.montarre.nativepack.internal;
 
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MMetadataType;
+import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.io.MPackageReaderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceType;
@@ -65,9 +66,20 @@ public final class MNPackagerMSI
   }
 
   @Override
-  public Optional<SStructuredErrorType<String>> unsupportedReason()
+  public Optional<SStructuredErrorType<String>> unsupportedReason(
+    final Optional<MPackageDeclaration> packageV)
     throws InterruptedException
   {
+    final var appImages =
+      new MNPackagerAppImageProvider();
+    final var appImage =
+      new MNPackagerAppImage(appImages);
+
+    final var appImageReason = appImage.unsupportedReason(packageV);
+    if (appImageReason.isPresent()) {
+      return appImageReason;
+    }
+
     try {
       final var r = this.processes.executeAndWait(
         System.getenv(),

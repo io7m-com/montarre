@@ -17,10 +17,13 @@
 
 package com.io7m.montarre.xml.internal.v1;
 
+import com.io7m.blackthorne.core.BTElementHandlerConstructorType;
 import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
+import com.io7m.blackthorne.core.BTQualifiedName;
 import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.MMetadata;
+import com.io7m.montarre.api.MMetadataFlatpakType;
 import com.io7m.montarre.api.MPackageName;
 import com.io7m.montarre.api.MShortName;
 import com.io7m.montarre.api.MVendorName;
@@ -29,6 +32,9 @@ import com.io7m.verona.core.VersionParser;
 import org.xml.sax.Attributes;
 
 import java.net.URI;
+import java.util.Map;
+
+import static com.io7m.montarre.xml.internal.v1.Mx1.element;
 
 /**
  * A parser.
@@ -49,6 +55,34 @@ public final class Mx1Metadata
     final BTElementParsingContextType context)
   {
     this.builder = MMetadata.builder();
+  }
+
+  @Override
+  public Map<BTQualifiedName, BTElementHandlerConstructorType<?, ?>>
+  onChildHandlersRequested(
+    final BTElementParsingContextType context)
+  {
+    return Map.ofEntries(
+      Map.entry(
+        element("Flatpak"),
+        Mx1Flatpak::new
+      )
+    );
+  }
+
+  @Override
+  public void onChildValueProduced(
+    final BTElementParsingContextType context,
+    final Object result)
+  {
+    switch (result) {
+      case MMetadataFlatpakType flatpak -> {
+        this.builder.setFlatpak(flatpak);
+      }
+      default -> {
+        throw new IllegalStateException("Unexpected value: " + result);
+      }
+    }
   }
 
   @Override

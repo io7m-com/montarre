@@ -18,14 +18,16 @@
 package com.io7m.montarre.xml.internal;
 
 import com.io7m.anethum.api.SerializationException;
-import com.io7m.montarre.api.MResource;
+import com.io7m.montarre.api.MFlatpakRuntime;
 import com.io7m.montarre.api.MManifestItemType;
 import com.io7m.montarre.api.MManifestType;
+import com.io7m.montarre.api.MMetadataFlatpakType;
 import com.io7m.montarre.api.MMetadataType;
 import com.io7m.montarre.api.MModule;
 import com.io7m.montarre.api.MPackageDeclaration;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
 import com.io7m.montarre.api.MPlatformDependentModule;
+import com.io7m.montarre.api.MResource;
+import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
 import com.io7m.montarre.schema.MSchemas;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -250,12 +252,34 @@ public final class MPackageDeclarationSerializer implements
       "VendorName",
       metadata.vendorName().name()
     );
+    this.writeFlatpak(metadata.flatpak());
+    this.output.writeEndElement();
+  }
+
+  private void writeFlatpak(
+    final MMetadataFlatpakType flatpak)
+    throws XMLStreamException
+  {
+    this.output.writeStartElement(NS, "Flatpak");
+    for (var runtime : flatpak.runtimes()) {
+      this.writeFlatpakRuntime(runtime);
+    }
+    this.output.writeEndElement();
+  }
+
+  private void writeFlatpakRuntime(
+    final MFlatpakRuntime runtime)
+    throws XMLStreamException
+  {
+    this.output.writeStartElement(NS, "FlatpakRuntime");
+    this.output.writeAttribute("Name", runtime.name());
+    this.output.writeAttribute("Version", runtime.version());
+    this.output.writeAttribute("Role", runtime.role().name());
     this.output.writeEndElement();
   }
 
   @Override
   public void close()
-    throws IOException
   {
 
   }

@@ -17,9 +17,9 @@
 
 package com.io7m.montarre.nativepack.internal;
 
-import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MMetadataType;
+import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.MShortName;
 import com.io7m.montarre.api.io.MPackageReaderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
@@ -34,12 +34,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
-import java.nio.file.attribute.FileTime;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,18 +55,6 @@ public final class MNPackagerDeb
   private static final Logger LOG =
     LoggerFactory.getLogger(MNPackagerDeb.class);
 
-  private static final Instant SOURCE_EPOCH =
-    Instant.parse("2010-01-01T00:00:00+00:00");
-  private static final FileTime SOURCE_EPOCH_FILETIME =
-    FileTime.from(SOURCE_EPOCH);
-  private static final RDottedName NAME =
-    new RDottedName("com.io7m.montarre.deb");
-
-  private static final OpenOption[] OPEN_OPTIONS = {
-    StandardOpenOption.WRITE,
-    StandardOpenOption.CREATE,
-    StandardOpenOption.TRUNCATE_EXISTING,
-  };
   private final MNativeProcessesType processes;
 
   /**
@@ -91,7 +75,8 @@ public final class MNPackagerDeb
   }
 
   @Override
-  public Optional<SStructuredErrorType<String>> unsupportedReason()
+  public Optional<SStructuredErrorType<String>> unsupportedReason(
+    final Optional<MPackageDeclaration> packageV)
     throws InterruptedException
   {
     final var toolOpt =

@@ -17,24 +17,25 @@
 
 package com.io7m.montarre.xml.internal.v1;
 
+import com.io7m.blackthorne.core.BTElementHandlerConstructorType;
 import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
-import com.io7m.montarre.api.MFileName;
-import com.io7m.montarre.api.MHash;
-import com.io7m.montarre.api.MHashAlgorithm;
-import com.io7m.montarre.api.MHashValue;
-import com.io7m.montarre.api.MResource;
-import com.io7m.montarre.api.MResourceRole;
-import org.xml.sax.Attributes;
+import com.io7m.blackthorne.core.BTQualifiedName;
+import com.io7m.montarre.api.MFlatpakRuntime;
+import com.io7m.montarre.api.MMetadataFlatpak;
+
+import java.util.Map;
+
+import static com.io7m.montarre.xml.internal.v1.Mx1.element;
 
 /**
  * A parser.
  */
 
-public final class Mx1Resource
-  implements BTElementHandlerType<Object, MResource>
+public final class Mx1Flatpak
+  implements BTElementHandlerType<MFlatpakRuntime, MMetadataFlatpak>
 {
-  private MResource data;
+  private final MMetadataFlatpak.Builder builder;
 
   /**
    * A parser.
@@ -42,37 +43,37 @@ public final class Mx1Resource
    * @param context The context
    */
 
-  public Mx1Resource(
+  public Mx1Flatpak(
     final BTElementParsingContextType context)
   {
-
+    this.builder = MMetadataFlatpak.builder();
   }
 
   @Override
-  public void onElementStart(
-    final BTElementParsingContextType context,
-    final Attributes attributes)
+  public Map<BTQualifiedName, BTElementHandlerConstructorType<?, ? extends MFlatpakRuntime>>
+  onChildHandlersRequested(
+    final BTElementParsingContextType context)
   {
-    this.data = new MResource(
-      new MFileName(attributes.getValue("File")),
-      new MHash(
-        new MHashAlgorithm(
-          attributes.getValue("HashAlgorithm")
-        ),
-        new MHashValue(
-          attributes.getValue("HashValue")
-        )
-      ),
-      MResourceRole.valueOf(
-        attributes.getValue("Role")
+    return Map.ofEntries(
+      Map.entry(
+        element("FlatpakRuntime"),
+        Mx1FlatpakRuntime::new
       )
     );
   }
 
   @Override
-  public MResource onElementFinished(
+  public void onChildValueProduced(
+    final BTElementParsingContextType context,
+    final MFlatpakRuntime result)
+  {
+    this.builder.addRuntimes(result);
+  }
+
+  @Override
+  public MMetadataFlatpak onElementFinished(
     final BTElementParsingContextType context)
   {
-    return this.data;
+    return this.builder.build();
   }
 }
