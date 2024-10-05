@@ -19,6 +19,7 @@ package com.io7m.montarre.maven_plugin;
 
 import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.MArchitectureName;
+import com.io7m.montarre.api.MCategoryName;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MFileFilter;
 import com.io7m.montarre.api.MFileName;
@@ -205,6 +206,13 @@ public final class MPackageMojo extends AbstractMojo
   private List<Resource> resources = new ArrayList<>();
 
   /**
+   * The categories.
+   */
+
+  @Parameter()
+  private List<String> categories = new ArrayList<>();
+
+  /**
    * Access to the Maven project.
    */
 
@@ -376,8 +384,10 @@ public final class MPackageMojo extends AbstractMojo
   private void buildPackageDeclaration()
     throws VersionException, IOException, NoSuchAlgorithmException
   {
-    final var builder = MPackageDeclaration.builder();
-    builder.setMetadata(
+    final var builder =
+      MPackageDeclaration.builder();
+
+    final var metaBuilder =
       MMetadata.builder()
         .setCopyright(this.copyright.trim())
         .setDescription(this.description.trim())
@@ -388,9 +398,13 @@ public final class MPackageMojo extends AbstractMojo
         .setSiteURI(URI.create(this.site.trim()))
         .setVersion(VersionParser.parse(this.packageVersion.trim()))
         .setShortName(new MShortName(this.shortName.trim()))
-        .setVendorName(new MVendorName(this.vendorName.trim()))
-        .build()
-    );
+        .setVendorName(new MVendorName(this.vendorName.trim()));
+
+    for (var category : this.categories) {
+      metaBuilder.addCategories(new MCategoryName(category));
+    }
+
+    builder.setMetadata(metaBuilder.build());
 
     final var manifestBuilder = MManifest.builder();
     this.buildManifestForResources(manifestBuilder);

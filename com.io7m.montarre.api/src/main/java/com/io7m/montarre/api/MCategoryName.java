@@ -24,6 +24,8 @@ import java.util.regex.Pattern;
  * A category name.
  *
  * @param name The name
+ *
+ * @see "https://specifications.freedesktop.org/menu-spec/latest/category-registry.html"
  */
 
 public record MCategoryName(
