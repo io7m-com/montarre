@@ -149,6 +149,7 @@ public final class MNPackagerMSI
         new ConcurrentLinkedQueue<>(),
         List.of(
           "wix.exe",
+          "build",
           wixXML.toString(),
           "-out",
           msiOut.toString()
