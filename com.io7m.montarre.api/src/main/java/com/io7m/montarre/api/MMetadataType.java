@@ -55,6 +55,16 @@ public non-sealed interface MMetadataType
   long requiredJDKVersion();
 
   /**
+   * @return The humanly-readable application name
+   */
+
+  @Value.Default
+  default String humanName()
+  {
+    return this.packageName().toString();
+  }
+
+  /**
    * @return The package description
    */
 

@@ -254,6 +254,11 @@ public final class MPackageDeclarationSerializer implements
       "VendorName",
       metadata.vendorName().name()
     );
+    this.output.writeAttribute(
+      "HumanName",
+      metadata.humanName()
+    );
+
     this.writeCategories(metadata.categories());
     this.writeFlatpak(metadata.flatpak());
     this.output.writeEndElement();

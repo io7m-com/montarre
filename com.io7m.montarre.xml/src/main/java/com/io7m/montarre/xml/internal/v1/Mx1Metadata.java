@@ -113,6 +113,11 @@ public final class Mx1Metadata
       attributes.getValue("License"));
     this.builder.setVendorName(
       new MVendorName(attributes.getValue("VendorName")));
+
+    final var humanName = attributes.getValue("HumanName");
+    if (humanName != null) {
+      this.builder.setHumanName(humanName);
+    }
   }
 
   @Override

@@ -64,7 +64,7 @@ public final class MNDesktopFile
 
     lines.add("[Desktop Entry]");
     lines.add("Type=Application");
-    lines.add("Name=%s".formatted(metadata.packageName()));
+    lines.add("Name=%s".formatted(metadata.humanName()));
     lines.add("Exec=/app/bin/%s".formatted(metadata.shortName()));
 
     if (anyIcons) {

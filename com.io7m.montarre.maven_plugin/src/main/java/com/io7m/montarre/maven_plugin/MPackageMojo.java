@@ -157,6 +157,13 @@ public final class MPackageMojo extends AbstractMojo
   private String site;
 
   /**
+   * The humanly-readable application name.
+   */
+
+  @Parameter()
+  private String humanName;
+
+  /**
    * The package name.
    */
 
@@ -399,6 +406,10 @@ public final class MPackageMojo extends AbstractMojo
         .setVersion(VersionParser.parse(this.packageVersion.trim()))
         .setShortName(new MShortName(this.shortName.trim()))
         .setVendorName(new MVendorName(this.vendorName.trim()));
+
+    if (this.humanName != null) {
+      metaBuilder.setHumanName(this.humanName.trim());
+    }
 
     for (var category : this.categories) {
       metaBuilder.addCategories(new MCategoryName(category));

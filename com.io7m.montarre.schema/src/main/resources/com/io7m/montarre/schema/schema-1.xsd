@@ -273,6 +273,15 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
+      <xsd:attribute name="HumanName"
+                     type="xsd:string"
+                     use="optional">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The optional human-readable application name. This will default to the package name if not specified.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
     </xsd:complexType>
   </xsd:element>
 

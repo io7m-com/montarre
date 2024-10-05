@@ -61,6 +61,7 @@
               <license>ISC</license>
               <copyright>Copyright © 2024 Mark Raynsford &lt;code@io7m.com> https://www.io7m.com</copyright>
               <vendorName>io7m</vendorName>
+              <humanName>Montarre</humanName>
               <categories>
                 <category>Development</category>
                 <category>Building</category>
