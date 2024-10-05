@@ -38,6 +38,15 @@ public record MOperatingSystemName(
     new MOperatingSystemName("unknown");
 
   /**
+   * @return The pattern that defines validity
+   */
+
+  public static Pattern valid()
+  {
+    return VALID;
+  }
+
+  /**
    * An operating system name.
    *
    * @param name The name

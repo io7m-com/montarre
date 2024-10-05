@@ -46,4 +46,5 @@ module com.io7m.montarre.cmdline
     to com.io7m.montarre.tests;
 
   exports com.io7m.montarre.cmdline;
+  exports com.io7m.montarre.cmdline.converters;
 }

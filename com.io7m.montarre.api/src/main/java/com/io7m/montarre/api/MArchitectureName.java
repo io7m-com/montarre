@@ -34,6 +34,15 @@ public record MArchitectureName(
   private static final Pattern VALID =
     Pattern.compile("[a-z][a-z0-9_-]{0,32}");
 
+  /**
+   * @return The pattern that defines validity
+   */
+
+  public static Pattern valid()
+  {
+    return VALID;
+  }
+
   private static final MArchitectureName UNKNOWN =
     new MArchitectureName("unknown");
 

@@ -17,6 +17,7 @@
 
 package com.io7m.montarre.cmdline;
 
+import com.io7m.montarre.cmdline.converters.MConverters;
 import com.io7m.montarre.cmdline.internal.MCMavenDownload;
 import com.io7m.montarre.cmdline.internal.MCNativeCreate;
 import com.io7m.montarre.cmdline.internal.MCNativePackagers;
@@ -73,6 +74,7 @@ public final class MMain implements Runnable
       );
 
     final var builder = QApplication.builder(metadata);
+    builder.setValueConverters(MConverters.get());
 
     {
       final var g =
