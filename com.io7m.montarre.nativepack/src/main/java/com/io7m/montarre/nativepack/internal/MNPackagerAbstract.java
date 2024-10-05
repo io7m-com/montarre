@@ -19,11 +19,13 @@ package com.io7m.montarre.nativepack.internal;
 
 import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.MException;
+import com.io7m.montarre.api.MOperatingSystemName;
 import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.MResourceRole;
 import com.io7m.montarre.api.io.MPackageReaderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceType;
+import com.io7m.montarre.api.natives.MNativeWorkspaceType;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -139,8 +141,20 @@ abstract class MNPackagerAbstract
   }
 
   protected final Optional<MResource> findBestIcon(
+    final MNativeWorkspaceType workspace,
     final MPackageReaderType reader)
   {
+    if (isWindows(workspace)) {
+      return reader.packageDeclaration()
+        .manifest()
+        .items()
+        .stream()
+        .filter(p -> p instanceof MResource)
+        .map(MResource.class::cast)
+        .filter(p -> p.role() == MResourceRole.ICO_WINDOWS)
+        .findFirst();
+    }
+
     return reader.packageDeclaration()
       .manifest()
       .items()
@@ -151,12 +165,24 @@ abstract class MNPackagerAbstract
       .max(MNPackagerAbstract::compareIconResources);
   }
 
+  private static boolean isWindows(
+    final MNativeWorkspaceType workspace)
+  {
+    return Objects.equals(
+      workspace.operatingSystem(),
+      MOperatingSystemName.windows()
+    );
+  }
+
   protected final Optional<Path> unpackIcon(
+    final MNativeWorkspaceType workspace,
     final MPackageReaderType packageV,
     final Path directory)
     throws IOException, MException
   {
-    final var iconOpt = this.findBestIcon(packageV);
+    final var iconOpt =
+      this.findBestIcon(workspace, packageV);
+
     if (iconOpt.isPresent()) {
       final var icon = iconOpt.get();
       if (Objects.requireNonNull(icon.role()) == MResourceRole.ICO_WINDOWS) {

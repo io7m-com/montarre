@@ -177,7 +177,7 @@ public final class MNPackagerDeb
       packageV.unpackInto(appDirectory);
 
       final var iconFile =
-        this.unpackIcon(packageV, directory);
+        this.unpackIcon(workspace, packageV, directory);
       final var licenseFile =
         this.unpackLicense(packageV, directory);
 

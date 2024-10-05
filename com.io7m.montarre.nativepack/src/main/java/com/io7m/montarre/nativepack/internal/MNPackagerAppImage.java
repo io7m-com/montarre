@@ -198,7 +198,7 @@ public final class MNPackagerAppImage
       packageV.unpackInto(appDirectory);
 
       final var iconFile =
-        this.unpackIcon(packageV, directory);
+        this.unpackIcon(workspace, packageV, directory);
       final var metadata =
         packageV.packageDeclaration().metadata();
 
