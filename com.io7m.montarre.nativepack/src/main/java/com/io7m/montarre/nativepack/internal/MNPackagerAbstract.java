@@ -26,6 +26,7 @@ import com.io7m.montarre.api.io.MPackageReaderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceType;
 import com.io7m.montarre.api.natives.MNativeWorkspaceType;
+import com.io7m.verona.core.Version;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -226,5 +227,25 @@ abstract class MNPackagerAbstract
       return Optional.of(file);
     }
     return Optional.empty();
+  }
+
+  protected final Version translateVersion(
+    final MNativeWorkspaceType workspace,
+    final Version version)
+  {
+    /*
+     * Version numbers will be embedded into executables and can't contain
+     * alphanumeric qualifiers on Windows.
+     */
+
+    if (isWindows(workspace)) {
+      return Version.of(
+        version.major(),
+        version.minor(),
+        version.patch()
+      );
+    }
+
+    return version;
   }
 }

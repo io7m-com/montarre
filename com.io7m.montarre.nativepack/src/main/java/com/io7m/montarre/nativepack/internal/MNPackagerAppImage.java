@@ -90,7 +90,8 @@ public final class MNPackagerAppImage
     super(inProvider);
   }
 
-  private static void executeJPackage(
+  private void executeJPackage(
+    final MNativeWorkspaceType workspace,
     final Path jdkPath,
     final MMetadataType metadata,
     final Path appDirectory,
@@ -111,14 +112,17 @@ public final class MNPackagerAppImage
     arguments.add(metadata.mainModule());
     arguments.add("--module-path");
     arguments.add(appDirectory.resolve("lib").toString());
-    arguments.add("--app-version");
-    arguments.add(metadata.version().toString());
     arguments.add("--dest");
     arguments.add(buildDirectory.toString());
     arguments.add("--copyright");
     arguments.add(metadata.copyright());
     arguments.add("--description");
     arguments.add(metadata.description());
+
+    arguments.add("--app-version");
+    arguments.add(
+      this.translateVersion(workspace, metadata.version()).toString()
+    );
 
     if (iconFile.isPresent()) {
       arguments.add("--icon");
@@ -202,7 +206,8 @@ public final class MNPackagerAppImage
       final var metadata =
         packageV.packageDeclaration().metadata();
 
-      executeJPackage(
+      this.executeJPackage(
+        workspace,
         jdkPath,
         metadata,
         appDirectory,
