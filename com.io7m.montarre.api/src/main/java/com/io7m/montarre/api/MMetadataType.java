@@ -24,6 +24,7 @@ import org.immutables.value.Value;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -94,6 +95,12 @@ public non-sealed interface MMetadataType
    */
 
   MVendorName vendorName();
+
+  /**
+   * @return The application categories
+   */
+
+  Set<MCategoryName> categories();
 
   /**
    * @return The flatpak-specific metadata

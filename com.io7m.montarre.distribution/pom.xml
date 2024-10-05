@@ -76,9 +76,34 @@
                   <entryName>bom.xml</entryName>
                 </resource>
                 <resource>
+                  <role>ICON_16</role>
+                  <file>${project.basedir}/src/main/images/icon16.png</file>
+                  <entryName>icon16.png</entryName>
+                </resource>
+                <resource>
+                  <role>ICON_24</role>
+                  <file>${project.basedir}/src/main/images/icon24.png</file>
+                  <entryName>icon24.png</entryName>
+                </resource>
+                <resource>
+                  <role>ICON_32</role>
+                  <file>${project.basedir}/src/main/images/icon32.png</file>
+                  <entryName>icon32.png</entryName>
+                </resource>
+                <resource>
+                  <role>ICON_48</role>
+                  <file>${project.basedir}/src/main/images/icon48.png</file>
+                  <entryName>icon48.png</entryName>
+                </resource>
+                <resource>
                   <role>ICON_64</role>
-                  <file>${project.basedir}/src/main/images/icon.png</file>
-                  <entryName>icon.png</entryName>
+                  <file>${project.basedir}/src/main/images/icon64.png</file>
+                  <entryName>icon64.png</entryName>
+                </resource>
+                <resource>
+                  <role>ICON_128</role>
+                  <file>${project.basedir}/src/main/images/icon128.png</file>
+                  <entryName>icon128.png</entryName>
                 </resource>
                 <resource>
                   <role>ICO_WINDOWS</role>

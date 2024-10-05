@@ -22,6 +22,7 @@ import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
 import com.io7m.blackthorne.core.BTQualifiedName;
 import com.io7m.lanark.core.RDottedName;
+import com.io7m.montarre.api.MCategoryName;
 import com.io7m.montarre.api.MMetadata;
 import com.io7m.montarre.api.MMetadataFlatpakType;
 import com.io7m.montarre.api.MPackageName;
@@ -63,10 +64,8 @@ public final class Mx1Metadata
     final BTElementParsingContextType context)
   {
     return Map.ofEntries(
-      Map.entry(
-        element("Flatpak"),
-        Mx1Flatpak::new
-      )
+      Map.entry(element("Flatpak"), Mx1Flatpak::new),
+      Map.entry(element("Category"), Mx1Category::new)
     );
   }
 
@@ -78,6 +77,9 @@ public final class Mx1Metadata
     switch (result) {
       case MMetadataFlatpakType flatpak -> {
         this.builder.setFlatpak(flatpak);
+      }
+      case MCategoryName category -> {
+        this.builder.addCategories(category);
       }
       default -> {
         throw new IllegalStateException("Unexpected value: " + result);

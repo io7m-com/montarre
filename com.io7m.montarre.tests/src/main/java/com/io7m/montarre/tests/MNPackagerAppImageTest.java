@@ -28,7 +28,7 @@ import com.io7m.montarre.api.natives.MNativeWorkspaceType;
 import com.io7m.montarre.io.MPackageReaders;
 import com.io7m.montarre.nativepack.MNWorkspaces;
 import com.io7m.montarre.nativepack.MNativeProcesses;
-import com.io7m.montarre.nativepack.internal.MNPackagerAppImageProvider;
+import com.io7m.montarre.nativepack.internal.app_image.MNPackagerAppImageProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;

@@ -15,18 +15,22 @@
  */
 
 
-package com.io7m.montarre.nativepack.internal;
+package com.io7m.montarre.nativepack.internal.flatpak;
 
 import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MFlatpakRuntime;
 import com.io7m.montarre.api.MFlatpakRuntimeRole;
 import com.io7m.montarre.api.MPackageDeclaration;
+import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.io.MPackageReaderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceType;
 import com.io7m.montarre.api.natives.MNativeProcessesType;
 import com.io7m.montarre.api.natives.MNativeWorkspaceType;
+import com.io7m.montarre.nativepack.internal.MNPackagerAbstract;
+import com.io7m.montarre.nativepack.internal.app_image.MNPackagerAppImage;
+import com.io7m.montarre.nativepack.internal.app_image.MNPackagerAppImageProvider;
 import com.io7m.seltzer.api.SStructuredError;
 import com.io7m.seltzer.api.SStructuredErrorType;
 import org.apache.commons.io.file.PathUtils;
@@ -198,10 +202,18 @@ public final class MNPackagerFlatpak
       this.flatpakInstallRuntime(workspace, sdk);
       this.flatpakInstallRuntime(workspace, platform);
       this.flatpakBuildInit(workspace, packageV, build, sdk, platform);
-      this.flatpakWriteMetadata(workspace, build, packageV, sdk, platform);
+      this.flatpakWriteMetadata(
+        workspace,
+        build,
+        packageV,
+        sdk,
+        platform
+      );
 
       generateAndCopyAppImage(workspace, reader, build);
 
+      this.flatpakWriteDesktopFile(build, packageV);
+      this.flatpakWriteIcons(reader, build, packageV);
       this.flatpakBuildFinish(build);
       this.flatpakBuildExport(build, repos);
       this.flatpakBuildBundle(repos, outputFile, packageV);
@@ -209,6 +221,98 @@ public final class MNPackagerFlatpak
       return outputFile;
     } catch (final Exception e) {
       throw this.error(e);
+    }
+  }
+
+  private void flatpakWriteDesktopFile(
+    final Path build,
+    final MPackageDeclaration packageV)
+    throws IOException
+  {
+    LOG.info("Writing desktop file.");
+
+    final var desktopFile =
+      build.resolve("files")
+        .resolve("share")
+        .resolve("applications")
+        .resolve(packageV.metadata().packageName() + ".desktop");
+
+    Files.createDirectories(desktopFile.getParent());
+    Files.writeString(
+      desktopFile,
+      MNDesktopFile.createDesktopFileText(packageV),
+      this.writeReplaceOptions()
+    );
+  }
+
+  private void flatpakWriteIcons(
+    final MPackageReaderType reader,
+    final Path build,
+    final MPackageDeclaration packageV)
+    throws MException, IOException
+  {
+    LOG.info("Writing icons.");
+
+    final var icons =
+      packageV.manifest()
+        .items()
+        .stream()
+        .filter(i -> i instanceof MResource)
+        .map(MResource.class::cast)
+        .filter(i -> i.role().isIcon())
+        .toList();
+
+    final var iconsDirectory =
+      build.resolve("files")
+        .resolve("share")
+        .resolve("icons")
+        .resolve("hicolor");
+
+    for (final var icon : icons) {
+      switch (icon.role()) {
+        case BOM, LICENSE, ICO_WINDOWS -> {
+          // Not used
+        }
+        case ICON_16 -> {
+          writeIcon(iconsDirectory, "16x16", packageV, reader, icon);
+        }
+        case ICON_24 -> {
+          writeIcon(iconsDirectory, "24x24", packageV, reader, icon);
+        }
+        case ICON_32 -> {
+          writeIcon(iconsDirectory, "32x32", packageV, reader, icon);
+        }
+        case ICON_48 -> {
+          writeIcon(iconsDirectory, "48x48", packageV, reader, icon);
+        }
+        case ICON_64 -> {
+          writeIcon(iconsDirectory, "64x64", packageV, reader, icon);
+        }
+        case ICON_128 -> {
+          writeIcon(iconsDirectory, "128x128", packageV, reader, icon);
+        }
+      }
+    }
+  }
+
+  private static void writeIcon(
+    final Path iconsDirectory,
+    final String sizeDirectory,
+    final MPackageDeclaration packageV,
+    final MPackageReaderType reader,
+    final MResource icon)
+    throws IOException, MException
+  {
+    LOG.debug("Writing icon {}.", sizeDirectory);
+
+    final var outFile =
+      iconsDirectory.resolve(sizeDirectory)
+        .resolve("apps")
+        .resolve(packageV.metadata().packageName() + ".png");
+
+    Files.createDirectories(outFile.getParent());
+    try (var stream = reader.readFile(icon.file())) {
+      Files.copy(stream, outFile);
     }
   }
 

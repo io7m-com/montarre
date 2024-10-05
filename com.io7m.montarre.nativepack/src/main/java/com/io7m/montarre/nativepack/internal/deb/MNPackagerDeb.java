@@ -15,7 +15,7 @@
  */
 
 
-package com.io7m.montarre.nativepack.internal;
+package com.io7m.montarre.nativepack.internal.deb;
 
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MMetadataType;
@@ -26,6 +26,7 @@ import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceType;
 import com.io7m.montarre.api.natives.MNativeProcessesType;
 import com.io7m.montarre.api.natives.MNativeWorkspaceType;
+import com.io7m.montarre.nativepack.internal.MNPackagerAbstract;
 import com.io7m.seltzer.api.SStructuredError;
 import com.io7m.seltzer.api.SStructuredErrorType;
 import com.io7m.verona.core.Version;

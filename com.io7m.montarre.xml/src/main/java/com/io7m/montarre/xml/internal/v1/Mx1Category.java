@@ -15,48 +15,46 @@
  */
 
 
-package com.io7m.montarre.nativepack.internal;
+package com.io7m.montarre.xml.internal.v1;
 
-import com.io7m.lanark.core.RDottedName;
-import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
-import com.io7m.montarre.api.natives.MNativePackagerServiceType;
-import com.io7m.montarre.api.natives.MNativeProcessesType;
+import com.io7m.blackthorne.core.BTElementHandlerType;
+import com.io7m.blackthorne.core.BTElementParsingContextType;
+import com.io7m.montarre.api.MCategoryName;
+import org.xml.sax.Attributes;
 
 /**
- * A native packager that produces Debian packages.
+ * A parser.
  */
 
-public final class MNPackagerDebProvider
-  implements MNativePackagerServiceProviderType
+public final class Mx1Category
+  implements BTElementHandlerType<Object, MCategoryName>
 {
-  private static final RDottedName NAME =
-    new RDottedName("com.io7m.montarre.deb");
+  private MCategoryName name;
 
   /**
-   * A native packager that produces Debian packages.
+   * A parser.
+   *
+   * @param context The context
    */
 
-  public MNPackagerDebProvider()
+  public Mx1Category(
+    final BTElementParsingContextType context)
   {
 
   }
 
   @Override
-  public RDottedName name()
+  public void onElementStart(
+    final BTElementParsingContextType context,
+    final Attributes attributes)
   {
-    return NAME;
+    this.name = new MCategoryName(attributes.getValue("Name"));
   }
 
   @Override
-  public String describe()
+  public MCategoryName onElementFinished(
+    final BTElementParsingContextType context)
   {
-    return "Produces Debian .deb packages.";
-  }
-
-  @Override
-  public MNativePackagerServiceType create(
-    final MNativeProcessesType processes)
-  {
-    return new MNPackagerDeb(this, processes);
+    return this.name;
   }
 }

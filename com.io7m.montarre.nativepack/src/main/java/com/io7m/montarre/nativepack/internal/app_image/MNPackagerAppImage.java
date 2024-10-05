@@ -15,7 +15,7 @@
  */
 
 
-package com.io7m.montarre.nativepack.internal;
+package com.io7m.montarre.nativepack.internal.app_image;
 
 import com.io7m.jmulticlose.core.CloseableCollection;
 import com.io7m.jmulticlose.core.ClosingResourceFailedException;
@@ -28,6 +28,7 @@ import com.io7m.montarre.api.io.MPackageReaderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceType;
 import com.io7m.montarre.api.natives.MNativeWorkspaceType;
+import com.io7m.montarre.nativepack.internal.MNPackagerAbstract;
 import com.io7m.seltzer.api.SStructuredError;
 import com.io7m.seltzer.api.SStructuredErrorType;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;

@@ -18,6 +18,7 @@
 package com.io7m.montarre.xml.internal;
 
 import com.io7m.anethum.api.SerializationException;
+import com.io7m.montarre.api.MCategoryName;
 import com.io7m.montarre.api.MFlatpakRuntime;
 import com.io7m.montarre.api.MManifestItemType;
 import com.io7m.montarre.api.MManifestType;
@@ -46,6 +47,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A package serializer.
@@ -252,8 +254,20 @@ public final class MPackageDeclarationSerializer implements
       "VendorName",
       metadata.vendorName().name()
     );
+    this.writeCategories(metadata.categories());
     this.writeFlatpak(metadata.flatpak());
     this.output.writeEndElement();
+  }
+
+  private void writeCategories(
+    final Set<MCategoryName> categories)
+    throws XMLStreamException
+  {
+    for (var name : categories.stream().sorted().toList()) {
+      this.output.writeStartElement(NS, "Category");
+      this.output.writeAttribute("Name", name.name());
+      this.output.writeEndElement();
+    }
   }
 
   private void writeFlatpak(

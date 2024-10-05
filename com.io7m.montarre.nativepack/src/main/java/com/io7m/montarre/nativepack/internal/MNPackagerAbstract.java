@@ -40,7 +40,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
-abstract class MNPackagerAbstract
+/**
+ * An abstract packager.
+ */
+
+public abstract class MNPackagerAbstract
   implements MNativePackagerServiceType
 {
   private static final OpenOption[] OPEN_OPTIONS = {

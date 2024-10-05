@@ -15,7 +15,7 @@
  */
 
 
-package com.io7m.montarre.nativepack.internal;
+package com.io7m.montarre.nativepack.internal.app_image;
 
 import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
@@ -23,20 +23,20 @@ import com.io7m.montarre.api.natives.MNativePackagerServiceType;
 import com.io7m.montarre.api.natives.MNativeProcessesType;
 
 /**
- * A native packager that produces MSI packages.
+ * A native packager that produces jpackage "app-images".
  */
 
-public final class MNPackagerMSIProvider
+public final class MNPackagerAppImageProvider
   implements MNativePackagerServiceProviderType
 {
   private static final RDottedName NAME =
-    new RDottedName("com.io7m.montarre.msi_wix");
+    new RDottedName("com.io7m.montarre.app_image");
 
   /**
-   * A native packager that produces Debian packages.
+   * A native packager that produces jpackage "app-images".
    */
 
-  public MNPackagerMSIProvider()
+  public MNPackagerAppImageProvider()
   {
 
   }
@@ -50,13 +50,13 @@ public final class MNPackagerMSIProvider
   @Override
   public String describe()
   {
-    return "Produces MSI packages.";
+    return "Produces jpackage 'app-images'.";
   }
 
   @Override
   public MNativePackagerServiceType create(
     final MNativeProcessesType processes)
   {
-    return new MNPackagerMSI(this, processes);
+    return new MNPackagerAppImage(this);
   }
 }

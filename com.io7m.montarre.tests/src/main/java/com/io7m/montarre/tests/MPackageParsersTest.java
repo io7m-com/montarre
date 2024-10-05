@@ -20,6 +20,7 @@ package com.io7m.montarre.tests;
 import com.io7m.anethum.api.ParsingException;
 import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.MArchitectureName;
+import com.io7m.montarre.api.MCategoryName;
 import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.MFileName;
 import com.io7m.montarre.api.MHash;
@@ -40,6 +41,8 @@ import com.io7m.montarre.xml.MPackageDeclarationSerializers;
 import com.io7m.verona.core.Version;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -54,6 +57,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class MPackageParsersTest
 {
+  private static final Logger LOG =
+    LoggerFactory.getLogger(MPackageParsersTest.class);
+
   private MPackageDeclarationParsers parsers;
   private MPackageDeclarationSerializers serializers;
 
@@ -116,6 +122,8 @@ public final class MPackageParsersTest
           .setSiteURI(URI.create("https://www.example.com"))
           .setVendorName(new MVendorName("io7m"))
           .setVersion(Version.of(1, 0, 0))
+          .addCategories(new MCategoryName("Office"))
+          .addCategories(new MCategoryName("Networking"))
           .build())
       .setManifest(
         MManifest.builder()
@@ -139,6 +147,8 @@ public final class MPackageParsersTest
       .build();
 
     this.serializers.serialize(URI.create("urn:out"), streamOut, pack0);
+
+    LOG.debug("{}", streamOut.toString(StandardCharsets.UTF_8));
 
     final var pack1 =
       this.parsers.parse(

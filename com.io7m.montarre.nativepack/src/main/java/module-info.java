@@ -15,10 +15,10 @@
  */
 
 import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
-import com.io7m.montarre.nativepack.internal.MNPackagerAppImageProvider;
-import com.io7m.montarre.nativepack.internal.MNPackagerDebProvider;
-import com.io7m.montarre.nativepack.internal.MNPackagerFlatpakProvider;
-import com.io7m.montarre.nativepack.internal.MNPackagerMSIProvider;
+import com.io7m.montarre.nativepack.internal.app_image.MNPackagerAppImageProvider;
+import com.io7m.montarre.nativepack.internal.deb.MNPackagerDebProvider;
+import com.io7m.montarre.nativepack.internal.flatpak.MNPackagerFlatpakProvider;
+import com.io7m.montarre.nativepack.internal.msi.MNPackagerMSIProvider;
 
 /**
  * Application packaging tools (Native packaging).
@@ -55,5 +55,13 @@ module com.io7m.montarre.nativepack
   exports com.io7m.montarre.nativepack;
 
   exports com.io7m.montarre.nativepack.internal
+    to com.io7m.montarre.tests;
+  exports com.io7m.montarre.nativepack.internal.flatpak
+    to com.io7m.montarre.tests;
+  exports com.io7m.montarre.nativepack.internal.app_image
+    to com.io7m.montarre.tests;
+  exports com.io7m.montarre.nativepack.internal.deb
+    to com.io7m.montarre.tests;
+  exports com.io7m.montarre.nativepack.internal.msi
     to com.io7m.montarre.tests;
 }

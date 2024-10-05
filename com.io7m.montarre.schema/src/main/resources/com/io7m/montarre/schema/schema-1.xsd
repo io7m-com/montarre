@@ -13,6 +13,17 @@
     <xsd:restriction base="xsd:string"/>
   </xsd:simpleType>
 
+  <xsd:simpleType name="CategoryNameType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A category name.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="[A-Z][A-Za-z0-9_-]{0,128}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
   <xsd:simpleType name="PackageNameType">
     <xsd:annotation>
       <xsd:documentation xml:lang="en">
@@ -90,6 +101,19 @@
     </xsd:restriction>
   </xsd:simpleType>
 
+  <xsd:element name="Category">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A category applied to an application.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="Name"
+                     type="mp:CategoryNameType"
+                     use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
   <xsd:simpleType name="FlatpakRuntimeRole">
     <xsd:restriction base="xsd:string">
       <xsd:enumeration value="PLATFORM"/>
@@ -137,7 +161,8 @@
     </xsd:annotation>
 
     <xsd:complexType>
-      <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+      <xsd:sequence minOccurs="0"
+                    maxOccurs="unbounded">
         <xsd:element ref="mp:FlatpakRuntime"/>
       </xsd:sequence>
     </xsd:complexType>
@@ -146,9 +171,15 @@
   <xsd:element name="Metadata">
     <xsd:complexType>
       <xsd:sequence>
-        <xsd:element ref="mp:Flatpak"
-                     minOccurs="0"
-                     maxOccurs="1"/>
+        <xsd:sequence minOccurs="0"
+                      maxOccurs="unbounded">
+          <xsd:element ref="mp:Category"/>
+        </xsd:sequence>
+        <xsd:sequence>
+          <xsd:element ref="mp:Flatpak"
+                       minOccurs="0"
+                       maxOccurs="1"/>
+        </xsd:sequence>
       </xsd:sequence>
 
       <xsd:attribute name="Version"
