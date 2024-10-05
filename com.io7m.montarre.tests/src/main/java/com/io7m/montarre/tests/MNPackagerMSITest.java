@@ -36,6 +36,8 @@ import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
@@ -43,8 +45,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.Executors;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public final class MNPackagerMSITest
 {
+  private static final Logger LOG =
+    LoggerFactory.getLogger(MNPackagerMSITest.class);
+
   private Path inputMpk;
   private MNPackagerMSIProvider packagers;
   private MNativeProcesses processes;
@@ -139,7 +146,40 @@ public final class MNPackagerMSITest
       this.reader
     );
 
-    Assertions.assertTrue(Files.isRegularFile(path));
+    LOG.debug("Produced {}", path);
+    assertTrue(Files.isRegularFile(path));
+
+    final var name = path.getFileName().toString();
+    assertTrue(
+      name.contains(this.workspace.architecture().name()),
+      "%s must contain %s".formatted(
+        name, this.workspace.architecture().name()
+      )
+    );
+    assertTrue(
+      name.contains(this.workspace.operatingSystem().name()),
+      "%s must contain %s".formatted(
+        name, this.workspace.operatingSystem().name()
+      )
+    );
+    assertTrue(
+      name.contains("0.0.1-SNAPSHOT"),
+      "%s must contain %s".formatted(
+        name, "0.0.1-SNAPSHOT"
+      )
+    );
+    assertTrue(
+      name.contains("montarre"),
+      "%s must contain %s".formatted(
+        name, "montarre"
+      )
+    );
+    assertTrue(
+      name.endsWith(".msi"),
+      "%s must end with .msi".formatted(
+        name
+      )
+    );
   }
 
   private void resource(
