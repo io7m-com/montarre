@@ -161,7 +161,8 @@ public final class MWiXWriter implements MWiXWriterType
         if (subdirectory.getNameCount() > 1) {
           xmlOutput.writeAttribute(
             "Subdirectory",
-            subdirectory.getParent().toString());
+            subdirectory.getParent().toString()
+          );
         }
 
         xmlOutput.writeStartElement(NS, "File");
@@ -222,7 +223,7 @@ public final class MWiXWriter implements MWiXWriterType
 
     if (iconOpt.isPresent()) {
       final var icon = iconOpt.get();
-      writePackageIcon(xmlOutput, icon);
+      this.writePackageIcon(xmlOutput, icon);
     }
 
     /*
@@ -276,15 +277,18 @@ public final class MWiXWriter implements MWiXWriterType
     xmlOutput.writeEndElement();
   }
 
-  private static void writePackageIcon(
+  private void writePackageIcon(
     final XMLStreamWriter xmlOutput,
     final MResource icon)
     throws XMLStreamException
   {
     {
+      final var iconFile =
+        this.directory.resolve(icon.file().name());
+
       xmlOutput.writeStartElement(NS, "Icon");
       xmlOutput.writeAttribute("Id", "Icon.ico");
-      xmlOutput.writeAttribute("SourceFile", icon.file().name());
+      xmlOutput.writeAttribute("SourceFile", iconFile.toString());
       xmlOutput.writeEndElement();
     }
 
