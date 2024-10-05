@@ -118,7 +118,8 @@ public final class MNPackagerAppImage
     arguments.add(metadata.copyright());
     arguments.add("--description");
     arguments.add(metadata.description());
-
+    arguments.add("--app-content");
+    arguments.add(appDirectory.resolve("meta").toString());
     arguments.add("--app-version");
     arguments.add(
       this.translateVersion(workspace, metadata.version()).toString()
