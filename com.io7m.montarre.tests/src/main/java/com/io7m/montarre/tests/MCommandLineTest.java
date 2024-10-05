@@ -96,7 +96,7 @@ public class MCommandLineTest
       List.of("help"),
       List.of("help", "help"),
       List.of("help", "package"),
-      List.of("help", "package", "extract-manifest"),
+      List.of("help", "package", "extract-declaration"),
       List.of("help", "package", "check"),
       List.of("help", "native"),
       List.of("help", "native", "packagers"),
@@ -164,7 +164,7 @@ public class MCommandLineTest
     final var r = MMain.mainExitless(
       new String[]{
         "package",
-        "extract-manifest",
+        "extract-declaration",
         "--file",
         file.toString()
       }

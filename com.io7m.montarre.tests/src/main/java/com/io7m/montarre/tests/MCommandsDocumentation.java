@@ -18,6 +18,7 @@
 package com.io7m.montarre.tests;
 
 
+import com.io7m.montarre.cmdline.internal.MCPackageExtractDeclaration;
 import com.io7m.quarrel.core.QCommandOrGroupType;
 import com.io7m.quarrel.core.QCommandParserConfiguration;
 import com.io7m.quarrel.core.QCommandParsers;
@@ -61,7 +62,7 @@ public final class MCommandsDocumentation
         new com.io7m.montarre.cmdline.internal.MCNativeCreate(),
         new com.io7m.montarre.cmdline.internal.MCNativePackagers(),
         new com.io7m.montarre.cmdline.internal.MCPackageCheck(),
-        new com.io7m.montarre.cmdline.internal.MCPackageExtractManifest(),
+        new MCPackageExtractDeclaration(),
         new com.io7m.montarre.cmdline.internal.MCPackageSchema()
       );
 

@@ -37,13 +37,13 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * "extract-manifest"
+ * "extract-declaration"
  */
 
-public final class MCPackageExtractManifest implements QCommandType
+public final class MCPackageExtractDeclaration implements QCommandType
 {
   private static final Logger LOG =
-    LoggerFactory.getLogger(MCPackageExtractManifest.class);
+    LoggerFactory.getLogger(MCPackageExtractDeclaration.class);
 
   private static final QParameterNamed1<Path> INPUT_FILE =
     new QParameterNamed1<>(
@@ -60,11 +60,11 @@ public final class MCPackageExtractManifest implements QCommandType
    * Construct a command.
    */
 
-  public MCPackageExtractManifest()
+  public MCPackageExtractDeclaration()
   {
     this.metadata = new QCommandMetadata(
-      "extract-manifest",
-      new QStringType.QConstant("Extract a package from a file without validation."),
+      "extract-declaration",
+      new QStringType.QConstant("Extract a package declaration from a file without validation."),
       Optional.empty()
     );
   }

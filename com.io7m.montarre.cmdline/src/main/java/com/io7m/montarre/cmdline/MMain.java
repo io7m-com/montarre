@@ -21,7 +21,7 @@ import com.io7m.montarre.cmdline.internal.MCMavenDownload;
 import com.io7m.montarre.cmdline.internal.MCNativeCreate;
 import com.io7m.montarre.cmdline.internal.MCNativePackagers;
 import com.io7m.montarre.cmdline.internal.MCPackageCheck;
-import com.io7m.montarre.cmdline.internal.MCPackageExtractManifest;
+import com.io7m.montarre.cmdline.internal.MCPackageExtractDeclaration;
 import com.io7m.montarre.cmdline.internal.MCPackageSchema;
 import com.io7m.montarre.cmdline.internal.MCWixXML;
 import com.io7m.quarrel.core.QApplication;
@@ -83,7 +83,7 @@ public final class MMain implements Runnable
             Optional.empty()
           )
         );
-      g.addCommand(new MCPackageExtractManifest());
+      g.addCommand(new MCPackageExtractDeclaration());
       g.addCommand(new MCPackageCheck());
       g.addCommand(new MCPackageSchema());
     }
