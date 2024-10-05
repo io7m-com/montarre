@@ -1,0 +1,3 @@
+com.io7m.montarre.nativepack.internal.MNPackagerAppImageProvider
+com.io7m.montarre.nativepack.internal.MNPackagerDebProvider
+com.io7m.montarre.nativepack.internal.MNPackagerMSIProvider

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>com.io7m.montarre</artifactId>
+    <groupId>com.io7m.montarre</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>com.io7m.montarre.distribution</artifactId>
+
+  <name>com.io7m.montarre.distribution</name>
+  <description>Application packaging tools (CLI distribution).</description>
+  <url>https://www.io7m.com/software/montarre</url>
+
+  <properties>
+    <mdep.analyze.skip>true</mdep.analyze.skip>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>com.io7m.montarre.cmdline</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- Specify a spurious dependency on the Maven plugin to ensure that it is
+         built in the reactor before this module. -->
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>com.io7m.montarre.maven_plugin</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>com.io7m.montarre.maven_plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <id>make-distribution</id>
+            <goals>
+              <goal>package</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <requiredJDKVersion>21</requiredJDKVersion>
+              <shortName>montarre</shortName>
+              <mainModule>com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain</mainModule>
+              <license>ISC</license>
+              <copyright>Copyright © 2024 Mark Raynsford &lt;code@io7m.com> https://www.io7m.com</copyright>
+              <vendorName>io7m</vendorName>
+              <libraries>
+                <excludes>
+                  <exclude>com\.io7m\.montarre\.cmdline-.*-main\.jar</exclude>
+                  <exclude>com\.io7m\.montarre\.distribution-.*</exclude>
+                  <exclude>maven-.*</exclude>
+                  <exclude>com\.io7m\.montarre\.maven_plugin-.*</exclude>
+                </excludes>
+              </libraries>
+              <resources>
+                <resource>
+                  <role>BOM</role>
+                  <file>${project.build.directory}/bom.xml</file>
+                  <entryName>bom.xml</entryName>
+                </resource>
+                <resource>
+                  <role>ICON_64</role>
+                  <file>${project.basedir}/src/main/images/icon.png</file>
+                  <entryName>icon.png</entryName>
+                </resource>
+                <resource>
+                  <role>ICO_WINDOWS</role>
+                  <file>${project.basedir}/src/main/images/icon.ico</file>
+                  <entryName>icon.ico</entryName>
+                </resource>
+                <resource>
+                  <role>LICENSE</role>
+                  <file>${project.basedir}/../README-LICENSE.txt</file>
+                  <entryName>license.txt</entryName>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

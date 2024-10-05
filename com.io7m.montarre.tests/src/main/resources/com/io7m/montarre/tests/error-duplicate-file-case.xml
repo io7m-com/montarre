@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Package xmlns="urn:com.io7m.montarre.package:1">
+  <Metadata Version="1.0.0"
+            Name="com.io7m.example"
+            RequiredJDKVersion="21"
+            Description="An example package."
+            Copyright="Copyright © 2024 Mark Raynsford &lt;code@io7m.com> https://www.io7m.com"
+            SiteURL="https://www.io7m.com"
+            MainModule="com.io7m.example/com.io7m.example.Main"
+            ShortName="example"/>
+  <Manifest>
+    <Module File="file.jar"
+            HashAlgorithm="SHA-256"
+            HashValue="aa"/>
+    <Module File="FILE.jar"
+            HashAlgorithm="SHA-256"
+            HashValue="aa"/>
+  </Manifest>
+</Package>

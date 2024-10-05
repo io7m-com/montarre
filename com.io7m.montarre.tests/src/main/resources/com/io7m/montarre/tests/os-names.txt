@@ -1,0 +1,13 @@
+aix
+freebsd
+hpux
+linux
+mac
+netbsd
+openbsd
+os400
+osx
+solaris
+sunos
+windows
+zos

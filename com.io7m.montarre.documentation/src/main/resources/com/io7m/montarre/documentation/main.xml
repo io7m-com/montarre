@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Document xmlns="urn:com.io7m.structural:8:0"
+          xmlns:dc="http://purl.org/dc/elements/1.1/"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          tableOfContentsDepth="1">
+
+  <Metadata>
+    <dc:creator>Mark Raynsford</dc:creator>
+    <dc:date>2024-10-03T17:13:28+00:00</dc:date>
+    <dc:description>User manual for the Montarre package.</dc:description>
+    <dc:identifier>f51d65bd-fc7b-4cc8-85bf-dbed171a9550</dc:identifier>
+    <dc:language>en</dc:language>
+    <dc:rights>Public Domain</dc:rights>
+    <dc:title>Montarre User Manual</dc:title>
+
+    <MetaProperty name="com.io7m.xstructural.web.branding.header">brand.xml</MetaProperty>
+    <MetaProperty name="com.io7m.xstructural.web.branding.footer">brand.xml</MetaProperty>
+  </Metadata>
+
+  <xi:include href="overview.xml"/>
+
+</Document>
