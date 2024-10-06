@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section xmlns="urn:com.io7m.structural:8:0"
+         id="bbe45b28-16e1-4e4c-926c-0ce60eeb3efd"
+         title="Installation">
+
+  <Subsection title="Overview">
+    <Paragraph>
+      There are several ways to install the <Term type="package">montarre</Term> tool. Regardless of the installation
+      method, the included command-line tool will present the same interface. The documentation is written in terms of
+      executing a command-line tool named <Term type="command">montarre</Term>. Some installation methods, however,
+      won't result in an executable named <Term type="command">montarre</Term> being installed. For example, the
+      <Link target="b2acf66b-a58e-402b-a242-5359abd657df">shaded jar</Link>
+      is, unsurprisingly, a jar file. When using this installation method, one should mentally substitute
+      <Term type="expression">"java -jar com.io7m.montarre.cmdline-${project.version}-main.jar"</Term>
+      whenever the documentation mentions the <Term type="command">montarre</Term> command.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Shaded Jar"
+              id="b2acf66b-a58e-402b-a242-5359abd657df">
+    <Paragraph>
+      The shaded jar distribution is simply a so-called <Term type="term">onejar</Term> consisting of all of the
+      application bytecode packed into a single jar file.
+    </Paragraph>
+    <Paragraph>
+      Download the jar file signature from
+      <LinkExternal target="https://repo1.maven.org/maven2/com/io7m/montarre/com.io7m.montarre.cmdline/${project.version}/com.io7m.montarre.cmdline-${project.version}-main.jar.asc">
+        Maven Central</LinkExternal>.
+    </Paragraph>
+    <FormalItem title="Shaded Jar Signature Download">
+      <Verbatim><![CDATA[
+$ wget https://repo1.maven.org/maven2/com/io7m/montarre/com.io7m.montarre.cmdline/${project.version}/com.io7m.montarre.cmdline-${project.version}-main.jar.asc
+]]></Verbatim>
+    </FormalItem>
+    <Paragraph>
+      Download the jar file from
+      <LinkExternal target="https://repo1.maven.org/maven2/com/io7m/montarre/com.io7m.montarre.cmdline/${project.version}/com.io7m.montarre.cmdline-${project.version}-main.jar">
+        Maven Central</LinkExternal>.
+    </Paragraph>
+    <FormalItem title="Shaded Jar Download">
+      <Verbatim><![CDATA[
+$ wget https://repo1.maven.org/maven2/com/io7m/montarre/com.io7m.montarre.cmdline/${project.version}/com.io7m.montarre.cmdline-${project.version}-main.jar
+]]></Verbatim>
+    </FormalItem>
+    <Paragraph>
+      Verify the signature:
+    </Paragraph>
+    <FormalItem title="Shaded Jar Signature Verification">
+      <Verbatim><![CDATA[
+$ gpg --verify com.io7m.montarre.cmdline-${project.version}-main.jar.asc
+]]></Verbatim>
+    </FormalItem>
+    <Paragraph>
+      Run the jar using an appropriate Java runtime:
+    </Paragraph>
+    <FormalItem title="Shaded Jar Execution">
+      <Verbatim><![CDATA[
+$ java -jar com.io7m.montarre.cmdline-${project.version}-main.jar
+montarre: usage: montarre [command] [arguments ...]
+
+  The montarre command-line application.
+
+  Use the "help" command to examine specific commands:
+
+    $ montarre help help.
+
+  Command-line arguments can be placed one per line into a file, and
+  the file can be referenced using the @ symbol:
+
+    $ echo help > file.txt
+    $ echo help >> file.txt
+    $ montarre @file.txt
+
+  Commands:
+    help             Show usage information for a command.
+    maven-central    Maven Central commands.
+    native           Native package commands.
+    package          Package commands.
+    version          Show the application version.
+    wix              WiX commands.
+
+  Documentation:
+    https://www.io7m.com/software/montarre/
+
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+
+</Section>

@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section xmlns="urn:com.io7m.structural:8:0"
+         id="89f58176-b846-4e2d-80ff-5bb1ad9cda07"
+         title="package">
+
+  <Subsection title="Description">
+    <Paragraph>
+      The <Term type="goal">package</Term> goal produces a <Term type="package">montarre</Term> package from the current
+      module's dependencies.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Configuration Parameters">
+    <Subsection title="applicationKind">
+      <Paragraph>
+        The <Term type="element">applicationKind</Term> element specifies the kind of the application. Some operating
+        systems distinguish between graphical and "console" applications, and some packaging standards such as Flatpak
+        also require this information. The element must have one of the following values:
+      </Paragraph>
+      <FormalItem title="Application Kinds">
+        <ListUnordered>
+          <Item>
+            <Term type="constant">CONSOLE</Term>
+            - The application does not have a graphical interface.
+          </Item>
+          <Item>
+            <Term type="constant">GRAPHICAL</Term>
+            - The application has a graphical interface.
+          </Item>
+        </ListUnordered>
+      </FormalItem>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<applicationKind>CONSOLE</applicationKind>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="categories">
+      <Paragraph>
+        The <Term type="element">categories</Term> element specifies the categories for the application. The element
+        must contain at least one <Term type="element">category</Term> element. Each
+        <Term type="element">category</Term>
+        must have text content matching one of the category values from the
+        <LinkExternal target="https://specifications.freedesktop.org/menu-spec/latest/category-registry.html">
+          freedesktop.org category registry</LinkExternal>.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<categories>
+  <category>Development</category>
+  <category>Building</category>
+</categories>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="copyright">
+      <Paragraph>
+        The <Term type="element">copyright</Term> element specifies a single-line copyright string.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<copyright>Copyright © 2024 Mark Raynsford &lt;code@io7m.com> https://www.io7m.com</copyright>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="description">
+      <Paragraph>
+        The <Term type="element">description</Term> element specifies a single-line application description.
+      </Paragraph>
+      <Paragraph>
+        If this element is not provided, a value is inferred from the Maven POM's
+        <Term type="element">description</Term>
+        element.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<description>Application packaging tools.</description>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="humanName">
+      <Paragraph>
+        The <Term type="element">humanName</Term> element specifies a humanly-readable application name.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<humanName>Montarre</humanName>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="libraries"
+                id="b1a07fc1-1462-4b78-aced-4f809530d16d">
+      <Paragraph>
+        The <Term type="element">libraries</Term> element specifies rules for including and excluding dependencies and
+        artifacts from being included in the resulting <Term type="package">montarre</Term> package. The element can
+        contain at most one <Link target="c0ce2502-a2e7-4869-bd99-aac5d87fcb99">includes</Link> element and at most one
+        <Link target="6cce37f0-8a37-43de-80a8-fda9c871374c">excludes</Link>
+        element. When the Maven plugin is deciding whether to <Term type="term">include</Term> an artifact in a package,
+        it will compare the filename against each of the inclusion and exclusion patterns. If the file is matched by at
+        least one inclusion filter, and not matched by any exclusion filter, then the file will be treated as included.
+      </Paragraph>
+      <Paragraph id="c0ce2502-a2e7-4869-bd99-aac5d87fcb99">
+        The <Term type="element">includes</Term> element contains a list of
+        <Term type="element">include</Term>
+        elements, each of which provides a
+        <LinkExternal target="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/regex/Pattern.html">
+          regular expression
+        </LinkExternal>
+        against which the <Term type="term">file names</Term> of artifacts are compared.
+      </Paragraph>
+      <Paragraph id="6cce37f0-8a37-43de-80a8-fda9c871374c">
+        The <Term type="element">excludes</Term> element contains a list of
+        <Term type="element">exclude</Term>
+        elements, each of which provides a
+        <LinkExternal target="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/regex/Pattern.html">
+          regular expression
+        </LinkExternal>
+        against which the <Term type="term">file names</Term> of artifacts are compared.
+      </Paragraph>
+      <Paragraph>
+        If no <Term type="element">libraries</Term> element is provided, the plugin acts as if all
+        <Term type="file">jar</Term>
+        files are included, and nothing is specifically excluded.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<libraries>
+  <excludes>
+    <exclude>com\.io7m\.montarre\.cmdline-.*-main\.jar</exclude>
+    <exclude>com\.io7m\.montarre\.distribution-.*</exclude>
+    <exclude>maven-.*</exclude>
+    <exclude>com\.io7m\.montarre\.maven_plugin-.*</exclude>
+  </excludes>
+</libraries>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="license">
+      <Paragraph>
+        The <Term type="element">license</Term> element specifies license information. In particular, the contents of
+        the element must be an <LinkExternal target="https://spdx.org/licenses/">SPDX</LinkExternal> license identifier
+        such as "ISC". If no <Term type="element">license</Term> element is provided, the license identifier is inferred
+        from the Maven POM's <Term type="element">license</Term> element.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<license>ISC</license>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="links">
+      <Paragraph>
+        The <Term type="element">links</Term> element specifies links to external resources. These links are used in
+        many packaging systems to provide connections to source code repositories, issue trackers, and etc.
+      </Paragraph>
+      <Paragraph>
+        If no <Term type="element">links</Term> element is provided, the plugin will make a best-effort attempt to
+        extract links from the Maven POM's various elements.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<links>
+  <link>
+    <role>HOME_PAGE</role>
+    <target>https://www.io7m.com/software/montarre/</target>
+  </link>
+  <link>
+    <role>SCM</role>
+    <target>https://www.github.com/io7m-com/montarre/</target>
+  </link>
+  <link>
+    <role>ISSUES</role>
+    <target>https://www.github.com/io7m-com/montarre/issues/</target>
+  </link>
+</links>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="longDescriptions">
+      <Paragraph>
+        The <Term type="element">longDescriptions</Term> element specifies longer descriptions of the application.
+        Currently, this data is almost exclusively used for Flatpak applications. The text of long descriptions will be
+        visible to users when published to services such as
+        <LinkExternal target="https://flathub.org/">FlatHub</LinkExternal>.
+      </Paragraph>
+    </Subsection>
+
+    <Subsection title="mainModule">
+      <Paragraph>
+        The <Term type="element">mainModule</Term> element specifies the fully-qualified name of the entry point of the
+        application. The syntax is the same as that expected by the
+        <Term type="command">java</Term>
+        command:
+        <Term type="expression">&lt;module>/&lt;mainclass></Term>
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<mainModule>com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain</mainModule>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="outputFile">
+      <Paragraph>
+        The <Term type="element">outputFile</Term> element specifies the output file that will be created by the plugin.
+        If not specified, this defaults to the artifact name, version, and a
+        <Term type="expression">.mpk</Term>
+        suffix.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<outputFile>com.io7m.montarre.cmdline-${project.version}.mpk</mainModule>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="packageName"
+                id="cc55874d-4afc-40f7-b873-ad189a80a2a1">
+      <Paragraph>
+        The <Term type="element">packageName</Term> element specifies a globally-unique package name. This name must be
+        in reverse DNS format conforming to the
+        <LinkExternal target="https://www.io7m.com/software/lanark/">Lanark</LinkExternal>
+        name specification.
+      </Paragraph>
+      <Paragraph>
+        In particular, this name is used to uniquely identify Flatpak applications and so cannot be changed after it has
+        been published.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<packageName>com.io7m.montarre</packageName>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="packageVersion">
+      <Paragraph>
+        The <Term type="element">packageVersion</Term> element specifies version information. It must have a <Term type="element">
+        number
+      </Term> child element whose text content is the full semantic version of the application, and a <Term type="element">
+        date
+      </Term> child element that indicates when the version number was set.
+      </Paragraph>
+      <Paragraph>
+        If no <Term type="element">packageVersion</Term> element is specified, the
+        <Term type="element">number</Term>
+        child element is set to the value of the Maven POM's
+        <Term type="element">version</Term>
+        element, and the <Term type="element">date</Term> child element is set to a fixed value of
+        <Term type="constant">2024-10-06</Term>
+        <LinkFootnote target="9a29d89c-a504-4593-ac6d-28924c07fc8a"/>.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<version>
+  <number>${project.version}</number>
+  <date>2024-10-06</date>
+</version>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="platformLibraries">
+      <Paragraph>
+        The <Term type="element">platformLibraries</Term> element is similar to the
+        <Link target="b1a07fc1-1462-4b78-aced-4f809530d16d">libraries</Link>
+        element except that its purpose is to categorize matching artifacts as being <Term type="term">
+        platform-dependent</Term>. For example, an application might include native library jar files for a number of
+        different platforms, and only the native library for the current platform should actually be placed on the
+        module path when the application is run. The <Term type="element">platformLibraries</Term> element allows for
+        specifying rules that will mark each matching artifact with their hardware architecture and operating system.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="element">platformLibraries</Term> element contains zero or more
+        <Term type="element">platformLibrary</Term>
+        elements that each specify a hardware architecture, operating system, and inclusion and exclusion patterns. It
+        operates in the same manner as the <Link target="b1a07fc1-1462-4b78-aced-4f809530d16d">libraries</Link> element
+        except that, if an artifact is included by a pattern, that artifact is marked as having the hardware
+        architecture and operating system of the
+        <Term type="element">platformLibrary</Term>
+        element containing the pattern.
+      </Paragraph>
+      <Paragraph>
+        If no <Term type="element">platformLibraries</Term> element is provided, no artifacts are marked as being
+        platform-dependent.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<platformLibraries>
+  <platformLibrary>
+    <architecture>x86_64</architecture>
+    <operatingSystem>linux</operatingSystem>
+    <includes>
+      <include>lwjgl-natives-linux-amd64\.jar</include>
+    </includes>
+  </platformLibrary>
+  <platformLibrary>
+    <architecture>aarch64</architecture>
+    <operatingSystem>linux</operatingSystem>
+    <includes>
+      <include>lwjgl-natives-linux-aarch64\.jar</include>
+    </includes>
+  </platformLibrary>
+  <platformLibrary>
+    <architecture>x86_64</architecture>
+    <operatingSystem>windows</operatingSystem>
+    <includes>
+      <include>lwjgl-natives-windows-amd64\.jar</include>
+    </includes>
+  </platformLibrary>
+  <platformLibrary>
+    <architecture>aarch64</architecture>
+    <operatingSystem>windows</operatingSystem>
+    <includes>
+      <include>lwjgl-natives-windows-aarch64\.jar</include>
+    </includes>
+  </platformLibrary>
+</platformLibraries>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="requiredJDKVersion">
+      <Paragraph>
+        The <Term type="element">requiredJDKVersion</Term> element specifies the minimum Java version required to run
+        the application.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<requiredJDKVersion>21</requiredJDKVersion>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="resources">
+      <Paragraph>
+        The <Term type="element">resources</Term> element specifies metadata resources that will be included in the
+        application package. The <Term type="element">resources</Term> element contains zero or more
+        <Term type="element">resource</Term>
+        elements that each specify a role, a file, and an entry name.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<resources>
+  <resource>
+    <role>BOM</role>
+    <file>${project.build.directory}/bom.xml</file>
+    <entryName>bom.xml</entryName>
+  </resource>
+  <resource>
+    <role>ICON_16</role>
+    <file>${project.basedir}/src/main/meta/icon16.png</file>
+    <entryName>icon16.png</entryName>
+  </resource>
+  <resource>
+    <role>ICON_24</role>
+    <file>${project.basedir}/src/main/meta/icon24.png</file>
+    <entryName>icon24.png</entryName>
+  </resource>
+  <resource>
+    <role>ICON_32</role>
+    <file>${project.basedir}/src/main/meta/icon32.png</file>
+    <entryName>icon32.png</entryName>
+  </resource>
+  <resource>
+    <role>ICON_48</role>
+    <file>${project.basedir}/src/main/meta/icon48.png</file>
+    <entryName>icon48.png</entryName>
+  </resource>
+  <resource>
+    <role>ICON_64</role>
+    <file>${project.basedir}/src/main/meta/icon64.png</file>
+    <entryName>icon64.png</entryName>
+  </resource>
+  <resource>
+    <role>ICON_128</role>
+    <file>${project.basedir}/src/main/meta/icon128.png</file>
+    <entryName>icon128.png</entryName>
+  </resource>
+  <resource>
+    <role>ICO_WINDOWS</role>
+    <file>${project.basedir}/src/main/meta/icon.ico</file>
+    <entryName>icon.ico</entryName>
+  </resource>
+  <resource>
+    <role>LICENSE</role>
+    <file>${project.basedir}/../README-LICENSE.txt</file>
+    <entryName>license.txt</entryName>
+  </resource>
+</resources>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="shortName">
+      <Paragraph>
+        The <Term type="element">shortName</Term> element specifies the shortened name of the package. This is used in a
+        number of places. For example, the executable produced by <Term type="command">jpackage</Term> when producing an
+        app-image will be named according to the short name. Additionally, packaging systems such as Debian packages
+        will use the short name instead of the
+        <Link target="cc55874d-4afc-40f7-b873-ad189a80a2a1">package name</Link>
+        due to being unable to support reverse DNS notation.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<shortName>montarre</requiredJDKVersion>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="vendor">
+      <Paragraph>
+        The <Term type="element">vendor</Term> element specifies information about the vendor of the package. It must
+        contain an <Term type="element">id</Term> element specifying the globally unique, reverse DNS identifier of the
+        vendor, and a <Term type="name">name</Term> element specifying a filesystem-safe vendor name. Some packaging
+        systems will use the vendor name as a directory name, so the name must be limited to short, filesystem-safe
+        names. A sensible approach for vendor IDs is to use a prefix of your Maven group name (or perhaps just the
+        entire group name if you use the same group name in every project).
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<vendor>
+  <id>com.io7m</id>
+  <name>io7m</name>
+</vendor>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="Skipping">
+    <Paragraph>
+      The plugin execution can be skipped by setting the <Term type="expression">montarre.skip</Term> property
+      to <Term type="constant">true</Term>.
+    </Paragraph>
+  </Subsection>
+
+  <Footnote id="9a29d89c-a504-4593-ac6d-28924c07fc8a">
+    A fixed date value is used in order to avoid making builds non-reproducible by inserting a varying date value into
+    packages.
+  </Footnote>
+
+</Section>

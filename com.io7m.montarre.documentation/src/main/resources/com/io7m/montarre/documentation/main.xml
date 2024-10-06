@@ -19,6 +19,7 @@
   </Metadata>
 
   <xi:include href="overview.xml"/>
+  <xi:include href="install.xml"/>
   <xi:include href="usage.xml"/>
   <xi:include href="maven.xml"/>
   <xi:include href="cmdline.xml"/>

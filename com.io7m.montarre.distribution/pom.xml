@@ -54,28 +54,37 @@
             </goals>
             <phase>package</phase>
             <configuration>
-              <packageName>com.io7m.montarre</packageName>
-              <requiredJDKVersion>21</requiredJDKVersion>
-              <shortName>montarre</shortName>
-              <mainModule>com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain</mainModule>
-              <copyright>Copyright © 2024 Mark Raynsford &lt;code@io7m.com> https://www.io7m.com</copyright>
-              <humanName>Montarre</humanName>
               <applicationKind>CONSOLE</applicationKind>
-              <version>
-                <number>${project.version}</number>
-                <date>2024-10-06</date>
-              </version>
-              <vendor>
-                <id>com.io7m</id>
-                <name>io7m</name>
-              </vendor>
-              <longDescriptions>
-                <longDescription>${project.basedir}/src/main/meta/description-en.xml</longDescription>
-              </longDescriptions>
+
               <categories>
                 <category>Development</category>
                 <category>Building</category>
               </categories>
+
+              <copyright>Copyright © 2024 Mark Raynsford &lt;code@io7m.com> https://www.io7m.com</copyright>
+
+              <humanName>Montarre</humanName>
+              <packageName>com.io7m.montarre</packageName>
+              <shortName>montarre</shortName>
+
+              <version>
+                <number>${project.version}</number>
+                <date>2024-10-06</date>
+              </version>
+
+              <vendor>
+                <id>com.io7m</id>
+                <name>io7m</name>
+              </vendor>
+
+              <longDescriptions>
+                <longDescription>${project.basedir}/src/main/meta/description-en.xml</longDescription>
+              </longDescriptions>
+
+              <mainModule>com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain</mainModule>
+
+              <requiredJDKVersion>21</requiredJDKVersion>
+
               <libraries>
                 <excludes>
                   <exclude>com\.io7m\.montarre\.cmdline-.*-main\.jar</exclude>
@@ -84,6 +93,7 @@
                   <exclude>com\.io7m\.montarre\.maven_plugin-.*</exclude>
                 </excludes>
               </libraries>
+
               <resources>
                 <resource>
                   <role>BOM</role>

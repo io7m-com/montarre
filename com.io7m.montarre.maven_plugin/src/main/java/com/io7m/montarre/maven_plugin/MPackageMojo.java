@@ -142,7 +142,7 @@ public final class MPackageMojo extends AbstractMojo
    * The package version.
    */
 
-  @Parameter()
+  @Parameter(required = false)
   private Version packageVersion;
 
   /**
@@ -170,21 +170,21 @@ public final class MPackageMojo extends AbstractMojo
    * The package links.
    */
 
-  @Parameter()
+  @Parameter(required = false)
   private List<Link> links = new ArrayList<>();
 
   /**
    * The package long description files.
    */
 
-  @Parameter()
+  @Parameter(required = false)
   private List<File> longDescriptions = new ArrayList<>();
 
   /**
    * The humanly-readable application name.
    */
 
-  @Parameter()
+  @Parameter(required = false)
   private String humanName;
 
   /**
@@ -205,14 +205,14 @@ public final class MPackageMojo extends AbstractMojo
    * The SPDX license identifier.
    */
 
-  @Parameter()
+  @Parameter(required = false)
   private String license;
 
   /**
    * The vendor.
    */
 
-  @Parameter()
+  @Parameter(required = false)
   private Vendor vendor;
 
   /**
@@ -226,28 +226,28 @@ public final class MPackageMojo extends AbstractMojo
    * The platform library filters.
    */
 
-  @Parameter()
+  @Parameter(required = false)
   private List<PlatformLibrary> platformLibraries = new ArrayList<>();
 
   /**
    * The library filter.
    */
 
-  @Parameter()
+  @Parameter(required = false)
   private Library libraries = new Library();
 
   /**
    * The resource files.
    */
 
-  @Parameter()
+  @Parameter(required = false)
   private List<Resource> resources = new ArrayList<>();
 
   /**
    * The categories.
    */
 
-  @Parameter()
+  @Parameter(required = false)
   private List<String> categories = new ArrayList<>();
 
   /**

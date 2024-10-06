@@ -1,0 +1,5 @@
+<plugin>
+  <groupId>com.io7m.montarre</groupId>
+  <artifactId>com.io7m.montarre.maven_plugin</artifactId>
+  <version>${project.version}</version>
+</plugin>

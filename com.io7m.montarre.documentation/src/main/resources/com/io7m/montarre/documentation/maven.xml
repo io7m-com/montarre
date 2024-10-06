@@ -1,9 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Section xmlns="urn:com.io7m.structural:8:0"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
          id="f3ab6b7a-7a96-426a-a0d6-fc222ab3c965"
          title="Maven Plugin">
-  <Paragraph>
-    Maven…
-  </Paragraph>
+  
+  <Section title="Usage">
+    <Subsection title="Overview">
+      <Paragraph>
+        This section of the documentation documents the
+        <LinkExternal target="https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#plugins">goals</LinkExternal>
+        of the <Term type="package">montarre</Term> Maven plugin.
+      </Paragraph>
+      <Paragraph>
+        To use the plugin, add at least the following to your Maven project's
+        <Term type="element">build</Term> section:
+      </Paragraph>
+      <FormalItem title="Maven Plugin Dependency">
+        <Verbatim><xi:include href="maven-small.txt" parse="text"/></Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Section>
+
+  <Section title="Goals">
+    <xi:include href="mpg-package.xml"/>
+  </Section>
+  
 </Section>
