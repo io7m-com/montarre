@@ -18,7 +18,6 @@
 package com.io7m.montarre.io.internal;
 
 import com.io7m.anethum.api.ParsingException;
-import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MFileName;
 import com.io7m.montarre.api.MHash;
@@ -26,6 +25,7 @@ import com.io7m.montarre.api.MModule;
 import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.MPlatformDependentModule;
 import com.io7m.montarre.api.MReservedNames;
+import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.io.MPackageReaderType;
 import com.io7m.montarre.api.parsers.MPackageDeclarationParserFactoryType;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;

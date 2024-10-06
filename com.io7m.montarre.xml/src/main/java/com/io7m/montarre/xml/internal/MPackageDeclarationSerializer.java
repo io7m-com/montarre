@@ -37,20 +37,13 @@ import com.io7m.montarre.api.MVendor;
 import com.io7m.montarre.api.MVersion;
 import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
 import com.io7m.montarre.schema.MSchemas;
+import com.io7m.montarre.xml.MReindent;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -107,36 +100,10 @@ public final class MPackageDeclarationSerializer implements
       this.output.writeEndElement();
       this.output.flush();
 
-      this.indent(byteOutput.toByteArray());
+      MReindent.indent(byteOutput.toByteArray(), this.stream);
     } catch (final Exception e) {
       throw new SerializationException(e.getMessage(), e);
     }
-  }
-
-  private void indent(
-    final byte[] data)
-    throws TransformerException, IOException
-  {
-    final var transformer =
-      TransformerFactory.newInstance()
-        .newTransformer();
-
-    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-    transformer.setOutputProperty(
-      "{http://xml.apache.org/xslt}indent-amount",
-      "2");
-    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-
-    this.stream.write(
-      """
-        <?xml version="1.0" encoding="UTF-8"?>
-        """.trim().getBytes(StandardCharsets.UTF_8));
-    this.stream.write('\n');
-
-    transformer.transform(
-      new StreamSource(new ByteArrayInputStream(data)),
-      new StreamResult(this.stream)
-    );
   }
 
   private void writeManifest(

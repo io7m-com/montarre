@@ -30,6 +30,7 @@ module com.io7m.montarre.nativepack
   requires static org.osgi.annotation.versioning;
 
   requires com.io7m.montarre.api;
+  requires com.io7m.montarre.xml;
 
   requires com.io7m.jaffirm.core;
   requires com.io7m.jdownload.core;

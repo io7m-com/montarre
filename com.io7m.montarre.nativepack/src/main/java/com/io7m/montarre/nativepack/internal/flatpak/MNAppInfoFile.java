@@ -21,19 +21,12 @@ import com.io7m.montarre.api.MApplicationKind;
 import com.io7m.montarre.api.MLinkRole;
 import com.io7m.montarre.api.MMetadataType;
 import com.io7m.montarre.api.MPackageDeclaration;
+import com.io7m.montarre.xml.MReindent;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
@@ -91,7 +84,7 @@ public final class MNAppInfoFile
       output.writeEndElement();
       output.flush();
 
-      return indent(byteOutput.toByteArray());
+      return MReindent.indent(byteOutput.toByteArray());
     } catch (final Exception e) {
       throw new IllegalStateException(e);
     }
@@ -299,36 +292,5 @@ public final class MNAppInfoFile
       case CONSOLE -> "console-application";
       case GRAPHICAL -> "desktop-application";
     };
-  }
-
-  private static String indent(
-    final byte[] data)
-    throws TransformerException, IOException
-  {
-    final var stream =
-      new ByteArrayOutputStream();
-
-    final var transformer =
-      TransformerFactory.newInstance()
-        .newTransformer();
-
-    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-    transformer.setOutputProperty(
-      "{http://xml.apache.org/xslt}indent-amount",
-      "2");
-    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-
-    stream.write(
-      """
-        <?xml version="1.0" encoding="UTF-8"?>
-        """.trim().getBytes(StandardCharsets.UTF_8));
-    stream.write('\n');
-
-    transformer.transform(
-      new StreamSource(new ByteArrayInputStream(data)),
-      new StreamResult(stream)
-    );
-
-    return stream.toString(StandardCharsets.UTF_8);
   }
 }

@@ -22,20 +22,14 @@ import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.MResourceRole;
 import com.io7m.montarre.api.wix.MWiXWriterType;
+import com.io7m.montarre.xml.MReindent;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -89,36 +83,10 @@ public final class MWiXWriter implements MWiXWriterType
         xmlOutputs.createXMLStreamWriter(this.bytesOut, "UTF-8");
 
       this.writeDocument(xmlOutput);
-      this.indent(this.bytesOut.toByteArray());
+      MReindent.indent(this.bytesOut.toByteArray(), this.output);
     } catch (final Exception e) {
       throw new MException(e.getMessage(), e, "error-xml");
     }
-  }
-
-  private void indent(
-    final byte[] data)
-    throws TransformerException, IOException
-  {
-    final var transformer =
-      TransformerFactory.newInstance()
-        .newTransformer();
-
-    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-    transformer.setOutputProperty(
-      "{http://xml.apache.org/xslt}indent-amount",
-      "2");
-    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-
-    this.output.write(
-      """
-        <?xml version="1.0" encoding="UTF-8"?>
-        """.trim().getBytes(StandardCharsets.UTF_8));
-    this.output.write('\n');
-
-    transformer.transform(
-      new StreamSource(new ByteArrayInputStream(data)),
-      new StreamResult(this.output)
-    );
   }
 
   private void writeDocument(

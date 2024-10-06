@@ -17,7 +17,6 @@
 
 package com.io7m.montarre.tests;
 
-import com.io7m.montarre.api.MArchitectureName;
 import com.io7m.montarre.api.MOperatingSystemName;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
