@@ -13,6 +13,11 @@
   </Feature>
 
   <Feature>
+    Extensive, type-driven, ahead-of-time checking; if your package validates, you should get working native packages on
+    all platforms.
+  </Feature>
+
+  <Feature>
     Support for producing simple jpackage "app-image" executables on any platform.
   </Feature>
 

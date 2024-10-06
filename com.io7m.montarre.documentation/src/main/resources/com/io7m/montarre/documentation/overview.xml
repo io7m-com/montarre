@@ -111,6 +111,10 @@
           formats.
         </Item>
         <Item>
+          Extensive, type-driven, ahead-of-time checking; if your package validates, you should get working native
+          packages on all platforms.
+        </Item>
+        <Item>
           Support for producing simple <Term type="package">jpackage</Term> "app-image" executables on any platform.
         </Item>
         <Item>
