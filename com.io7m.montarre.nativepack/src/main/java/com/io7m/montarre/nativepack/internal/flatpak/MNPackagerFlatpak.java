@@ -188,7 +188,7 @@ public final class MNPackagerFlatpak
 
       final var outputFile =
         directory.resolve(
-          "%s.flatpak".formatted(packageV.metadata().packageName())
+          "%s.flatpak".formatted(packageV.metadata().names().packageName())
         );
 
       final var build =
@@ -213,6 +213,7 @@ public final class MNPackagerFlatpak
       generateAndCopyAppImage(workspace, reader, build);
 
       this.flatpakWriteDesktopFile(build, packageV);
+      this.flatpakWriteAppInfoFile(build, packageV);
       this.flatpakWriteIcons(reader, build, packageV);
       this.flatpakBuildFinish(build);
       this.flatpakBuildExport(build, repos);
@@ -222,6 +223,40 @@ public final class MNPackagerFlatpak
     } catch (final Exception e) {
       throw this.error(e);
     }
+  }
+
+  private void flatpakWriteAppInfoFile(
+    final Path build,
+    final MPackageDeclaration packageV)
+    throws IOException
+  {
+    LOG.info("Writing appinfo file.");
+
+    /*
+     * Some systems expect an ".appdata.xml" file, whilst some expect a
+     * ".metainfo.xml" file. Given that we're generating the content, we
+     * can install both.
+     */
+
+    final var text =
+      MNAppInfoFile.createAppInfoFileText(packageV);
+
+    final var appdata =
+      build.resolve("files")
+        .resolve("share")
+        .resolve("metainfo")
+        .resolve(packageV.metadata().names().packageName() + ".appdata.xml");
+
+    final var metainfo =
+      build.resolve("files")
+        .resolve("share")
+        .resolve("metainfo")
+        .resolve(packageV.metadata().names().packageName() + ".metainfo.xml");
+
+    Files.createDirectories(appdata.getParent());
+    Files.writeString(appdata, text, this.writeReplaceOptions());
+    Files.createDirectories(metainfo.getParent());
+    Files.writeString(metainfo, text, this.writeReplaceOptions());
   }
 
   private void flatpakWriteDesktopFile(
@@ -235,7 +270,7 @@ public final class MNPackagerFlatpak
       build.resolve("files")
         .resolve("share")
         .resolve("applications")
-        .resolve(packageV.metadata().packageName() + ".desktop");
+        .resolve(packageV.metadata().names().packageName() + ".desktop");
 
     Files.createDirectories(desktopFile.getParent());
     Files.writeString(
@@ -308,10 +343,10 @@ public final class MNPackagerFlatpak
     final var outFile =
       iconsDirectory.resolve(sizeDirectory)
         .resolve("apps")
-        .resolve(packageV.metadata().packageName() + ".png");
+        .resolve(packageV.metadata().names().packageName() + ".png");
 
     Files.createDirectories(outFile.getParent());
-    try (var stream = reader.readFile(icon.file())) {
+    try (final var stream = reader.readFile(icon.file())) {
       Files.copy(stream, outFile);
     }
   }
@@ -334,7 +369,7 @@ public final class MNPackagerFlatpak
         "--verbose",
         repos.toString(),
         outputFile.toString(),
-        packageV.metadata().packageName().toString()
+        packageV.metadata().names().packageName().toString()
       )
     );
 
@@ -459,13 +494,13 @@ public final class MNPackagerFlatpak
     final var metadata =
       directory.resolve("metadata");
 
-    try (var writer =
+    try (final var writer =
            Files.newBufferedWriter(metadata, this.writeReplaceOptions())) {
       writer.append("[Application]");
       writer.append('\n');
 
       writer.append("name=");
-      writer.append(packageV.metadata().packageName().toString());
+      writer.append(packageV.metadata().names().packageName().toString());
       writer.append('\n');
 
       writer.append("runtime=");
@@ -477,7 +512,7 @@ public final class MNPackagerFlatpak
       writer.append('\n');
 
       writer.append("command=/app/bin/");
-      writer.append(packageV.metadata().shortName().toString());
+      writer.append(packageV.metadata().names().shortName().toString());
       writer.append('\n');
     }
   }
@@ -510,7 +545,7 @@ public final class MNPackagerFlatpak
         "build-init",
         "--verbose",
         directory.toString(),
-        packageV.metadata().packageName().name().value(),
+        packageV.metadata().names().packageName().name().value(),
         sdk.fullName(workspace.architecture()),
         platform.fullName(workspace.architecture())
       )

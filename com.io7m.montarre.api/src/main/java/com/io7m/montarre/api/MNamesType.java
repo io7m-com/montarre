@@ -15,37 +15,56 @@
  */
 
 
-package com.io7m.montarre.xml;
+package com.io7m.montarre.api;
 
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
+import com.io7m.immutables.styles.ImmutablesStyleType;
+import org.immutables.value.Value;
 
-import java.io.OutputStream;
-import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 /**
- * Package declaration serializers.
+ * Name information.
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+@ImmutablesStyleType
+@Value.Immutable
+public interface MNamesType
 {
   /**
-   * Package declaration serializers.
+   * @return The package name
    */
 
-  public MPackageDeclarationSerializers()
-  {
+  MPackageName packageName();
 
+  /**
+   * @return The humanly-readable application name
+   */
+
+  @Value.Default
+  default String humanName()
+  {
+    return this.packageName().toString();
   }
 
-  @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
+  /**
+   * @return The package short name
+   */
+
+  MShortName shortName();
+
+  /**
+   * @return A name-based UUID from the package name
+   */
+
+  @Value.Derived
+  default UUID id()
   {
-    return new MPackageDeclarationSerializer(stream);
+    return UUID.nameUUIDFromBytes(
+      this.packageName()
+        .name()
+        .value()
+        .getBytes(StandardCharsets.UTF_8)
+    );
   }
 }

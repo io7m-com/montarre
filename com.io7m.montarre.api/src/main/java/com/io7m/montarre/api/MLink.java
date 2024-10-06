@@ -14,38 +14,43 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+package com.io7m.montarre.api;
 
-package com.io7m.montarre.xml;
-
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
-
-import java.io.OutputStream;
 import java.net.URI;
+import java.util.Comparator;
+import java.util.Objects;
 
 /**
- * Package declaration serializers.
+ * A link.
+ *
+ * @param role   The link role
+ * @param target The target
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+public record MLink(
+  MLinkRole role,
+  URI target)
+  implements Comparable<MLink>
 {
   /**
-   * Package declaration serializers.
+   * A link.
+   *
+   * @param role   The link role
+   * @param target The target
    */
 
-  public MPackageDeclarationSerializers()
+  public MLink
   {
-
+    Objects.requireNonNull(role, "role");
+    Objects.requireNonNull(target, "target");
   }
 
   @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
+  public int compareTo(
+    final MLink other)
   {
-    return new MPackageDeclarationSerializer(stream);
+    return Comparator.comparing(MLink::target)
+      .thenComparing(MLink::role)
+      .compare(this, other);
   }
 }

@@ -15,37 +15,40 @@
  */
 
 
-package com.io7m.montarre.xml;
+package com.io7m.montarre.api;
 
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
+import com.io7m.immutables.styles.ImmutablesStyleType;
+import org.immutables.value.Value;
 
-import java.io.OutputStream;
-import java.net.URI;
+import java.util.List;
 
 /**
- * Package declaration serializers.
+ * A long description of the application.
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+@Value.Immutable
+@ImmutablesStyleType
+public interface MLongDescriptionType
 {
   /**
-   * Package declaration serializers.
+   * @return The description language
    */
 
-  public MPackageDeclarationSerializers()
+  @Value.Default
+  default String language()
   {
-
+    return "en";
   }
 
-  @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
-  {
-    return new MPackageDeclarationSerializer(stream);
-  }
+  /**
+   * @return The description paragraphs
+   */
+
+  List<MParagraph> descriptions();
+
+  /**
+   * @return The feature list
+   */
+
+  List<MFeature> features();
 }

@@ -15,37 +15,65 @@
  */
 
 
-package com.io7m.montarre.xml;
-
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
-
-import java.io.OutputStream;
-import java.net.URI;
+package com.io7m.montarre.maven_plugin;
 
 /**
- * Package declaration serializers.
+ * A version.
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+public final class Version
 {
+  private String number = "";
+  private String date = "";
+
   /**
-   * Package declaration serializers.
+   * A version.
    */
 
-  public MPackageDeclarationSerializers()
+  public Version()
   {
 
   }
 
-  @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
+  /**
+   * @return The number
+   */
+
+  public String getNumber()
   {
-    return new MPackageDeclarationSerializer(stream);
+    return this.number;
+  }
+
+  /**
+   * Set the number
+   *
+   * @param newID The number
+   */
+
+  public void setNumber(
+    final String newID)
+  {
+    this.number = newID;
+  }
+
+  /**
+   * @return The date
+   */
+
+  public String getDate()
+  {
+    return this.date;
+  }
+
+  /**
+   * Set the date
+   *
+   * @param newName The date
+   */
+
+  public void setDate(
+    final String newName)
+  {
+    this.date = newName;
   }
 }

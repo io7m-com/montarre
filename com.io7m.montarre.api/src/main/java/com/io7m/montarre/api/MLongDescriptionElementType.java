@@ -15,37 +15,14 @@
  */
 
 
-package com.io7m.montarre.xml;
-
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
-
-import java.io.OutputStream;
-import java.net.URI;
+package com.io7m.montarre.api;
 
 /**
- * Package declaration serializers.
+ * Elements that appear in long description.
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+public sealed interface MLongDescriptionElementType
+  permits MFeature, MParagraph
 {
-  /**
-   * Package declaration serializers.
-   */
 
-  public MPackageDeclarationSerializers()
-  {
-
-  }
-
-  @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
-  {
-    return new MPackageDeclarationSerializer(stream);
-  }
 }

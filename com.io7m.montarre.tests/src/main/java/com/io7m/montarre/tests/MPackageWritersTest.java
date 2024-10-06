@@ -18,6 +18,12 @@
 package com.io7m.montarre.tests;
 
 import com.io7m.lanark.core.RDottedName;
+import com.io7m.montarre.api.MApplicationKind;
+import com.io7m.montarre.api.MCopying;
+import com.io7m.montarre.api.MJavaInfo;
+import com.io7m.montarre.api.MLink;
+import com.io7m.montarre.api.MLinkRole;
+import com.io7m.montarre.api.MNames;
 import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MFileName;
@@ -31,7 +37,10 @@ import com.io7m.montarre.api.MPackageName;
 import com.io7m.montarre.api.MReservedNames;
 import com.io7m.montarre.api.MResourceRole;
 import com.io7m.montarre.api.MShortName;
+import com.io7m.montarre.api.MVendor;
+import com.io7m.montarre.api.MVendorID;
 import com.io7m.montarre.api.MVendorName;
+import com.io7m.montarre.api.MVersion;
 import com.io7m.montarre.io.MPackageWriters;
 import com.io7m.verona.core.Version;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +50,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,17 +64,37 @@ public final class MPackageWritersTest
     MPackageDeclaration.builder()
       .setMetadata(
         MMetadata.builder()
-          .setCopyright(
-            "Copyright © 2024 Mark Raynsford <code@io7m.com> https://www.io7m.com")
+          .setCopying(
+            MCopying.builder()
+              .setCopyright("Copyright © 2024 Mark Raynsford <code@io7m.com> https://www.io7m.com")
+              .setLicense("ISC")
+              .build()
+          )
           .setDescription("An example package.")
-          .setLicense("ISC")
-          .setMainModule("com.io7m.example/com.io7m.example.Main")
-          .setPackageName(new MPackageName(new RDottedName("com.io7m.example")))
-          .setRequiredJDKVersion(21L)
-          .setShortName(new MShortName("example"))
-          .setSiteURI(URI.create("https://www.example.com"))
-          .setVendorName(new MVendorName("io7m"))
-          .setVersion(Version.of(1, 0, 0))
+          .setJavaInfo(
+            MJavaInfo.builder()
+              .setMainModule("com.io7m.example/com.io7m.example.Main")
+              .setRequiredJDKVersion(21)
+              .build()
+          )
+          .setNames(
+            MNames.builder()
+              .setPackageName(new MPackageName(new RDottedName("com.io7m.example")))
+              .setShortName(new MShortName("example"))
+              .build()
+          )
+          .setApplicationKind(MApplicationKind.CONSOLE)
+          .addLinks(new MLink(MLinkRole.HOME_PAGE, URI.create("https://www.example.com")))
+          .setVendor(new MVendor(
+            new MVendorID(new RDottedName("com.io7m")),
+            new MVendorName("io7m")
+          ))
+          .setVersion(
+            new MVersion(
+              Version.of(1, 0, 0),
+              LocalDate.parse("2024-10-06")
+            )
+          )
           .build())
       .setManifest(
         MManifest.builder()

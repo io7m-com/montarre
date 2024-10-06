@@ -188,13 +188,13 @@ public final class MWiXWriter implements MWiXWriterType
       this.pack.manifest();
 
     final var vendorName =
-      metadata.vendorName().name();
+      metadata.vendor().name().name();
     final var packName =
-      metadata.packageName().name().value();
+      metadata.names().packageName().name().value();
     final var packVersion =
       metadata.version().toString();
     final var packID =
-      metadata.id().toString();
+      metadata.names().id().toString();
 
     final var iconOpt =
       manifest.items()

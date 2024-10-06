@@ -32,6 +32,7 @@ import com.io7m.montarre.api.natives.MNativeWorkspaceType;
 import com.io7m.montarre.io.MPackageReaders;
 import com.io7m.montarre.nativepack.MNWorkspaces;
 import com.io7m.montarre.nativepack.MNativeProcesses;
+import com.io7m.montarre.nativepack.internal.flatpak.MNAppInfoFile;
 import com.io7m.montarre.nativepack.internal.flatpak.MNPackagerFlatpakProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
@@ -237,6 +238,16 @@ public final class MNPackagerFlatpakTest
 
     assertEquals("error-flatpak-runtimes", e.errorCode());
     assertTrue(e.message().contains("The flatpak metadata is missing an SDK and/or platform."));
+  }
+
+  @Test
+  public void testAppInfoGeneration()
+    throws Exception
+  {
+    final var text =
+      MNAppInfoFile.createAppInfoFileText(this.reader.packageDeclaration());
+
+    LOG.debug("{}", text);
   }
 
   private void resource(

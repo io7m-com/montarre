@@ -15,37 +15,65 @@
  */
 
 
-package com.io7m.montarre.xml;
-
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
-
-import java.io.OutputStream;
-import java.net.URI;
+package com.io7m.montarre.maven_plugin;
 
 /**
- * Package declaration serializers.
+ * A vendor.
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+public final class Vendor
 {
+  private String id = "";
+  private String name = "";
+
   /**
-   * Package declaration serializers.
+   * A vendor.
    */
 
-  public MPackageDeclarationSerializers()
+  public Vendor()
   {
 
   }
 
-  @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
+  /**
+   * @return The ID
+   */
+
+  public String getId()
   {
-    return new MPackageDeclarationSerializer(stream);
+    return this.id;
+  }
+
+  /**
+   * Set the ID
+   *
+   * @param newID The ID
+   */
+
+  public void setId(
+    final String newID)
+  {
+    this.id = newID;
+  }
+
+  /**
+   * @return The name
+   */
+
+  public String getName()
+  {
+    return this.name;
+  }
+
+  /**
+   * Set the name
+   *
+   * @param newName The name
+   */
+
+  public void setName(
+    final String newName)
+  {
+    this.name = newName;
   }
 }

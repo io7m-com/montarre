@@ -4,6 +4,19 @@
             targetNamespace="urn:com.io7m.montarre.package:1"
             xmlns:mp="urn:com.io7m.montarre.package:1">
 
+  <xsd:simpleType name="ApplicationKindType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        The type of application. Many packaging systems and some operating systems distinguish between "console" and
+        "graphical" applications.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="CONSOLE"/>
+      <xsd:enumeration value="GRAPHICAL"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
   <xsd:simpleType name="VersionType">
     <xsd:annotation>
       <xsd:documentation xml:lang="en">
@@ -21,6 +34,17 @@
     </xsd:annotation>
     <xsd:restriction base="xsd:string">
       <xsd:pattern value="[A-Z][A-Za-z0-9_-]{0,128}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="VendorIDType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A vendor ID; A Lanark dotted name.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="([a-z][a-z0-9_-]{0,63})(\.[a-z][a-z0-9_-]{0,62}){0,15}"/>
     </xsd:restriction>
   </xsd:simpleType>
 
@@ -101,6 +125,62 @@
     </xsd:restriction>
   </xsd:simpleType>
 
+  <xsd:element name="Version">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        Version information.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="Number"
+                     type="xsd:string"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The version number. Typically in semantic version form ("2.0.0", "1.0.0-SNAPSHOT", etc).
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="Date"
+                     type="xsd:date"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The date the version was set.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="Vendor">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A vendor.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="ID"
+                     type="mp:VendorIDType"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The unique vendor ID.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="Name"
+                     type="mp:VendorNameType"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The vendor name.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+
   <xsd:element name="Category">
     <xsd:annotation>
       <xsd:documentation xml:lang="en">
@@ -111,6 +191,130 @@
       <xsd:attribute name="Name"
                      type="mp:CategoryNameType"
                      use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:simpleType name="LinkRole">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        The role of a link.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="ISSUES"/>
+      <xsd:enumeration value="HOME_PAGE"/>
+      <xsd:enumeration value="DONATION"/>
+      <xsd:enumeration value="CONTACT"/>
+      <xsd:enumeration value="FAQ"/>
+      <xsd:enumeration value="TRANSLATE"/>
+      <xsd:enumeration value="CONTRIBUTE"/>
+      <xsd:enumeration value="SCM"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:element name="Link">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A link.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="Role"
+                     type="mp:LinkRole"
+                     use="required"/>
+      <xsd:attribute name="Target"
+                     type="xsd:anyURI"
+                     use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="Copying">
+    <xsd:complexType>
+      <xsd:attribute name="License"
+                     type="xsd:string"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            An SPDX license identifier such as "ISC".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="Copyright"
+                     type="xsd:string"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            A copyright string such as "Copyright © 2024 Mark Raynsford &lt;code@io7m.com> https://www.io7m.com".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="JavaInfo">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        Information relative to the Java runtime.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="RequiredJDKVersion"
+                     type="xsd:unsignedLong"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The required JDK version.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="MainModule"
+                     type="xsd:string"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The main application module. This should be in a fully-qualified module form such as
+            "com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain".
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="Names">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        Package name information.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="Name"
+                     type="mp:PackageNameType"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The package name.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="ShortName"
+                     type="mp:ShortNameType"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The package short name. The short name is used when exporting to some native package systems such as Debian
+            packages.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="HumanName"
+                     type="xsd:string"
+                     use="optional">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The optional human-readable application name. This will default to the package name if not specified.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
     </xsd:complexType>
   </xsd:element>
 
@@ -168,6 +372,33 @@
     </xsd:complexType>
   </xsd:element>
 
+  <xsd:element name="Feature">
+    <xsd:complexType mixed="true"/>
+  </xsd:element>
+
+  <xsd:element name="Paragraph">
+    <xsd:complexType mixed="true"/>
+  </xsd:element>
+
+  <xsd:element name="LongDescription">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:sequence minOccurs="1"
+                      maxOccurs="unbounded">
+          <xsd:element ref="mp:Paragraph"/>
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0"
+                      maxOccurs="unbounded">
+          <xsd:element ref="mp:Feature"/>
+        </xsd:sequence>
+      </xsd:sequence>
+
+      <xsd:attribute name="Language"
+                     use="required"
+                     type="xsd:NMTOKEN"/>
+    </xsd:complexType>
+  </xsd:element>
+
   <xsd:element name="Metadata">
     <xsd:complexType>
       <xsd:sequence>
@@ -175,40 +406,26 @@
                       maxOccurs="unbounded">
           <xsd:element ref="mp:Category"/>
         </xsd:sequence>
+        <xsd:element ref="mp:Copying"/>
         <xsd:sequence>
           <xsd:element ref="mp:Flatpak"
                        minOccurs="0"
                        maxOccurs="1"/>
         </xsd:sequence>
+        <xsd:element ref="mp:JavaInfo"/>
+        <xsd:sequence minOccurs="0"
+                      maxOccurs="unbounded">
+          <xsd:element ref="mp:Link"/>
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0"
+                      maxOccurs="1">
+          <xsd:element ref="mp:LongDescription"/>
+        </xsd:sequence>
+        <xsd:element ref="mp:Names"/>
+        <xsd:element ref="mp:Vendor"/>
+        <xsd:element ref="mp:Version"/>
       </xsd:sequence>
 
-      <xsd:attribute name="Version"
-                     type="mp:VersionType"
-                     use="required">
-        <xsd:annotation>
-          <xsd:documentation xml:lang="en">
-            The package version.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="Name"
-                     type="mp:PackageNameType"
-                     use="required">
-        <xsd:annotation>
-          <xsd:documentation xml:lang="en">
-            The package name.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="RequiredJDKVersion"
-                     type="xsd:unsignedLong"
-                     use="required">
-        <xsd:annotation>
-          <xsd:documentation xml:lang="en">
-            The required JDK version.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
       <xsd:attribute name="Description"
                      type="xsd:string"
                      use="required">
@@ -218,67 +435,12 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
-      <xsd:attribute name="Copyright"
-                     type="xsd:string"
+      <xsd:attribute name="ApplicationKind"
+                     type="mp:ApplicationKindType"
                      use="required">
         <xsd:annotation>
           <xsd:documentation xml:lang="en">
-            A copyright string such as "Copyright © 2024 Mark Raynsford &lt;code@io7m.com> https://www.io7m.com".
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="License"
-                     type="xsd:string"
-                     use="required">
-        <xsd:annotation>
-          <xsd:documentation xml:lang="en">
-            An SPDX license identifier such as "ISC".
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="SiteURL"
-                     type="xsd:anyURI"
-                     use="required">
-        <xsd:annotation>
-          <xsd:documentation xml:lang="en">
-            A link to the software package site. This should be a human-readable website or a git repository frontend.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="MainModule"
-                     type="xsd:string"
-                     use="required">
-        <xsd:annotation>
-          <xsd:documentation xml:lang="en">
-            The main application module. This should be in a fully-qualified module form such as
-            "com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain".
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="ShortName"
-                     type="mp:ShortNameType"
-                     use="required">
-        <xsd:annotation>
-          <xsd:documentation xml:lang="en">
-            The package short name.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="VendorName"
-                     type="mp:VendorNameType"
-                     use="required">
-        <xsd:annotation>
-          <xsd:documentation xml:lang="en">
-            The vendor name.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
-      <xsd:attribute name="HumanName"
-                     type="xsd:string"
-                     use="optional">
-        <xsd:annotation>
-          <xsd:documentation xml:lang="en">
-            The optional human-readable application name. This will default to the package name if not specified.
+            The kind of the application.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>

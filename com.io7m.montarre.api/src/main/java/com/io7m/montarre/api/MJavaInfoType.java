@@ -15,37 +15,31 @@
  */
 
 
-package com.io7m.montarre.xml;
+package com.io7m.montarre.api;
 
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
-
-import java.io.OutputStream;
-import java.net.URI;
+import com.io7m.immutables.styles.ImmutablesStyleType;
+import org.immutables.value.Value;
 
 /**
- * Package declaration serializers.
+ * Information involving the Java runtime.
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+@Value.Immutable
+@ImmutablesStyleType
+public interface MJavaInfoType
 {
   /**
-   * Package declaration serializers.
+   * @return The minimum required JDK version
    */
 
-  public MPackageDeclarationSerializers()
-  {
+  long requiredJDKVersion();
 
-  }
+  /**
+   * The fully-qualified main module name used as the application entrypoint.
+   * For example, "com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain".
+   *
+   * @return The fully-qualified main module
+   */
 
-  @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
-  {
-    return new MPackageDeclarationSerializer(stream);
-  }
+  String mainModule();
 }

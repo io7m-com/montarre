@@ -19,8 +19,14 @@ package com.io7m.montarre.tests;
 
 import com.io7m.anethum.api.ParsingException;
 import com.io7m.lanark.core.RDottedName;
+import com.io7m.montarre.api.MApplicationKind;
 import com.io7m.montarre.api.MArchitectureName;
 import com.io7m.montarre.api.MCategoryName;
+import com.io7m.montarre.api.MCopying;
+import com.io7m.montarre.api.MJavaInfo;
+import com.io7m.montarre.api.MLink;
+import com.io7m.montarre.api.MLinkRole;
+import com.io7m.montarre.api.MNames;
 import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.MFileName;
 import com.io7m.montarre.api.MHash;
@@ -35,7 +41,10 @@ import com.io7m.montarre.api.MPackageName;
 import com.io7m.montarre.api.MPlatformDependentModule;
 import com.io7m.montarre.api.MResourceRole;
 import com.io7m.montarre.api.MShortName;
+import com.io7m.montarre.api.MVendor;
+import com.io7m.montarre.api.MVendorID;
 import com.io7m.montarre.api.MVendorName;
+import com.io7m.montarre.api.MVersion;
 import com.io7m.montarre.xml.MPackageDeclarationParsers;
 import com.io7m.montarre.xml.MPackageDeclarationSerializers;
 import com.io7m.verona.core.Version;
@@ -50,6 +59,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.HexFormat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -93,7 +103,7 @@ public final class MPackageParsersTest
     final var file =
       "/com/io7m/montarre/tests/%s".formatted(name);
 
-    try (var stream =
+    try (final var stream =
            MPackageParsersTest.class.getResourceAsStream(file)) {
       assertThrows(ParsingException.class, () -> {
         this.parsers.parse(URI.create("urn:fail"), stream);
@@ -105,23 +115,43 @@ public final class MPackageParsersTest
   public void testSerialize()
     throws Exception
   {
-    var streamOut = new ByteArrayOutputStream();
+    final var streamOut = new ByteArrayOutputStream();
 
     final var pack0 =
       MPackageDeclaration.builder()
       .setMetadata(
         MMetadata.builder()
-          .setCopyright(
-            "Copyright © 2024 Mark Raynsford <code@io7m.com> https://www.io7m.com")
+          .setCopying(
+            MCopying.builder()
+              .setCopyright("Copyright © 2024 Mark Raynsford <code@io7m.com> https://www.io7m.com")
+              .setLicense("ISC")
+              .build()
+          )
           .setDescription("An example package.")
-          .setMainModule("com.io7m.example/com.io7m.example.Main")
-          .setPackageName(new MPackageName(new RDottedName("com.io7m.example")))
-          .setRequiredJDKVersion(21L)
-          .setLicense("ISC")
-          .setShortName(new MShortName("example"))
-          .setSiteURI(URI.create("https://www.example.com"))
-          .setVendorName(new MVendorName("io7m"))
-          .setVersion(Version.of(1, 0, 0))
+          .setJavaInfo(
+            MJavaInfo.builder()
+              .setMainModule("com.io7m.example/com.io7m.example.Main")
+              .setRequiredJDKVersion(21)
+              .build()
+          )
+          .setNames(
+            MNames.builder()
+              .setPackageName(new MPackageName(new RDottedName("com.io7m.example")))
+              .setShortName(new MShortName("example"))
+              .build()
+          )
+          .setApplicationKind(MApplicationKind.CONSOLE)
+          .addLinks(new MLink(MLinkRole.HOME_PAGE, URI.create("https://www.example.com")))
+          .setVendor(new MVendor(
+            new MVendorID(new RDottedName("com.io7m")),
+            new MVendorName("io7m")
+          ))
+          .setVersion(
+            new MVersion(
+              Version.of(1, 0, 0),
+              LocalDate.parse("2024-10-06")
+            )
+          )
           .addCategories(new MCategoryName("Office"))
           .addCategories(new MCategoryName("Networking"))
           .build())
@@ -163,7 +193,7 @@ public final class MPackageParsersTest
     final String text)
     throws NoSuchAlgorithmException
   {
-    var digest =
+    final var digest =
       MessageDigest.getInstance("SHA-256");
 
     digest.update(text.getBytes(StandardCharsets.UTF_8));

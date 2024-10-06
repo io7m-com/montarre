@@ -17,15 +17,16 @@
 
 package com.io7m.montarre.api;
 
-
 import com.io7m.immutables.styles.ImmutablesStyleType;
-import com.io7m.verona.core.Version;
 import org.immutables.value.Value;
 
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
-import java.util.UUID;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import static com.io7m.montarre.api.MLinkRole.HOME_PAGE;
 
 /**
  * Package metadata.
@@ -37,32 +38,22 @@ public non-sealed interface MMetadataType
   extends MPackageElementType
 {
   /**
+   * @return The package name information
+   */
+
+  MNamesType names();
+
+  /**
    * @return The package version
    */
 
-  Version version();
+  MVersion version();
 
   /**
-   * @return The package name
+   * @return Information involving the Java runtime
    */
 
-  MPackageName packageName();
-
-  /**
-   * @return The minimum required JDK version
-   */
-
-  long requiredJDKVersion();
-
-  /**
-   * @return The humanly-readable application name
-   */
-
-  @Value.Default
-  default String humanName()
-  {
-    return this.packageName().toString();
-  }
+  MJavaInfoType javaInfo();
 
   /**
    * @return The package description
@@ -71,46 +62,71 @@ public non-sealed interface MMetadataType
   String description();
 
   /**
-   * @return The package copyright string
+   * @return The various package links.
    */
 
-  String copyright();
+  Set<MLink> links();
 
   /**
-   * @return The SPDX license identifier
+   * @return The vendor
    */
 
-  String license();
+  MVendor vendor();
 
   /**
-   * @return The package site
+   * @return The copyright and license information
    */
 
-  URI siteURI();
+  MCopyingType copying();
 
   /**
-   * @return The package main module
+   * @return A long description of the application
    */
 
-  String mainModule();
+  @Value.Default
+  default List<MLongDescriptionType> longDescriptions()
+  {
+    return List.of(
+      MLongDescription.builder()
+        .addDescriptions(new MParagraph(this.description()))
+        .build()
+    );
+  }
 
   /**
-   * @return The package short name
+   * A map of the long descriptions by language.
+   *
+   * @return The long descriptions by language
    */
 
-  MShortName shortName();
-
-  /**
-   * @return The vendor name
-   */
-
-  MVendorName vendorName();
+  @Value.Derived
+  default SortedMap<String, MLongDescriptionType> longDescriptionsByLanguage()
+  {
+    final var map = new TreeMap<String, MLongDescriptionType>();
+    for (final var description : this.longDescriptions()) {
+      final var language = description.language();
+      if (map.containsKey(language)) {
+        throw new IllegalArgumentException(
+          "A long description already exists with language '%s'"
+            .formatted(language)
+        );
+      }
+      map.put(language, description);
+    }
+    return Collections.unmodifiableSortedMap(map);
+  }
 
   /**
    * @return The application categories
    */
 
   Set<MCategoryName> categories();
+
+  /**
+   * @return The kind of the application
+   */
+
+  MApplicationKind applicationKind();
 
   /**
    * @return The flatpak-specific metadata
@@ -124,17 +140,22 @@ public non-sealed interface MMetadataType
   }
 
   /**
-   * @return A name-based UUID from the package name
+   * Check preconditions for the type.
    */
 
-  @Value.Derived
-  default UUID id()
+  @Value.Check
+  default void checkPreconditions()
   {
-    return UUID.nameUUIDFromBytes(
-      this.packageName()
-        .name()
-        .value()
-        .getBytes(StandardCharsets.UTF_8)
-    );
+    if (this.links().stream().noneMatch(link -> link.role() == HOME_PAGE)) {
+      throw new IllegalArgumentException(
+        "A link with the %s role is required.".formatted(HOME_PAGE)
+      );
+    }
+
+    if (this.longDescriptions().isEmpty()) {
+      throw new IllegalArgumentException(
+        "No long descriptions were provided."
+      );
+    }
   }
 }

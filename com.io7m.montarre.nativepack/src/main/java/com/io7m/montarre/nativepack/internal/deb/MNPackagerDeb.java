@@ -18,6 +18,7 @@
 package com.io7m.montarre.nativepack.internal.deb;
 
 import com.io7m.montarre.api.MException;
+import com.io7m.montarre.api.MLinkRole;
 import com.io7m.montarre.api.MMetadataType;
 import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.MShortName;
@@ -172,7 +173,7 @@ public final class MNPackagerDeb
 
       executeJPackage(
         jdkPath,
-        metadata.shortName(),
+        metadata.names().shortName(),
         metadata,
         appDirectory,
         buildDirectory,
@@ -183,8 +184,8 @@ public final class MNPackagerDeb
 
       return this.findOutput(
         workspace,
-        metadata.shortName(),
-        metadata.version(),
+        metadata.names().shortName(),
+        metadata.version().version(),
         buildDirectory
       );
     } catch (final Exception e) {
@@ -212,21 +213,30 @@ public final class MNPackagerDeb
     arguments.add("--name");
     arguments.add(shortName.name());
     arguments.add("--module");
-    arguments.add(metadata.mainModule());
+    arguments.add(metadata.javaInfo().mainModule());
     arguments.add("--module-path");
     arguments.add(appDirectory.resolve("lib").toString());
     arguments.add("--app-version");
-    arguments.add(metadata.version().toString());
+    arguments.add(metadata.version().version().toString());
     arguments.add("--dest");
     arguments.add(buildDirectory.toString());
     arguments.add("--copyright");
-    arguments.add(metadata.copyright());
+    arguments.add(metadata.copying().copyright());
     arguments.add("--description");
     arguments.add(metadata.description());
     arguments.add("--linux-package-name");
-    arguments.add(metadata.shortName().name());
+    arguments.add(metadata.names().shortName().name());
+
     arguments.add("--about-url");
-    arguments.add(metadata.siteURI().toString());
+    arguments.add(
+      metadata.links()
+        .stream()
+        .filter(k -> k.role() == MLinkRole.HOME_PAGE)
+        .findFirst()
+        .orElseThrow()
+        .target()
+        .toString()
+    );
 
     if (iconFile.isPresent()) {
       arguments.add("--icon");

@@ -191,8 +191,8 @@ public final class MNPackagerMSI
     final MMetadataType metadata)
   {
     return "%s-%s-%s-%s.msi".formatted(
-      metadata.shortName().name(),
-      metadata.version().toString(),
+      metadata.names().shortName().name(),
+      metadata.version().version().toString(),
       workspace.architecture(),
       workspace.operatingSystem()
     );

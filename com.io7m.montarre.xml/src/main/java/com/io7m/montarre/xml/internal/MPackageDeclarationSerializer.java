@@ -19,15 +19,22 @@ package com.io7m.montarre.xml.internal;
 
 import com.io7m.anethum.api.SerializationException;
 import com.io7m.montarre.api.MCategoryName;
+import com.io7m.montarre.api.MCopyingType;
 import com.io7m.montarre.api.MFlatpakRuntime;
+import com.io7m.montarre.api.MJavaInfoType;
+import com.io7m.montarre.api.MLink;
+import com.io7m.montarre.api.MLongDescriptionType;
 import com.io7m.montarre.api.MManifestItemType;
 import com.io7m.montarre.api.MManifestType;
 import com.io7m.montarre.api.MMetadataFlatpakType;
 import com.io7m.montarre.api.MMetadataType;
 import com.io7m.montarre.api.MModule;
+import com.io7m.montarre.api.MNamesType;
 import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.MPlatformDependentModule;
 import com.io7m.montarre.api.MResource;
+import com.io7m.montarre.api.MVendor;
+import com.io7m.montarre.api.MVersion;
 import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
 import com.io7m.montarre.schema.MSchemas;
 
@@ -43,9 +50,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -59,7 +66,6 @@ public final class MPackageDeclarationSerializer implements
   private static final String NS =
     MSchemas.schema1_0().namespace().toString();
 
-  private final URI target;
   private final OutputStream stream;
   private final XMLOutputFactory outputs;
   private XMLStreamWriter output;
@@ -67,16 +73,12 @@ public final class MPackageDeclarationSerializer implements
   /**
    * A package serializer.
    *
-   * @param inTarget The target
    * @param inStream The stream
    */
 
   public MPackageDeclarationSerializer(
-    final URI inTarget,
     final OutputStream inStream)
   {
-    this.target =
-      Objects.requireNonNull(inTarget, "target");
     this.stream =
       Objects.requireNonNull(inStream, "stream");
     this.outputs =
@@ -149,7 +151,7 @@ public final class MPackageDeclarationSerializer implements
         .sorted(Comparator.comparing(MManifestItemType::file))
         .toList();
 
-    for (var item : sortedItems) {
+    for (final var item : sortedItems) {
       this.writeManifestItem(item);
     }
 
@@ -161,13 +163,13 @@ public final class MPackageDeclarationSerializer implements
     throws XMLStreamException
   {
     switch (item) {
-      case MResource i -> {
+      case final MResource i -> {
         this.writeManifestItemResource(i);
       }
-      case MModule i -> {
+      case final MModule i -> {
         this.writeManifestItemModule(i);
       }
-      case MPlatformDependentModule i -> {
+      case final MPlatformDependentModule i -> {
         this.writeManifestItemPlatformDependentModule(i);
       }
     }
@@ -214,61 +216,148 @@ public final class MPackageDeclarationSerializer implements
     throws XMLStreamException
   {
     this.output.writeStartElement(NS, "Metadata");
+
     this.output.writeAttribute(
-      "Version",
-      metadata.version().toString()
-    );
-    this.output.writeAttribute(
-      "Name",
-      metadata.packageName().name().value()
-    );
-    this.output.writeAttribute(
-      "RequiredJDKVersion",
-      Long.toUnsignedString(metadata.requiredJDKVersion())
+      "ApplicationKind",
+      metadata.applicationKind().name()
     );
     this.output.writeAttribute(
       "Description",
       metadata.description()
     );
+
+    this.writeCategories(metadata.categories());
+    this.writeCopying(metadata.copying());
+    this.writeFlatpak(metadata.flatpak());
+    this.writeJavaInfo(metadata.javaInfo());
+    this.writeLinks(metadata.links());
+    this.writeLongDescriptions(metadata.longDescriptions());
+    this.writeNames(metadata.names());
+    this.writeVendor(metadata.vendor());
+    this.writeVersion(metadata.version());
+    this.output.writeEndElement();
+  }
+
+  private void writeNames(
+    final MNamesType names)
+    throws XMLStreamException
+  {
+    this.output.writeStartElement(NS, "Names");
     this.output.writeAttribute(
-      "Copyright",
-      metadata.copyright()
-    );
-    this.output.writeAttribute(
-      "SiteURL",
-      metadata.siteURI().toString()
-    );
-    this.output.writeAttribute(
-      "MainModule",
-      metadata.mainModule()
-    );
-    this.output.writeAttribute(
-      "License",
-      metadata.license()
+      "Name",
+      names.packageName().name().value()
     );
     this.output.writeAttribute(
       "ShortName",
-      metadata.shortName().name()
-    );
-    this.output.writeAttribute(
-      "VendorName",
-      metadata.vendorName().name()
+      names.shortName().name()
     );
     this.output.writeAttribute(
       "HumanName",
-      metadata.humanName()
+      names.humanName()
     );
-
-    this.writeCategories(metadata.categories());
-    this.writeFlatpak(metadata.flatpak());
     this.output.writeEndElement();
+  }
+
+  private void writeCopying(
+    final MCopyingType copying)
+    throws XMLStreamException
+  {
+    this.output.writeStartElement(NS, "Copying");
+    this.output.writeAttribute(
+      "Copyright",
+      copying.copyright()
+    );
+    this.output.writeAttribute(
+      "License",
+      copying.license()
+    );
+    this.output.writeEndElement();
+  }
+
+  private void writeJavaInfo(
+    final MJavaInfoType info)
+    throws XMLStreamException
+  {
+    this.output.writeStartElement(NS, "JavaInfo");
+    this.output.writeAttribute(
+      "RequiredJDKVersion",
+      Long.toUnsignedString(info.requiredJDKVersion())
+    );
+    this.output.writeAttribute(
+      "MainModule",
+      info.mainModule()
+    );
+    this.output.writeEndElement();
+  }
+
+  private void writeVersion(
+    final MVersion version)
+    throws XMLStreamException
+  {
+    this.output.writeStartElement(NS, "Version");
+    this.output.writeAttribute("Number", version.version().toString());
+    this.output.writeAttribute("Date", version.date().toString());
+    this.output.writeEndElement();
+  }
+
+  private void writeVendor(
+    final MVendor vendor)
+    throws XMLStreamException
+  {
+    this.output.writeStartElement(NS, "Vendor");
+    this.output.writeAttribute("ID", vendor.id().toString());
+    this.output.writeAttribute("Name", vendor.name().toString());
+    this.output.writeEndElement();
+  }
+
+  private void writeLongDescriptions(
+    final List<MLongDescriptionType> descriptions)
+    throws XMLStreamException
+  {
+    for (final var description : descriptions) {
+      this.writeLongDescription(description);
+    }
+  }
+
+  private void writeLongDescription(
+    final MLongDescriptionType value)
+    throws XMLStreamException
+  {
+    this.output.writeStartElement(NS, "LongDescription");
+    this.output.writeAttribute("Language", value.language());
+
+    for (final var p : value.descriptions()) {
+      this.output.writeStartElement(NS, "Paragraph");
+      this.output.writeCharacters(p.text().trim());
+      this.output.writeEndElement();
+    }
+
+    for (final var f : value.features()) {
+      this.output.writeStartElement(NS, "Feature");
+      this.output.writeCharacters(f.text().trim());
+      this.output.writeEndElement();
+    }
+
+    this.output.writeEndElement();
+  }
+
+  private void writeLinks(
+    final Set<MLink> links)
+    throws XMLStreamException
+  {
+    for (final var link : links.stream().sorted().toList()) {
+      this.output.writeStartElement(NS, "Link");
+      this.output.writeAttribute("Role", link.role().name());
+      this.output.writeAttribute("Target", link.target().toString());
+      this.output.writeEndElement();
+    }
   }
 
   private void writeCategories(
     final Set<MCategoryName> categories)
     throws XMLStreamException
   {
-    for (var name : categories.stream().sorted().toList()) {
+    for (final var name : categories.stream().sorted().toList()) {
       this.output.writeStartElement(NS, "Category");
       this.output.writeAttribute("Name", name.name());
       this.output.writeEndElement();
@@ -280,7 +369,7 @@ public final class MPackageDeclarationSerializer implements
     throws XMLStreamException
   {
     this.output.writeStartElement(NS, "Flatpak");
-    for (var runtime : flatpak.runtimes()) {
+    for (final var runtime : flatpak.runtimes()) {
       this.writeFlatpakRuntime(runtime);
     }
     this.output.writeEndElement();

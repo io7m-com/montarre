@@ -15,37 +15,69 @@
  */
 
 
-package com.io7m.montarre.xml;
+package com.io7m.montarre.maven_plugin;
 
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
+import com.io7m.montarre.api.MLinkRole;
 
-import java.io.OutputStream;
-import java.net.URI;
+import java.util.Objects;
 
 /**
- * Package declaration serializers.
+ * A link.
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+public final class Link
 {
+  private MLinkRole role = MLinkRole.HOME_PAGE;
+  private String target = "";
+
   /**
-   * Package declaration serializers.
+   * A resource.
    */
 
-  public MPackageDeclarationSerializers()
+  public Link()
   {
 
   }
 
-  @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
+  /**
+   * Set the role.
+   *
+   * @param newRole The role
+   */
+
+  public void setRole(
+    final MLinkRole newRole)
   {
-    return new MPackageDeclarationSerializer(stream);
+    this.role = Objects.requireNonNull(newRole, "role");
+  }
+
+  /**
+   * Set the target.
+   *
+   * @param newTarget The target
+   */
+
+  public void setTarget(
+    final String newTarget)
+  {
+    this.target = Objects.requireNonNull(newTarget, "target");
+  }
+
+  /**
+   * @return The link role
+   */
+
+  public MLinkRole getRole()
+  {
+    return this.role;
+  }
+
+  /**
+   * @return The target
+   */
+
+  public String getTarget()
+  {
+    return this.target;
   }
 }

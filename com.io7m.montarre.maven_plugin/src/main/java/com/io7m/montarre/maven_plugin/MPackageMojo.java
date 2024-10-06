@@ -17,18 +17,26 @@
 
 package com.io7m.montarre.maven_plugin;
 
+import com.io7m.anethum.api.ParsingException;
 import com.io7m.lanark.core.RDottedName;
+import com.io7m.montarre.api.MApplicationKind;
 import com.io7m.montarre.api.MArchitectureName;
 import com.io7m.montarre.api.MCategoryName;
+import com.io7m.montarre.api.MCopying;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MFileFilter;
 import com.io7m.montarre.api.MFileName;
 import com.io7m.montarre.api.MHash;
 import com.io7m.montarre.api.MHashAlgorithm;
 import com.io7m.montarre.api.MHashValue;
+import com.io7m.montarre.api.MJavaInfo;
+import com.io7m.montarre.api.MLink;
+import com.io7m.montarre.api.MLinkRole;
+import com.io7m.montarre.api.MLongDescription;
 import com.io7m.montarre.api.MManifest;
 import com.io7m.montarre.api.MMetadata;
 import com.io7m.montarre.api.MModule;
+import com.io7m.montarre.api.MNames;
 import com.io7m.montarre.api.MOperatingSystemName;
 import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.MPackageName;
@@ -37,9 +45,13 @@ import com.io7m.montarre.api.MPlatformDependentModule;
 import com.io7m.montarre.api.MPlatformFileFilter;
 import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.MShortName;
+import com.io7m.montarre.api.MVendor;
+import com.io7m.montarre.api.MVendorID;
 import com.io7m.montarre.api.MVendorName;
+import com.io7m.montarre.api.MVersion;
 import com.io7m.montarre.api.io.MPackageWriterType;
 import com.io7m.montarre.io.MPackageWriters;
+import com.io7m.montarre.xml.MLongDescriptionParsers;
 import com.io7m.seltzer.api.SStructuredErrorType;
 import com.io7m.verona.core.VersionException;
 import com.io7m.verona.core.VersionParser;
@@ -70,6 +82,7 @@ import java.nio.file.Paths;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -96,6 +109,8 @@ public final class MPackageMojo extends AbstractMojo
 {
   private static final Logger LOG =
     LoggerFactory.getLogger(MPackageMojo.class);
+
+  private final MLongDescriptionParsers longDescriptionParsers;
 
   @Parameter(
     required = false,
@@ -125,8 +140,8 @@ public final class MPackageMojo extends AbstractMojo
    * The package version.
    */
 
-  @Parameter(defaultValue = "${project.version}")
-  private String packageVersion;
+  @Parameter()
+  private Version packageVersion;
 
   /**
    * The main module.
@@ -150,11 +165,18 @@ public final class MPackageMojo extends AbstractMojo
   private String copyright = "";
 
   /**
-   * The package site.
+   * The package links.
    */
 
-  @Parameter(defaultValue = "${project.url}")
-  private String site;
+  @Parameter()
+  private List<Link> links = new ArrayList<>();
+
+  /**
+   * The package long description files.
+   */
+
+  @Parameter()
+  private List<File> longDescriptions = new ArrayList<>();
 
   /**
    * The humanly-readable application name.
@@ -171,13 +193,6 @@ public final class MPackageMojo extends AbstractMojo
   private String shortName;
 
   /**
-   * The vendor name.
-   */
-
-  @Parameter(required = true)
-  private String vendorName;
-
-  /**
    * The package required JDK version.
    */
 
@@ -188,8 +203,22 @@ public final class MPackageMojo extends AbstractMojo
    * The SPDX license identifier.
    */
 
-  @Parameter(required = true)
+  @Parameter()
   private String license;
+
+  /**
+   * The vendor.
+   */
+
+  @Parameter()
+  private Vendor vendor;
+
+  /**
+   * The application kind.
+   */
+
+  @Parameter(required = true)
+  private MApplicationKind applicationKind;
 
   /**
    * The platform library filters.
@@ -258,16 +287,18 @@ public final class MPackageMojo extends AbstractMojo
       new HashSet<>();
     this.collectedPlatformDependentArtifacts =
       new TreeMap<>();
+    this.longDescriptionParsers =
+      new MLongDescriptionParsers();
   }
 
   private static MHash hashOf(
     final File file)
     throws IOException, NoSuchAlgorithmException
   {
-    try (var stream = Files.newInputStream(file.toPath())) {
+    try (final var stream = Files.newInputStream(file.toPath())) {
       final var digest =
         MessageDigest.getInstance("SHA-256");
-      try (var dStream = new DigestInputStream(stream, digest)) {
+      try (final var dStream = new DigestInputStream(stream, digest)) {
         dStream.transferTo(OutputStream.nullOutputStream());
       }
       return new MHash(
@@ -308,7 +339,7 @@ public final class MPackageMojo extends AbstractMojo
         Paths.get(this.outputFile + ".tmp");
 
       final var writers = new MPackageWriters();
-      try (var writer =
+      try (final var writer =
              writers.create(output, outputTmp, this.packageV)) {
         this.writeFiles(writer);
       }
@@ -319,7 +350,7 @@ public final class MPackageMojo extends AbstractMojo
         output.toFile()
       );
     } catch (final Exception e) {
-      if (e instanceof SStructuredErrorType<?> s) {
+      if (e instanceof final SStructuredErrorType<?> s) {
         logStructuredError(LOG, s);
       } else {
         LOG.error("{}", e.getMessage());
@@ -355,14 +386,14 @@ public final class MPackageMojo extends AbstractMojo
     final MPackageWriterType writer)
     throws MException
   {
-    for (var platform : this.collectedPlatformDependentArtifacts.keySet()) {
+    for (final var platform : this.collectedPlatformDependentArtifacts.keySet()) {
       final var sorted =
         this.collectedPlatformDependentArtifacts.get(platform)
           .stream()
           .sorted(Comparator.comparing(o -> o.getFile().getName()))
           .toList();
 
-      for (var artifact : sorted) {
+      for (final var artifact : sorted) {
         final var file = artifact.getFile();
         final var fileName = file.getName();
         final var entryName = "lib/" + fileName;
@@ -380,7 +411,7 @@ public final class MPackageMojo extends AbstractMojo
         .sorted(Comparator.comparing(o -> o.getFile().getName()))
         .toList();
 
-    for (var artifact : sorted) {
+    for (final var artifact : sorted) {
       final var file = artifact.getFile();
       final var fileName = file.getName();
       final var entryName = "lib/" + fileName;
@@ -389,29 +420,35 @@ public final class MPackageMojo extends AbstractMojo
   }
 
   private void buildPackageDeclaration()
-    throws VersionException, IOException, NoSuchAlgorithmException
+    throws Exception
   {
     final var builder =
       MPackageDeclaration.builder();
 
+    this.fixLinks();
+    this.fixLicense();
+
     final var metaBuilder =
       MMetadata.builder()
-        .setCopyright(this.copyright.trim())
-        .setDescription(this.description.trim())
-        .setLicense(this.license.trim())
-        .setMainModule(this.mainModule.trim())
-        .setPackageName(new MPackageName(new RDottedName(this.packageName.trim())))
-        .setRequiredJDKVersion(this.requiredJDKVersion)
-        .setSiteURI(URI.create(this.site.trim()))
-        .setVersion(VersionParser.parse(this.packageVersion.trim()))
-        .setShortName(new MShortName(this.shortName.trim()))
-        .setVendorName(new MVendorName(this.vendorName.trim()));
+        .setApplicationKind(this.applicationKind)
+        .setDescription(this.description.trim());
 
-    if (this.humanName != null) {
-      metaBuilder.setHumanName(this.humanName.trim());
+    this.setNames(metaBuilder);
+    this.setCopying(metaBuilder);
+    this.setJavaInfo(metaBuilder);
+    this.setVersion(metaBuilder);
+    this.setVendor(metaBuilder);
+    this.addLongDescriptions(metaBuilder);
+
+    for (final var link : this.links) {
+      metaBuilder.addLinks(
+        new MLink(
+          link.getRole(),
+          URI.create(link.getTarget()))
+      );
     }
 
-    for (var category : this.categories) {
+    for (final var category : this.categories) {
       metaBuilder.addCategories(new MCategoryName(category));
     }
 
@@ -424,6 +461,145 @@ public final class MPackageMojo extends AbstractMojo
 
     builder.setManifest(manifestBuilder.build());
     this.packageV = builder.build();
+  }
+
+  private void setNames(
+    final MMetadata.Builder metaBuilder)
+  {
+    final var nameBuilder = MNames.builder();
+
+    nameBuilder.setPackageName(
+      new MPackageName(new RDottedName(this.packageName.trim())));
+    nameBuilder.setShortName(
+      new MShortName(this.shortName.trim()));
+
+    if (this.humanName != null) {
+      nameBuilder.setHumanName(this.humanName.trim());
+    }
+
+    metaBuilder.setNames(nameBuilder.build());
+  }
+
+  private void setCopying(
+    final MMetadata.Builder metaBuilder)
+  {
+    metaBuilder.setCopying(
+      MCopying.builder()
+        .setCopyright(this.copyright.trim())
+        .setLicense(this.license.trim())
+        .build()
+    );
+  }
+
+  private void setJavaInfo(
+    final MMetadata.Builder metaBuilder)
+  {
+    metaBuilder.setJavaInfo(
+      MJavaInfo.builder()
+        .setMainModule(this.mainModule)
+        .setRequiredJDKVersion(this.requiredJDKVersion)
+        .build()
+    );
+  }
+
+  private void setVersion(
+    final MMetadata.Builder metaBuilder)
+    throws VersionException
+  {
+    if (this.packageVersion == null) {
+      LOG.warn("No package version was set: Defaulting date to 2024-01-01.");
+      this.packageVersion = new Version();
+      this.packageVersion.setDate("2024-01-01");
+      this.packageVersion.setNumber(this.project.getVersion());
+    }
+
+    metaBuilder.setVersion(
+      new MVersion(
+        VersionParser.parse(this.packageVersion.getNumber()),
+        LocalDate.parse(this.packageVersion.getDate())
+      )
+    );
+  }
+
+  private void setVendor(
+    final MMetadata.Builder metaBuilder)
+  {
+    if (this.vendor == null) {
+      throw new IllegalArgumentException("No vendor has been set!");
+    }
+
+    metaBuilder.setVendor(
+      new MVendor(
+        new MVendorID(new RDottedName(this.vendor.getId())),
+        new MVendorName(this.vendor.getName())
+      )
+    );
+  }
+
+  private void addLongDescriptions(
+    final MMetadata.Builder metaBuilder)
+    throws ParsingException, IOException
+  {
+    if (this.longDescriptions.isEmpty()) {
+      return;
+    }
+
+    final var results = new ArrayList<MLongDescription>();
+    for (final var file : this.longDescriptions) {
+      final var longDescription =
+        this.longDescriptionParsers.parseFile(file.toPath());
+      results.add(longDescription);
+    }
+    metaBuilder.setLongDescriptions(List.copyOf(results));
+  }
+
+  private void fixLicense()
+  {
+    if (this.license == null) {
+      final var licenses = this.project.getLicenses();
+      if (licenses.isEmpty()) {
+        throw new IllegalArgumentException(
+          "No licenses in POM, and no license parameter was specified.");
+      }
+      this.license = licenses.get(0).getName();
+    }
+  }
+
+  private void fixLinks()
+  {
+    if (this.links.isEmpty()) {
+      this.buildLinksIfEmpty();
+    }
+  }
+
+  private void buildLinksIfEmpty()
+  {
+    {
+      final var issues = this.project.getIssueManagement();
+      if (issues != null) {
+        final var link = new Link();
+        link.setRole(MLinkRole.ISSUES);
+        link.setTarget(issues.getUrl());
+        this.links.add(link);
+      }
+    }
+
+    {
+      final var scm = this.project.getScm();
+      if (scm != null) {
+        final var link = new Link();
+        link.setRole(MLinkRole.SCM);
+        link.setTarget(scm.getUrl());
+        this.links.add(link);
+      }
+    }
+
+    {
+      final var link = new Link();
+      link.setRole(MLinkRole.HOME_PAGE);
+      link.setTarget(this.project.getUrl());
+      this.links.add(link);
+    }
   }
 
   private void buildManifestForResources(
@@ -445,8 +621,9 @@ public final class MPackageMojo extends AbstractMojo
     final MManifest.Builder manifestBuilder)
     throws IOException, NoSuchAlgorithmException
   {
-    for (var platform : this.collectedPlatformDependentArtifacts.keySet()) {
-      for (var artifact : this.collectedPlatformDependentArtifacts.get(platform)) {
+    for (final var platform : this.collectedPlatformDependentArtifacts.keySet()) {
+      for (final var artifact : this.collectedPlatformDependentArtifacts.get(
+        platform)) {
         final var file = artifact.getFile();
         final var fileName = file.getName();
         final var entryName = "lib/" + fileName;
@@ -468,7 +645,7 @@ public final class MPackageMojo extends AbstractMojo
     final MManifest.Builder manifestBuilder)
     throws IOException, NoSuchAlgorithmException
   {
-    for (var artifact : this.collectedLibraries) {
+    for (final var artifact : this.collectedLibraries) {
       final var file = artifact.getFile();
       final var fileName = file.getName();
       final var entryName = "lib/" + fileName;
@@ -570,7 +747,7 @@ public final class MPackageMojo extends AbstractMojo
       return true;
     }
 
-    for (var filter : this.platformFileFilters) {
+    for (final var filter : this.platformFileFilters) {
       if (filter.evaluate(fileName)) {
         final var platform =
           new MPlatform(filter.architecture(), filter.operatingSystem());

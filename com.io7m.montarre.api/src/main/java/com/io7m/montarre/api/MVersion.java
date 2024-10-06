@@ -15,37 +15,34 @@
  */
 
 
-package com.io7m.montarre.xml;
+package com.io7m.montarre.api;
 
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
+import com.io7m.verona.core.Version;
 
-import java.io.OutputStream;
-import java.net.URI;
+import java.time.LocalDate;
+import java.util.Objects;
 
 /**
- * Package declaration serializers.
+ * Version information.
+ *
+ * @param version The application version number
+ * @param date    The date the version was set
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+public record MVersion(
+  Version version,
+  LocalDate date)
 {
   /**
-   * Package declaration serializers.
+   * Version information.
+   *
+   * @param version The application version number
+   * @param date    The date the version was set
    */
 
-  public MPackageDeclarationSerializers()
+  public MVersion
   {
-
-  }
-
-  @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
-  {
-    return new MPackageDeclarationSerializer(stream);
+    Objects.requireNonNull(version, "version");
+    Objects.requireNonNull(date, "date");
   }
 }

@@ -15,37 +15,59 @@
  */
 
 
-package com.io7m.montarre.xml;
-
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
-
-import java.io.OutputStream;
-import java.net.URI;
+package com.io7m.montarre.api;
 
 /**
- * Package declaration serializers.
+ * The role of a link.
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+public enum MLinkRole
 {
   /**
-   * Package declaration serializers.
+   * A link to an issue tracker.
    */
 
-  public MPackageDeclarationSerializers()
-  {
+  ISSUES,
 
-  }
+  /**
+   * A link to a home page.
+   */
 
-  @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
-  {
-    return new MPackageDeclarationSerializer(stream);
-  }
+  HOME_PAGE,
+
+  /**
+   * A link to a donation page.
+   */
+
+  DONATION,
+
+  /**
+   * A link to a contact page.
+   */
+
+  CONTACT,
+
+  /**
+   * A link to an FAQ page.
+   */
+
+  FAQ,
+
+  /**
+   * A link to a translation page.
+   */
+
+  TRANSLATE,
+
+  /**
+   * A link to a contribution page.
+   */
+
+  CONTRIBUTE,
+
+  /**
+   * A link to an SCM repository.
+   */
+
+  SCM
 }

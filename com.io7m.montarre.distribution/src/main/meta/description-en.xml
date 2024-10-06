@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<LongDescription xmlns="urn:com.io7m.montarre.package:1"
+                 Language="en">
+  <Paragraph>
+    The Montarre package provides a set of tools for producing native platform artifacts from platform-independent Java
+    packages.
+  </Paragraph>
+
+  <Feature>Comprehensively documented.</Feature>
+  <Feature>OSGi-ready.</Feature>
+  <Feature>JPMS-ready.</Feature>
+  <Feature>ISC license.</Feature>
+
+</LongDescription>

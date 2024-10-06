@@ -21,18 +21,20 @@ import com.io7m.blackthorne.core.BTElementHandlerConstructorType;
 import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
 import com.io7m.blackthorne.core.BTQualifiedName;
-import com.io7m.lanark.core.RDottedName;
+import com.io7m.montarre.api.MApplicationKind;
 import com.io7m.montarre.api.MCategoryName;
+import com.io7m.montarre.api.MCopying;
+import com.io7m.montarre.api.MJavaInfo;
+import com.io7m.montarre.api.MLink;
+import com.io7m.montarre.api.MLongDescription;
 import com.io7m.montarre.api.MMetadata;
 import com.io7m.montarre.api.MMetadataFlatpakType;
-import com.io7m.montarre.api.MPackageName;
-import com.io7m.montarre.api.MShortName;
-import com.io7m.montarre.api.MVendorName;
+import com.io7m.montarre.api.MNames;
+import com.io7m.montarre.api.MVendor;
+import com.io7m.montarre.api.MVersion;
 import com.io7m.verona.core.VersionException;
-import com.io7m.verona.core.VersionParser;
 import org.xml.sax.Attributes;
 
-import java.net.URI;
 import java.util.Map;
 
 import static com.io7m.montarre.xml.internal.v1.Mx1.element;
@@ -65,7 +67,14 @@ public final class Mx1Metadata
   {
     return Map.ofEntries(
       Map.entry(element("Flatpak"), Mx1Flatpak::new),
-      Map.entry(element("Category"), Mx1Category::new)
+      Map.entry(element("Category"), Mx1Category::new),
+      Map.entry(element("Link"), Mx1Link::new),
+      Map.entry(element("LongDescription"), Mx1LongDescription::new),
+      Map.entry(element("Vendor"), Mx1Vendor::new),
+      Map.entry(element("Version"), Mx1Version::new),
+      Map.entry(element("JavaInfo"), Mx1JavaInfo::new),
+      Map.entry(element("Copying"), Mx1Copying::new),
+      Map.entry(element("Names"), Mx1Names::new)
     );
   }
 
@@ -75,11 +84,32 @@ public final class Mx1Metadata
     final Object result)
   {
     switch (result) {
-      case MMetadataFlatpakType flatpak -> {
+      case final MVersion version -> {
+        this.builder.setVersion(version);
+      }
+      case final MVendor vendor -> {
+        this.builder.setVendor(vendor);
+      }
+      case final MMetadataFlatpakType flatpak -> {
         this.builder.setFlatpak(flatpak);
       }
-      case MCategoryName category -> {
+      case final MCategoryName category -> {
         this.builder.addCategories(category);
+      }
+      case final MLink link -> {
+        this.builder.addLinks(link);
+      }
+      case final MJavaInfo info -> {
+        this.builder.setJavaInfo(info);
+      }
+      case final MNames info -> {
+        this.builder.setNames(info);
+      }
+      case final MCopying copying -> {
+        this.builder.setCopying(copying);
+      }
+      case final MLongDescription longDescription -> {
+        this.builder.addLongDescriptions(longDescription);
       }
       default -> {
         throw new IllegalStateException("Unexpected value: " + result);
@@ -93,31 +123,10 @@ public final class Mx1Metadata
     final Attributes attributes)
     throws VersionException
   {
-    this.builder.setSiteURI(
-      URI.create(attributes.getValue("SiteURL")));
-    this.builder.setShortName(
-      new MShortName(attributes.getValue("ShortName")));
-    this.builder.setRequiredJDKVersion(
-      Long.parseUnsignedLong(attributes.getValue("RequiredJDKVersion")));
-    this.builder.setPackageName(
-      new MPackageName(new RDottedName(attributes.getValue("Name"))));
-    this.builder.setVersion(
-      VersionParser.parse(attributes.getValue("Version")));
-    this.builder.setMainModule(
-      attributes.getValue("MainModule"));
     this.builder.setDescription(
       attributes.getValue("Description"));
-    this.builder.setCopyright(
-      attributes.getValue("Copyright"));
-    this.builder.setLicense(
-      attributes.getValue("License"));
-    this.builder.setVendorName(
-      new MVendorName(attributes.getValue("VendorName")));
-
-    final var humanName = attributes.getValue("HumanName");
-    if (humanName != null) {
-      this.builder.setHumanName(humanName);
-    }
+    this.builder.setApplicationKind(
+      MApplicationKind.valueOf(attributes.getValue("ApplicationKind")));
   }
 
   @Override

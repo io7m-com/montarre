@@ -15,37 +15,53 @@
  */
 
 
-package com.io7m.montarre.xml;
+package com.io7m.montarre.xml.internal.v1;
 
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
+import com.io7m.blackthorne.core.BTElementHandlerType;
+import com.io7m.blackthorne.core.BTElementParsingContextType;
+import com.io7m.montarre.api.MLink;
+import com.io7m.montarre.api.MLinkRole;
+import org.xml.sax.Attributes;
 
-import java.io.OutputStream;
 import java.net.URI;
 
 /**
- * Package declaration serializers.
+ * A parser.
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+public final class Mx1Link
+  implements BTElementHandlerType<Object, MLink>
 {
+  private MLink link;
+
   /**
-   * Package declaration serializers.
+   * A parser.
+   *
+   * @param context The context
    */
 
-  public MPackageDeclarationSerializers()
+  public Mx1Link(
+    final BTElementParsingContextType context)
   {
 
   }
 
   @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
+  public void onElementStart(
+    final BTElementParsingContextType context,
+    final Attributes attributes)
   {
-    return new MPackageDeclarationSerializer(stream);
+    this.link =
+      new MLink(
+        MLinkRole.valueOf(attributes.getValue("Role")),
+        URI.create(attributes.getValue("Target"))
+      );
+  }
+
+  @Override
+  public MLink onElementFinished(
+    final BTElementParsingContextType context)
+  {
+    return this.link;
   }
 }

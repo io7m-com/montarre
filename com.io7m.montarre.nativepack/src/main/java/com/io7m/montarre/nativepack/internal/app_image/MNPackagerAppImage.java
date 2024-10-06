@@ -106,22 +106,22 @@ public final class MNPackagerAppImage
     arguments.add("--runtime-image");
     arguments.add(jdkPath.toString());
     arguments.add("--name");
-    arguments.add(metadata.shortName().name());
+    arguments.add(metadata.names().shortName().name());
     arguments.add("--module");
-    arguments.add(metadata.mainModule());
+    arguments.add(metadata.javaInfo().mainModule());
     arguments.add("--module-path");
     arguments.add(appDirectory.resolve("lib").toString());
     arguments.add("--dest");
     arguments.add(buildDirectory.toString());
     arguments.add("--copyright");
-    arguments.add(metadata.copyright());
+    arguments.add(metadata.copying().copyright());
     arguments.add("--description");
     arguments.add(metadata.description());
     arguments.add("--app-content");
     arguments.add(appDirectory.resolve("meta").toString());
     arguments.add("--app-version");
     arguments.add(
-      this.translateVersion(workspace, metadata.version()).toString()
+      this.translateVersion(workspace, metadata.version().version()).toString()
     );
 
     if (iconFile.isPresent()) {
@@ -218,12 +218,12 @@ public final class MNPackagerAppImage
       );
 
       this.appImageRoot =
-        buildDirectory.resolve(metadata.shortName().name());
+        buildDirectory.resolve(metadata.names().shortName().name());
 
       return this.packOutput(
         workspace,
         outputDirectory,
-        metadata.shortName(),
+        metadata.names().shortName(),
         this.archiveName(workspace, metadata)
       );
     } catch (final Exception e) {
@@ -245,8 +245,8 @@ public final class MNPackagerAppImage
     final MMetadataType metadata)
   {
     return "%s-%s-%s-%s".formatted(
-      metadata.packageName(),
-      metadata.version(),
+      metadata.names().packageName(),
+      metadata.version().version().toString(),
       workspace.architecture(),
       workspace.operatingSystem()
     );

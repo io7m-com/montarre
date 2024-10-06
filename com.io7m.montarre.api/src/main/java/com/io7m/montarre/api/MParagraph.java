@@ -15,37 +15,36 @@
  */
 
 
-package com.io7m.montarre.xml;
+package com.io7m.montarre.api;
 
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerFactoryType;
-import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
-import com.io7m.montarre.xml.internal.MPackageDeclarationSerializer;
-
-import java.io.OutputStream;
-import java.net.URI;
+import java.util.Objects;
 
 /**
- * Package declaration serializers.
+ * A paragraph.
+ *
+ * @param text The text
+ *
+ * @see "https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/#description"
  */
 
-public final class MPackageDeclarationSerializers
-  implements MPackageDeclarationSerializerFactoryType
+public record MParagraph(
+  String text)
+  implements MLongDescriptionElementType
 {
   /**
-   * Package declaration serializers.
+   * A category name.
+   *
+   * @param text The text
    */
 
-  public MPackageDeclarationSerializers()
+  public MParagraph
   {
-
+    Objects.requireNonNull(text, "text");
   }
 
   @Override
-  public MPackageDeclarationSerializerType createSerializerWithContext(
-    final Void context,
-    final URI target,
-    final OutputStream stream)
+  public String toString()
   {
-    return new MPackageDeclarationSerializer(stream);
+    return this.text;
   }
 }
