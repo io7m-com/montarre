@@ -144,12 +144,12 @@ public final class MWiXWriter implements MWiXWriterType
     xmlOutput.writeStartElement(NS, "ComponentGroup");
     xmlOutput.writeAttribute("Id", "Files");
 
-    try (var fileStream = Files.walk(this.directory)) {
+    try (final var fileStream = Files.walk(this.directory)) {
       final var fileList =
         fileStream.sorted()
           .toList();
 
-      for (var file : fileList) {
+      for (final var file : fileList) {
         if (!Files.isRegularFile(file)) {
           continue;
         }
@@ -192,7 +192,7 @@ public final class MWiXWriter implements MWiXWriterType
     final var packName =
       metadata.names().packageName().name().value();
     final var packVersion =
-      metadata.version().toString();
+      metadata.version().version();
     final var packID =
       metadata.names().id().toString();
 
@@ -204,11 +204,19 @@ public final class MWiXWriter implements MWiXWriterType
         .filter(i -> i.role() == MResourceRole.ICO_WINDOWS)
         .findFirst();
 
+    /*
+     * Wix says: Specify a four-part version or semantic version, such as
+     * '#.#.#.#' or '#.#.#-label.#'.
+     */
+
+    final var transformedVersion =
+      "%s.0".formatted(packVersion);
+
     xmlOutput.writeStartElement(NS, "Package");
     xmlOutput.writeAttribute("Language", "1033");
     xmlOutput.writeAttribute("Manufacturer", "io7m");
     xmlOutput.writeAttribute("Name", packName);
-    xmlOutput.writeAttribute("Version", packVersion);
+    xmlOutput.writeAttribute("Version", transformedVersion);
     xmlOutput.writeAttribute("UpgradeCode", packID);
 
     /*
