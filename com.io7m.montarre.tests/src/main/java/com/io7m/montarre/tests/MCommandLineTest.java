@@ -272,6 +272,11 @@ public final class MCommandLineTest
       }
     );
     assertEquals(0, r1);
+
+    assertEquals(
+      -1L,
+      Files.mismatch(inputFile, outputFile)
+    );
   }
 
   @Test

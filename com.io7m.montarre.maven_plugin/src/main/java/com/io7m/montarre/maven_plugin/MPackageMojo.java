@@ -78,6 +78,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -88,6 +89,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.HexFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.SortedMap;
@@ -276,6 +278,7 @@ public final class MPackageMojo extends AbstractMojo
   private MPackageDeclaration packageV;
   private Set<Artifact> collectedLibraries;
   private SortedMap<MPlatform, Set<Artifact>> collectedPlatformDependentArtifacts;
+  private ArrayList<Map.Entry<MFileName, Path>> filesToWrite;
 
   /**
    * The "package" mojo.
@@ -289,6 +292,8 @@ public final class MPackageMojo extends AbstractMojo
       new TreeMap<>();
     this.longDescriptionParsers =
       new MLongDescriptionParsers();
+    this.filesToWrite =
+      new ArrayList<>();
   }
 
   private static MHash hashOf(
@@ -363,28 +368,29 @@ public final class MPackageMojo extends AbstractMojo
     final MPackageWriterType writer)
     throws MException
   {
-    this.writeResources(writer);
-    this.writeModules(writer);
-    this.writePlatformDependentModules(writer);
+    this.writeResources();
+    this.writeModules();
+    this.writePlatformDependentModules();
+
+    this.filesToWrite.sort(Map.Entry.comparingByKey());
+
+    for (final var entry : this.filesToWrite) {
+      writer.addFile(entry.getKey(), entry.getValue());
+    }
   }
 
-  private void writeResources(
-    final MPackageWriterType writer)
-    throws MException
+  private void writeResources()
   {
     for (final var resource : this.resources) {
       final var entryName =
         "meta/%s".formatted(resource.getEntryName());
       final var resourcePath =
         Paths.get(resource.getFile());
-
-      writer.addFile(new MFileName(entryName), resourcePath);
+      this.filesToWrite.add(Map.entry(new MFileName(entryName), resourcePath));
     }
   }
 
-  private void writePlatformDependentModules(
-    final MPackageWriterType writer)
-    throws MException
+  private void writePlatformDependentModules()
   {
     for (final var platform : this.collectedPlatformDependentArtifacts.keySet()) {
       final var sorted =
@@ -397,14 +403,12 @@ public final class MPackageMojo extends AbstractMojo
         final var file = artifact.getFile();
         final var fileName = file.getName();
         final var entryName = "lib/" + fileName;
-        writer.addFile(new MFileName(entryName), file.toPath());
+        this.filesToWrite.add(Map.entry(new MFileName(entryName), file.toPath()));
       }
     }
   }
 
-  private void writeModules(
-    final MPackageWriterType writer)
-    throws MException
+  private void writeModules()
   {
     final var sorted =
       this.collectedLibraries.stream()
@@ -415,7 +419,7 @@ public final class MPackageMojo extends AbstractMojo
       final var file = artifact.getFile();
       final var fileName = file.getName();
       final var entryName = "lib/" + fileName;
-      writer.addFile(new MFileName(entryName), file.toPath());
+      this.filesToWrite.add(Map.entry(new MFileName(entryName), file.toPath()));
     }
   }
 
