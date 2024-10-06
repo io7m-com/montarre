@@ -356,6 +356,7 @@ public final class MPackageWriter implements MPackageWriterType
           new MFileName(
             inputDirectory.relativize(file)
               .toString()
+              .replace('\\', '/')
           );
 
         if (MReservedNames.isReserved(entryName)) {

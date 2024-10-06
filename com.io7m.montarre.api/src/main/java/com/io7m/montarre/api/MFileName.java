@@ -38,6 +38,10 @@ public record MFileName(
   public MFileName
   {
     Objects.requireNonNull(name, "name");
+
+    if (name.contains("\\")) {
+      throw new IllegalArgumentException("File names may not contain '\\'");
+    }
   }
 
   @Override
@@ -47,7 +51,7 @@ public record MFileName(
     if (this == other) {
       return true;
     }
-    if (other instanceof MFileName otherF) {
+    if (other instanceof final MFileName otherF) {
       return this.name.equalsIgnoreCase(otherF.name);
     }
     return false;
