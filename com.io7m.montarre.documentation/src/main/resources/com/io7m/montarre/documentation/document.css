@@ -14,46 +14,70 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-
-package com.io7m.montarre.api.io;
-
-import com.io7m.montarre.api.MException;
-import com.io7m.montarre.api.MFileName;
-
-import java.nio.file.Path;
-
-/**
- * A package being written.
- */
-
-public interface MPackageWriterType
-  extends AutoCloseable
+.brandingContainer
 {
-  /**
-   * Add a file to the package.
-   *
-   * @param name The file name
-   * @param file The file
-   *
-   * @throws MException On errors
-   */
+  margin: 1em;
+  margin-left: 0em;
+}
 
-  void addFile(
-    MFileName name,
-    Path file)
-    throws MException;
+.branding
+{
+  font-family: monospace;
+  font-size:   80%;
+}
 
-  @Override
-  void close()
-    throws MException;
+.button,
+.class,
+.command,
+.constant,
+.directory,
+.element,
+.expression,
+.file,
+.function,
+.menu,
+.package,
+.parameter,
+.tab,
+.variable,
+.window
+{
+  font-family: monospace;
+  font-size:   90%;
+}
 
-  /**
-   * Pack all files in the given directory hierarchy.
-   *
-   * @param inputDirectory The input directory
-   */
+.term
+{
+  font-style: italic;
+}
 
-  void packFrom(
-    Path inputDirectory)
-    throws MException;
+.genericTable
+{
+  border:          1px solid #dddddd;
+  width:           100%;
+  border-collapse: collapse;
+}
+.genericTable th
+{
+  border:     1px solid #dddddd;
+  text-align: left;
+  font-size:  var(--stFontSize);
+  padding:    0.5em;
+}
+.genericTable td
+{
+  border:    1px solid #dddddd;
+  font-size: var(--stFontSize);
+  padding:   0.5em;
+}
+.genericTable td:nth-child(1)
+{
+  width: 12em;
+}
+
+.screenImage
+{
+  max-width:  95%;
+  max-height: 95%;
+  height:     auto;
 }

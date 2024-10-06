@@ -133,7 +133,7 @@ public final class MPackageWriter implements MPackageWriterType
     throws MException
   {
     final byte[] packageData;
-    try (var byteOut = new ByteArrayOutputStream()) {
+    try (final var byteOut = new ByteArrayOutputStream()) {
       this.serializers.serialize(
         URI.create("urn:unavailable"),
         byteOut,
@@ -176,7 +176,7 @@ public final class MPackageWriter implements MPackageWriterType
     this.attributes.put("File", name);
 
     if (MReservedNames.isReserved(name)) {
-      throw errorReserved();
+      throw this.errorReserved();
     }
 
     final var declared =
@@ -211,13 +211,13 @@ public final class MPackageWriter implements MPackageWriterType
 
       final var closeShield =
         CloseShieldOutputStream.wrap(this.zip);
-      try (var digestStream =
+      try (final var digestStream =
              new DigestOutputStream(closeShield, digest)) {
         Files.copy(file, digestStream);
 
         try {
           this.zip.closeEntry();
-        } catch (IOException e) {
+        } catch (final IOException e) {
           throw this.errorIO(e);
         }
 
@@ -338,6 +338,37 @@ public final class MPackageWriter implements MPackageWriterType
     }
   }
 
+  @Override
+  public void packFrom(
+    final Path inputDirectory)
+    throws MException
+  {
+    Objects.requireNonNull(inputDirectory, "inputDirectory");
+
+    try (final var stream = Files.walk(inputDirectory)) {
+      final var files =
+        stream.filter(Files::isRegularFile)
+          .sorted()
+          .toList();
+
+      for (final var file : files) {
+        final var entryName =
+          new MFileName(
+            inputDirectory.relativize(file)
+              .toString()
+          );
+
+        if (MReservedNames.isReserved(entryName)) {
+          continue;
+        }
+
+        this.addFile(entryName, file);
+      }
+    } catch (final IOException e) {
+      throw this.errorIO(e);
+    }
+  }
+
   private Map<String, String> copyAttributes()
   {
     return this.attributes.entrySet()
@@ -349,7 +380,7 @@ public final class MPackageWriter implements MPackageWriterType
   private void validate()
     throws MException
   {
-    for (var file : this.packageV.manifest().items()) {
+    for (final var file : this.packageV.manifest().items()) {
       if (!this.writtenHashes.containsKey(file.file())) {
         this.attributes.put("File", file.file());
         throw new MException(

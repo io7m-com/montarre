@@ -47,6 +47,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -58,7 +59,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class MCommandLineTest
+public final class MCommandLineTest
 {
   private static final MPackageDeclaration EMPTY_PACKAGE =
     MPackageDeclaration.builder()
@@ -127,6 +128,8 @@ public class MCommandLineTest
       List.of("help", "package"),
       List.of("help", "package", "extract-declaration"),
       List.of("help", "package", "check"),
+      List.of("help", "package", "unpack"),
+      List.of("help", "package", "pack"),
       List.of("help", "native"),
       List.of("help", "native", "packagers"),
       List.of("help", "native", "create"),
@@ -156,7 +159,7 @@ public class MCommandLineTest
     final var fileTmp =
       directory.resolve("file.mpk.tmp");
 
-    try (var writer =
+    try (final var writer =
            WRITERS.create(file, fileTmp, PACKAGE_WITH_EMPTY)) {
       writer.addFile(new MFileName("meta/bom.xml"), fileEmpty);
     }
@@ -185,7 +188,7 @@ public class MCommandLineTest
     final var fileTmp =
       directory.resolve("file.mpk.tmp");
 
-    try (var writer =
+    try (final var writer =
            WRITERS.create(file, fileTmp, PACKAGE_WITH_EMPTY)) {
       writer.addFile(new MFileName("meta/bom.xml"), fileEmpty);
     }
@@ -199,6 +202,76 @@ public class MCommandLineTest
       }
     );
     assertEquals(0, r);
+  }
+
+  @Test
+  public void testPackageUnpack(
+    final @TempDir Path directory,
+    final @TempDir Path output)
+    throws Exception
+  {
+    final var fileEmpty = directory.resolve("file.txt");
+    Files.createFile(fileEmpty);
+
+    final var file =
+      directory.resolve("file.mpk");
+    final var fileTmp =
+      directory.resolve("file.mpk.tmp");
+
+    try (final var writer =
+           WRITERS.create(file, fileTmp, PACKAGE_WITH_EMPTY)) {
+      writer.addFile(new MFileName("meta/bom.xml"), fileEmpty);
+    }
+
+    final var r = MMain.mainExitless(
+      new String[]{
+        "package",
+        "unpack",
+        "--file",
+        file.toString(),
+        "--output-directory",
+        output.toString()
+      }
+    );
+    assertEquals(0, r);
+  }
+
+  @Test
+  public void testPackageUnpackPack(
+    final @TempDir Path directory,
+    final @TempDir Path unpackTo)
+    throws Exception
+  {
+    final var inputFile =
+      directory.resolve("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk");
+    final var outputFile =
+      directory.resolve("packed.mpk");
+
+    this.resource("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk", inputFile);
+
+    final var r0 = MMain.mainExitless(
+      new String[]{
+        "package",
+        "unpack",
+        "--file",
+        inputFile.toString(),
+        "--output-directory",
+        unpackTo.toString()
+      }
+    );
+    assertEquals(0, r0);
+
+    final var r1 = MMain.mainExitless(
+      new String[]{
+        "package",
+        "pack",
+        "--input-directory",
+        unpackTo.toString(),
+        "--output-file",
+        outputFile.toString()
+      }
+    );
+    assertEquals(0, r1);
   }
 
   @Test
@@ -281,5 +354,18 @@ public class MCommandLineTest
     );
     assertEquals(1, r);
     assertFalse(Files.isRegularFile(outFile));
+  }
+
+  private void resource(
+    final String resourceName,
+    final Path output)
+    throws IOException
+  {
+    final var file =
+      "/com/io7m/montarre/tests/" + resourceName;
+
+    try (final var stream = MCommandLineTest.class.getResourceAsStream(file)) {
+      Files.write(output, stream.readAllBytes());
+    }
   }
 }

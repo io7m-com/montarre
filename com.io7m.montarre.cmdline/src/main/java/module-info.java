@@ -39,6 +39,7 @@ module com.io7m.montarre.cmdline
   requires org.apache.commons.io;
   requires com.io7m.jdownload.core;
   requires java.net.http;
+  requires com.io7m.montarre.xml;
 
   uses MNativePackagerServiceProviderType;
 

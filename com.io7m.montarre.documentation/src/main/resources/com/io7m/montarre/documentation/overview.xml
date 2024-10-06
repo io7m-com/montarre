@@ -5,8 +5,143 @@
 
   <Subsection title="Introduction">
     <Paragraph>
-      The <Term type="package">montarre</Term> package…
+      The <Term type="package">montarre</Term> package provides tools for producing platform-specific native executables
+      and installation media from a single platform-independent source package.
     </Paragraph>
   </Subsection>
+
+  <Subsection title="Motivation">
+    <Paragraph>
+      In traditional programming environments, prior to Java, compilers typically produced native code for the platform
+      upon which they were running. If you were on hardware architecture <Term type="constant">A</Term>, using operating
+      system <Term type="constant">O</Term>, then unless you were willing to go through the pain and suffering of
+      configuring a <Term type="term">cross-compiler</Term>, you could only produce native executables that would run on
+      hardware architecture <Term type="constant">A</Term>, using operating system <Term type="constant">O</Term>.
+    </Paragraph>
+    <Paragraph>
+      As a consequence of this, if you wanted to distribute a program for a range of hardware architectures and
+      operating systems, you would have to maintain at most <Term type="expression">M * N</Term> systems to build code
+      (where <Term type="expression">M</Term> is the number of operating systems and
+      <Term type="expression">N</Term>
+      is the number of hardware architectures). Worse, all of these systems had to be trusted to actually produce code
+      that was correct given a single package of source code. Even worse, because each platform would inevitably have
+      its own set of tools, the singled shared build procedure for the code would become exponentially complicated with
+      lots of branching logic in order to get it to run correctly on all platforms
+      <LinkFootnote target="4c43c313-fae7-4c5a-a121-97f225208a9d"/>.
+    </Paragraph>
+    <FormalItem title="N by M Native Compilation"
+                id="47ee5ee1-0853-4a7c-b440-bd75295b0157">
+      <Image source="motivation-1toN.png"
+             type="screenImage">
+        N by M native compilation.
+      </Image>
+    </FormalItem>
+    <Paragraph>
+      Java, with varying degrees of success, opted to follow a
+      <Term type="term">write once run anywhere</Term>
+      paradigm: The output of the compiler is platform-neutral bytecode, and end-consumers would simply load this
+      bytecode into their locally installed <Term type="term">Java Virtual Machine</Term>. It therefore wouldn't matter
+      on what hardware architecture and/or on which operating system the code was compiled, as the output of the process
+      would ostensibly be the same regardless. This would essentially collapse the above diagram to one that looked like
+      this:
+    </Paragraph>
+    <FormalItem title="Java To Bytecode Compilation">
+      <Image source="motivation-ideal.png"
+             type="screenImage">
+        Java to bytecode compilation.
+      </Image>
+    </FormalItem>
+    <Paragraph>
+      This was theoretically absolutely ideal from a developer perspective. A developer could maintain a single machine
+      and use it to produce code for any number of completely different platforms. The developer could offer a single
+      download link online for the program instead of having to offer one per platform.
+    </Paragraph>
+    <Paragraph>
+      In practice, there were some issues with this. Using the above system, it is not possible to know ahead of time
+      which version of the Java VM is installed on end-user systems. Java bytecode is versioned, and a given Java VM has
+      a stated upper bound on the bytecode versions it can support. If a user has a Java 21 VM installed, and is given
+      Java bytecode targeting Java 23, the bytecode will simply not run. Worse, on many operating systems, the Java VM
+      will print an error message about the bytecode version, but the desktop environment will simply hide/discard the
+      message. This leaves users with silently failing programs.
+    </Paragraph>
+    <Paragraph>
+      In Java 14, the <Term type="package">jpackage</Term> tool was introduced. The
+      <Term type="package">jpackage</Term>
+      tool can be handed Java bytecode, and a Java VM, and the tool will produce a native executable for the current
+      platform that runs the given bytecode. This is both a benefit and a curse; a benefit because it is now possible to
+      package Java code in a manner that makes it immune to the problem of not having a suitable Java VM installed, but
+      a curse because it could indicate somewhat of a return to the
+      <Link target="47ee5ee1-0853-4a7c-b440-bd75295b0157">N by M</Link>
+      compilation model.
+    </Paragraph>
+    <Paragraph>
+      In an ideal world, we would have our Java compilation process stay completely platform-independent, and produce
+      identical results regardless of the platform upon which it is run. The output of this process would be a
+      completely platform-neutral artifact that a user <Term type="term">could</Term> theoretically run if they had an
+      appropriate runtime installed. We would then like a second process, completely decoupled from the first, where
+      that platform-independent artifact could be transformed into something more familiar and suitable for the platform
+      upon which it is running. Ideally, the second process would leave the bytecode of the original
+      platform-independent artifact completely intact so that we could trust that the code is still "correct" and hasn't
+      been broken in some platform-specific way. Critically, this would keep our main compilation process (the part that
+      is typically complex and difficult) completely platform-independent, whilst still allowing us to produce artifacts
+      that are platform-dependent. The <Term type="package">jpackage</Term> tool can achieve this, but requires a lot of
+      per-platform configuration in order to get good results.
+    </Paragraph>
+    <FormalItem title="Decoupled Compilation">
+      <Image source="motivation-decoupled.png"
+             type="screenImage">
+        Decoupled compilation.
+      </Image>
+    </FormalItem>
+    <Paragraph>
+      The <Term type="package">montarre</Term> package attempts to provide tools to achieve the above in relatively
+      painless manner.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Features">
+    <Paragraph>
+      The <Term type="package">montarre</Term> package provides the following features:
+    </Paragraph>
+    <FormalItem title="Features">
+      <ListUnordered>
+        <Item>
+          A rich, strictly-defined, and well-specified packaging format that remains platform-independent whilst
+          allowing straightforward zero-configuration transformations to a wide range of platform-specific package
+          formats.
+        </Item>
+        <Item>
+          Support for producing simple <Term type="package">jpackage</Term> "app-image" executables on any platform.
+        </Item>
+        <Item>
+          Support for producing Debian
+          <LinkExternal target="https://www.debian.org/distrib/packages">.deb</LinkExternal>
+          packages.
+        </Item>
+        <Item>
+          Support for producing Windows
+          <LinkExternal target="https://en.wikipedia.org/wiki/Windows_Installer">MSI</LinkExternal>
+          installers.
+        </Item>
+        <Item>
+          Support for producing
+          <LinkExternal target="https://www.flatpak.org/">Flatpaks</LinkExternal>.
+        </Item>
+        <Item>
+          A carefully-engineered Java API for creating, manipulating, and transforming packages.
+        </Item>
+        <Item>
+          A full command-line interface built on top of the Java API.
+        </Item>
+        <Item>
+          A Maven plugin for producing packages from any Maven module.
+        </Item>
+      </ListUnordered>
+    </FormalItem>
+  </Subsection>
+
+  <Footnote id="4c43c313-fae7-4c5a-a121-97f225208a9d">
+    See practically any C or C++ project written in the past thirty years for examples of just how bad this can get.
+  </Footnote>
 
 </Section>

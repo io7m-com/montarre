@@ -122,7 +122,7 @@ public final class MPackageReader implements MPackageReaderType
       throw this.errorNoPackage();
     }
 
-    try (var stream = this.zipFile.getInputStream(packageEntry)) {
+    try (final var stream = this.zipFile.getInputStream(packageEntry)) {
       this.packageV =
         this.parsers.parse(
           URI.create(MReservedNames.montarrePackage().name()),
@@ -134,7 +134,7 @@ public final class MPackageReader implements MPackageReaderType
       throw this.errorParsing(e);
     }
 
-    for (var item : this.packageV.manifest().items()) {
+    for (final var item : this.packageV.manifest().items()) {
       final var itemFile =
         item.file();
       final var entryName =
@@ -265,8 +265,8 @@ public final class MPackageReader implements MPackageReaderType
       throw this.errorHashSupport(e);
     }
 
-    try (var zipStream = this.zipFile.getInputStream(zipEntry)) {
-      try (var digestStream = new DigestInputStream(zipStream, digest)) {
+    try (final var zipStream = this.zipFile.getInputStream(zipEntry)) {
+      try (final var digestStream = new DigestInputStream(zipStream, digest)) {
         digestStream.transferTo(OutputStream.nullOutputStream());
       }
     } catch (final IOException e) {
@@ -298,15 +298,21 @@ public final class MPackageReader implements MPackageReaderType
 
     this.attributes.clear();
 
+    final var metaInfDir =
+      outputDirectory.resolve("META-INF");
     final var metaDir =
       outputDirectory.resolve("meta");
     final var libDir =
       outputDirectory.resolve("lib");
 
+    Files.createDirectories(metaInfDir);
+    setFakeTime(metaInfDir);
     Files.createDirectories(metaDir);
     setFakeTime(metaDir);
     Files.createDirectories(libDir);
     setFakeTime(libDir);
+
+    this.unpackDeclaration(metaInfDir);
 
     for (final var item : this.packageV.manifest().items()) {
       final var entry =
@@ -315,21 +321,21 @@ public final class MPackageReader implements MPackageReaderType
       this.attributes.put("File", item.file());
 
       switch (item) {
-        case MResource ignored -> {
+        case final MResource ignored -> {
           final var entryPath =
             Paths.get(item.file().name());
 
           this.copyEntry(entry, metaDir.resolve(entryPath.getFileName()));
         }
 
-        case MModule ignored -> {
+        case final MModule ignored -> {
           final var entryPath =
             Paths.get(item.file().name());
 
           this.copyEntry(entry, libDir.resolve(entryPath.getFileName()));
         }
 
-        case MPlatformDependentModule platformModule -> {
+        case final MPlatformDependentModule platformModule -> {
           final var entryPath =
             Paths.get(item.file().name());
           final var archDir =
@@ -348,14 +354,29 @@ public final class MPackageReader implements MPackageReaderType
     }
   }
 
+  private void unpackDeclaration(
+    final Path metaInfDir)
+    throws IOException
+  {
+    final var entry =
+      this.zipFile.getEntry(MReservedNames.montarrePackage().name());
+
+    try (final var stream = this.zipFile.getInputStream(entry)) {
+      final var directory = metaInfDir.resolve("MONTARRE");
+      Files.createDirectories(directory);
+      setFakeTime(directory);
+      Files.copy(stream, directory.resolve("PACKAGE.XML"));
+    }
+  }
+
   private void copyEntry(
     final ZipArchiveEntry entry,
     final Path outFile)
     throws IOException
   {
-    try (var outStream =
+    try (final var outStream =
            Files.newOutputStream(outFile, OPEN_OPTIONS)) {
-      try (var inStream = this.zipFile.getInputStream(entry)) {
+      try (final var inStream = this.zipFile.getInputStream(entry)) {
         inStream.transferTo(outStream);
         outStream.flush();
       }
