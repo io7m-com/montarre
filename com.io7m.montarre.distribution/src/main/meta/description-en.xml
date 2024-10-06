@@ -18,6 +18,10 @@
   </Feature>
 
   <Feature>
+    Reproducible builds by default.
+  </Feature>
+
+  <Feature>
     Support for producing simple jpackage "app-image" executables on any platform.
   </Feature>
 

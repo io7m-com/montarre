@@ -115,6 +115,9 @@
           packages on all platforms.
         </Item>
         <Item>
+          <LinkExternal target="https://reproducible-builds.org/">Reproducible builds</LinkExternal> by default.
+        </Item>
+        <Item>
           Support for producing simple <Term type="package">jpackage</Term> "app-image" executables on any platform.
         </Item>
         <Item>
