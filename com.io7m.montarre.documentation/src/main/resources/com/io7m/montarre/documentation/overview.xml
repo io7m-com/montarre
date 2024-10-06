@@ -75,17 +75,27 @@
       compilation model.
     </Paragraph>
     <Paragraph>
+      Let's consider what might be an ideal build setup that would keep our nice, simple, straightforward
+      platform-neutral builds, but would also be able to produce platform-specific artifacts on demand without
+      introducing any complexity into the build.
+    </Paragraph>
+    <Paragraph>
       In an ideal world, we would have our Java compilation process stay completely platform-independent, and produce
       identical results regardless of the platform upon which it is run. The output of this process would be a
       completely platform-neutral artifact that a user <Term type="term">could</Term> theoretically run if they had an
-      appropriate runtime installed. We would then like a second process, completely decoupled from the first, where
-      that platform-independent artifact could be transformed into something more familiar and suitable for the platform
-      upon which it is running. Ideally, the second process would leave the bytecode of the original
-      platform-independent artifact completely intact so that we could trust that the code is still "correct" and hasn't
-      been broken in some platform-specific way. Critically, this would keep our main compilation process (the part that
-      is typically complex and difficult) completely platform-independent, whilst still allowing us to produce artifacts
-      that are platform-dependent. The <Term type="package">jpackage</Term> tool can achieve this, but requires a lot of
-      per-platform configuration in order to get good results.
+      appropriate runtime installed. The platform-neutral artifact could be signed, published and that would be the end
+      of it from the perspective of our build system.
+    </Paragraph>
+    <Paragraph>
+      We would then like a second process, completely isolated and decoupled from the first, where that
+      platform-independent artifact could be downloaded from a repository and transformed into something more familiar
+      and suitable for the platform upon which it is running. Ideally, the second process would leave the bytecode of
+      the original platform-independent artifact completely intact so that we could trust that the code is still
+      "correct" and hasn't been broken in some platform-specific way. The <Term type="package">jpackage</Term> tool
+      can achieve this, but requires a lot of per-platform configuration in order to get good results. In practice, the
+      <Term type="package">jpackage</Term> tool really requires knowledge of your original build process as it will not
+      otherwise have all the information it needs to, for example, categorize any platform-dependent native libraries
+      included in the original artifact, or have access to other metadata such as license information.
     </Paragraph>
     <FormalItem title="Decoupled Compilation">
       <Image source="motivation-decoupled.png"
@@ -95,7 +105,7 @@
     </FormalItem>
     <Paragraph>
       The <Term type="package">montarre</Term> package attempts to provide tools to achieve the above in relatively
-      painless manner.
+      painless manner. It attempts to adhere to a paradigm of <Term type="term">compile once, transform anywhere</Term>!
     </Paragraph>
   </Subsection>
 
@@ -115,7 +125,8 @@
           packages on all platforms.
         </Item>
         <Item>
-          <LinkExternal target="https://reproducible-builds.org/">Reproducible builds</LinkExternal> by default.
+          <LinkExternal target="https://reproducible-builds.org/">Reproducible builds</LinkExternal>
+          by default.
         </Item>
         <Item>
           Support for producing simple <Term type="package">jpackage</Term> "app-image" executables on any platform.
