@@ -1,0 +1,78 @@
+$ unzip -p com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk META-INF/MONTARRE/PACKAGE.XML
+
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="urn:com.io7m.montarre.package:1">
+  <Metadata ApplicationKind="CONSOLE" Description="Application packaging tools (CLI distribution).">
+    <Category Name="Building"/>
+    <Category Name="Development"/>
+    <Copying Copyright="Copyright © 2024 Mark Raynsford &lt;code@io7m.com&gt; https://www.io7m.com" License="ISC"/>
+    <Flatpak>
+      <FlatpakRuntime Name="org.freedesktop.Sdk" Version="24.08" Role="SDK"/>
+      <FlatpakRuntime Name="org.freedesktop.Platform" Version="24.08" Role="PLATFORM"/>
+    </Flatpak>
+    <JavaInfo RequiredJDKVersion="21" MainModule="com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain"/>
+    <Link Role="SCM" Target="https://www.github.com/io7m-com/montarre"/>
+    <Link Role="ISSUES" Target="https://www.github.com/io7m-com/montarre/issues"/>
+    <Link Role="HOME_PAGE" Target="https://www.io7m.com/software/montarre"/>
+    <LongDescription Language="en">
+      <Paragraph>The Montarre package provides a set of tools for producing native platform artifacts from platform-independent Java packages.</Paragraph>
+      <Feature>A rich, strictly-defined, and well-specified packaging format that remains platform-independent whilst allowing straightforward zero-configuration transformations to a wide range of platform-specific package formats.</Feature>
+      <Feature>Support for producing simple jpackage "app-image" executables on any platform.</Feature>
+      <Feature>Support for producing Debian .deb packages.</Feature>
+      <Feature>Support for producing Windows MSI installers.</Feature>
+      <Feature>Support for producing Flatpaks.</Feature>
+      <Feature>Comprehensively documented.</Feature>
+      <Feature>A carefully-engineered Java API for creating, manipulating, and transforming packages.</Feature>
+      <Feature>A full command-line interface built on top of the Java API.</Feature>
+      <Feature>A Maven plugin for producing packages from any Maven module.</Feature>
+      <Feature>OSGi-ready.</Feature>
+      <Feature>JPMS-ready.</Feature>
+      <Feature>ISC license.</Feature>
+    </LongDescription>
+    <Names Name="com.io7m.montarre" ShortName="montarre" HumanName="Montarre"/>
+    <Vendor ID="com.io7m" Name="io7m"/>
+    <Version Number="0.0.1-SNAPSHOT" Date="2024-01-01"/>
+  </Metadata>
+  <Manifest>
+    <Module File="lib/com.io7m.anethum.api-1.1.1.jar" HashAlgorithm="SHA-256" HashValue="bef5e82eeac406d93b993858e575ba304366ad333d54134969951d1223ff2ce8"/>
+    <Module File="lib/com.io7m.blackthorne.core-2.0.2.jar" HashAlgorithm="SHA-256" HashValue="48b994b273dddd8a2a410c43db3efcd0d91a71910fc27189a24736313fb2bb23"/>
+    <Module File="lib/com.io7m.blackthorne.jxe-2.0.2.jar" HashAlgorithm="SHA-256" HashValue="bfcf0e162aa3b636f29f933de5d80f01a1ee1ebb32780f1ff8ca96d56a75ecdf"/>
+    <Module File="lib/com.io7m.jaffirm.core-4.0.1.jar" HashAlgorithm="SHA-256" HashValue="dc02592647284de9b985a3852e3ad967e9ee561d44772d3e4ecd99afbbc22f18"/>
+    <Module File="lib/com.io7m.jcip-2.0.1.jar" HashAlgorithm="SHA-256" HashValue="f103daf09059c6969efb7e87dbd427da9dd2b9088224f3aca36e76865edd8ba2"/>
+    <Module File="lib/com.io7m.jdownload.core-1.0.0.jar" HashAlgorithm="SHA-256" HashValue="807ec26e9b987dd7e5e475f64494501582af0a89375ec106a8307102a269095d"/>
+    <Module File="lib/com.io7m.jlexing.core-3.2.0.jar" HashAlgorithm="SHA-256" HashValue="e26c6046de6cf41819fe2ed15e38279ce3447cf45430166b0f25a3f589d55c93"/>
+    <Module File="lib/com.io7m.jmulticlose.core-1.1.3.jar" HashAlgorithm="SHA-256" HashValue="c0e5164f515e530dc210772d98120bbf8f60c9933b9e178e3ad4dbbf4ef43b92"/>
+    <Module File="lib/com.io7m.junreachable.core-4.0.2.jar" HashAlgorithm="SHA-256" HashValue="979cb909924e8ea64e17b03340c601a8e6b6e1620c4e751a0bd74a34ffb9d5e9"/>
+    <Module File="lib/com.io7m.jxe.core-2.0.0.jar" HashAlgorithm="SHA-256" HashValue="3520d03a2606787c4e88625f151c9dbbc853bd4987e752c509e6030a83238b67"/>
+    <Module File="lib/com.io7m.jxtrand.api-2.1.0.jar" HashAlgorithm="SHA-256" HashValue="53c1a2cc739b6359441ba7aacc2aee74166ea416060b197ef6530e8a60052b27"/>
+    <Module File="lib/com.io7m.jxtrand.vanilla-2.1.0.jar" HashAlgorithm="SHA-256" HashValue="c1bbcea8b4ec0a99093e1ec745036e7849f98687158ad3b777179618052ce9b2"/>
+    <Module File="lib/com.io7m.lanark.core-1.2.0.jar" HashAlgorithm="SHA-256" HashValue="c725d2de4b82b9632cc2d72219b27f5d4c4700dde3dd2905f965f06894f04503"/>
+    <Module File="lib/com.io7m.montarre.api-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="7fac14b8783763688a8489321281db56b48ea18d10ea21134c9c6984b65fbf84"/>
+    <Module File="lib/com.io7m.montarre.cmdline-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="849602c857096cdea6afb42d96c877c3224ec20d7bb54b75b272f5b2c3695061"/>
+    <Module File="lib/com.io7m.montarre.io-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="d12934fa63005bec2368f4772735c640d9f0aee06dcaedba62c18104f58159be"/>
+    <Module File="lib/com.io7m.montarre.nativepack-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="67ad2343039c1e37ac92303d859b29fd5259834478a3bee3fa0539d6bdc7a2ae"/>
+    <Module File="lib/com.io7m.montarre.schema-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="f9f18971ffab2026a03e1e52deff068cda545b1f85b0d947fdc14864d9e5509d"/>
+    <Module File="lib/com.io7m.montarre.xml-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="d198baa1e10ba1b3cbfb98c1029cc6a318b6a5639679b7b6474b8691b741ec55"/>
+    <Module File="lib/com.io7m.quarrel.core-1.6.1.jar" HashAlgorithm="SHA-256" HashValue="20047834fc6d68a57ea251bccc52822de8bac068c4a13dcb6ae99111e542be90"/>
+    <Module File="lib/com.io7m.quarrel.ext.logback-1.6.1.jar" HashAlgorithm="SHA-256" HashValue="48827e4267a6e85c5900649381bf73ddfb0ccee9e4e181834d3c17bd12e4fb48"/>
+    <Module File="lib/com.io7m.seltzer.api-1.1.0.jar" HashAlgorithm="SHA-256" HashValue="1097d2d28fcf12e6a9699fc9b527712f954ebe8d25467ccfa8201e445eeadf96"/>
+    <Module File="lib/com.io7m.streamtime.core-1.0.0.jar" HashAlgorithm="SHA-256" HashValue="d062c6142754e507c51a3e127b449ae2d95cf30afb65b4cfd6fffa7f7717a0c8"/>
+    <Module File="lib/com.io7m.verona.core-1.0.1.jar" HashAlgorithm="SHA-256" HashValue="b6c2fb9858a9736c32e05513f0c0801ebcf38d7226d5c70f62dd7ba4dbd311e2"/>
+    <Module File="lib/commons-codec-1.17.1.jar" HashAlgorithm="SHA-256" HashValue="f9f6cb103f2ddc3c99a9d80ada2ae7bf0685111fd6bffccb72033d1da4e6ff23"/>
+    <Module File="lib/commons-compress-1.27.1.jar" HashAlgorithm="SHA-256" HashValue="293d80f54b536b74095dcd7ea3cf0a29bbfc3402519281332495f4420d370d16"/>
+    <Module File="lib/commons-io-2.17.0.jar" HashAlgorithm="SHA-256" HashValue="4aa4ca48f3dfd30b78220b7881d8cb93eac4093ec94361b6befa9487998a550b"/>
+    <Module File="lib/commons-lang3-3.17.0.jar" HashAlgorithm="SHA-256" HashValue="6ee731df5c8e5a2976a1ca023b6bb320ea8d3539fbe64c8a1d5cb765127c33b4"/>
+    <Module File="lib/logback-classic-1.5.8.jar" HashAlgorithm="SHA-256" HashValue="89b0f7bec5fa8a9c9246acd1e99f0e84d6cb3bbadaa5b095a14c2cd0f4732d05"/>
+    <Module File="lib/logback-core-1.5.8.jar" HashAlgorithm="SHA-256" HashValue="a698e4cff3eac45eec9b2755df93bb7a9725d853f7938030654ce5430b37c41d"/>
+    <Module File="lib/slf4j-api-2.0.16.jar" HashAlgorithm="SHA-256" HashValue="a12578dde1ba00bd9b816d388a0b879928d00bab3c83c240f7013bf4196c579a"/>
+    <Resource File="meta/bom.xml" HashAlgorithm="SHA-256" HashValue="2de51bad276f6bc2728cd70aac66a9a70b9bcba0dccffa764078819b4fa0dbd1" Role="BOM"/>
+    <Resource File="meta/icon.ico" HashAlgorithm="SHA-256" HashValue="a36ce859182d76a764bfdb2260b05e0c00580a191e7bc36155a00062ccd06b0e" Role="ICO_WINDOWS"/>
+    <Resource File="meta/icon128.png" HashAlgorithm="SHA-256" HashValue="404b0d848df4c98a02804b6e7566b4c4bf27430f7c584381d32cf43a0b3e4028" Role="ICON_128"/>
+    <Resource File="meta/icon16.png" HashAlgorithm="SHA-256" HashValue="47734e7530a565bca0d8b3c2015600441b31fe151c59855b4f0af535360e1cf9" Role="ICON_16"/>
+    <Resource File="meta/icon24.png" HashAlgorithm="SHA-256" HashValue="7597832ef6ebff7f4fa8ac0c8774552f54b47391f8db8479ea96e395556c7da0" Role="ICON_24"/>
+    <Resource File="meta/icon32.png" HashAlgorithm="SHA-256" HashValue="e3ea34ef4296b538d7ef5d58ad511ab5bd4b4b078a30f1910e9789143c98776a" Role="ICON_32"/>
+    <Resource File="meta/icon48.png" HashAlgorithm="SHA-256" HashValue="35d5ada26910c3f707f9b8cfb016b1dca9a575c940018fa5048d71258581b0fc" Role="ICON_48"/>
+    <Resource File="meta/icon64.png" HashAlgorithm="SHA-256" HashValue="c30a14e51ade414a6110daa447e8d44cfa10808fa9ce06b4bb67f37def7fd04e" Role="ICON_64"/>
+    <Resource File="meta/license.txt" HashAlgorithm="SHA-256" HashValue="cb2db7e26966764c369e6fb4ca08a989e752d926016dd132661a8c64b25149f4" Role="LICENSE"/>
+  </Manifest>
+</Package>

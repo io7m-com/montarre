@@ -7,9 +7,53 @@
     packages.
   </Paragraph>
 
-  <Feature>Comprehensively documented.</Feature>
-  <Feature>OSGi-ready.</Feature>
-  <Feature>JPMS-ready.</Feature>
-  <Feature>ISC license.</Feature>
+  <Feature>
+    A rich, strictly-defined, and well-specified packaging format that remains platform-independent whilst allowing
+    straightforward zero-configuration transformations to a wide range of platform-specific package formats.
+  </Feature>
+
+  <Feature>
+    Support for producing simple jpackage "app-image" executables on any platform.
+  </Feature>
+
+  <Feature>
+    Support for producing Debian .deb packages.
+  </Feature>
+
+  <Feature>
+    Support for producing Windows MSI installers.
+  </Feature>
+
+  <Feature>
+    Support for producing Flatpaks.
+  </Feature>
+
+  <Feature>
+    Comprehensively documented.
+  </Feature>
+
+  <Feature>
+    A carefully-engineered Java API for creating, manipulating, and transforming packages.
+  </Feature>
+
+  <Feature>
+    A full command-line interface built on top of the Java API.
+  </Feature>
+
+  <Feature>
+    A Maven plugin for producing packages from any Maven module.
+  </Feature>
+
+  <Feature>
+    OSGi-ready.
+  </Feature>
+
+  <Feature>
+    JPMS-ready.
+  </Feature>
+
+  <Feature>
+    ISC license.
+  </Feature>
 
 </LongDescription>
