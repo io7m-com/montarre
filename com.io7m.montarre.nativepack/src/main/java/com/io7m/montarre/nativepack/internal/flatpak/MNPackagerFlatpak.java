@@ -359,7 +359,7 @@ public final class MNPackagerFlatpak
   {
     LOG.info("Creating Flatpak bundle");
 
-    final var r = this.processes.executeAndWait(
+    this.processes.executeAndWaitChecked(
       System.getenv(),
       new ConcurrentLinkedQueue<>(),
       new ConcurrentLinkedQueue<>(),
@@ -372,16 +372,6 @@ public final class MNPackagerFlatpak
         packageV.metadata().names().packageName().toString()
       )
     );
-
-    if (r != 0) {
-      throw new MException(
-        "The flatpak tool returned a non-zero exit code.",
-        "error-flatpak",
-        Map.of(
-          "Error Code", Integer.toString(r)
-        )
-      );
-    }
   }
 
   private void flatpakBuildExport(
@@ -391,7 +381,7 @@ public final class MNPackagerFlatpak
   {
     LOG.info("Exporting Flatpak build");
 
-    final var r = this.processes.executeAndWait(
+    this.processes.executeAndWaitChecked(
       System.getenv(),
       new ConcurrentLinkedQueue<>(),
       new ConcurrentLinkedQueue<>(),
@@ -403,16 +393,6 @@ public final class MNPackagerFlatpak
         build.toString()
       )
     );
-
-    if (r != 0) {
-      throw new MException(
-        "The flatpak tool returned a non-zero exit code.",
-        "error-flatpak",
-        Map.of(
-          "Error Code", Integer.toString(r)
-        )
-      );
-    }
   }
 
   private void flatpakBuildFinish(
@@ -421,7 +401,7 @@ public final class MNPackagerFlatpak
   {
     LOG.info("Finishing Flatpak build.");
 
-    final var r = this.processes.executeAndWait(
+    this.processes.executeAndWaitChecked(
       System.getenv(),
       new ConcurrentLinkedQueue<>(),
       new ConcurrentLinkedQueue<>(),
@@ -432,16 +412,6 @@ public final class MNPackagerFlatpak
         directory.toString()
       )
     );
-
-    if (r != 0) {
-      throw new MException(
-        "The flatpak tool returned a non-zero exit code.",
-        "error-flatpak",
-        Map.of(
-          "Error Code", Integer.toString(r)
-        )
-      );
-    }
   }
 
   private static void generateAndCopyAppImage(
@@ -536,7 +506,7 @@ public final class MNPackagerFlatpak
       "Runtime must have a PLATFORM role"
     );
 
-    final var r = this.processes.executeAndWait(
+    this.processes.executeAndWaitChecked(
       System.getenv(),
       new ConcurrentLinkedQueue<>(),
       new ConcurrentLinkedQueue<>(),
@@ -550,16 +520,6 @@ public final class MNPackagerFlatpak
         platform.fullName(workspace.architecture())
       )
     );
-
-    if (r != 0) {
-      throw new MException(
-        "The flatpak tool returned a non-zero exit code.",
-        "error-flatpak",
-        Map.of(
-          "Error Code", Integer.toString(r)
-        )
-      );
-    }
   }
 
   private void flatpakInstallRuntime(
@@ -572,7 +532,7 @@ public final class MNPackagerFlatpak
 
     LOG.info("Installing Flatpak runtime {}.", name);
 
-    final var r = this.processes.executeAndWait(
+    this.processes.executeAndWaitChecked(
       System.getenv(),
       new ConcurrentLinkedQueue<>(),
       new ConcurrentLinkedQueue<>(),
@@ -585,15 +545,5 @@ public final class MNPackagerFlatpak
         name
       )
     );
-
-    if (r != 0) {
-      throw new MException(
-        "The flatpak tool returned a non-zero exit code.",
-        "error-flatpak",
-        Map.of(
-          "Error Code", Integer.toString(r)
-        )
-      );
-    }
   }
 }

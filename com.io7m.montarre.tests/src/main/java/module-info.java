@@ -49,6 +49,7 @@ open module com.io7m.montarre.tests
   requires java.net.http;
   requires com.h2database.mvstore;
   requires io.helidon.webserver;
+  requires com.io7m.jaffirm.core;
 
   exports com.io7m.montarre.tests;
 }

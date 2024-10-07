@@ -17,6 +17,7 @@
 
 package com.io7m.montarre.api.natives;
 
+import com.io7m.jaffirm.core.Preconditions;
 import com.io7m.montarre.api.MException;
 
 import java.util.List;
@@ -50,6 +51,50 @@ public interface MNativeProcessesType
     ConcurrentLinkedQueue<String> standardError,
     List<String> commandLine)
     throws MException, InterruptedException;
+
+  /**
+   * Execute a process, waiting for it to complete, and raise an exception
+   * if the exit code returned is non-zero.
+   *
+   * @param environment   The environment
+   * @param standardOut   The standard out log
+   * @param standardError The standard error log
+   * @param commandLine   The command line
+   *
+   * @throws MException           On errors
+   * @throws InterruptedException On interruption
+   */
+
+  default void executeAndWaitChecked(
+    final Map<String, String> environment,
+    final ConcurrentLinkedQueue<String> standardOut,
+    final ConcurrentLinkedQueue<String> standardError,
+    final List<String> commandLine)
+    throws MException, InterruptedException
+  {
+    Preconditions.checkPreconditionV(
+      !commandLine.isEmpty(),
+      "Command-line must be non-empty."
+    );
+
+    final var r = this.executeAndWait(
+      environment,
+      standardOut,
+      standardError,
+      List.copyOf(commandLine)
+    );
+
+    if (r != 0) {
+      throw new MException(
+        "The command returned a non-zero exit code.",
+        "error-exec-command",
+        Map.ofEntries(
+          Map.entry("Error Code", Integer.toString(r)),
+          Map.entry("Command", commandLine.toString())
+        )
+      );
+    }
+  }
 
   @Override
   void close()

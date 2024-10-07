@@ -26,6 +26,7 @@ module com.io7m.montarre.api
   requires static org.immutables.value;
 
   requires com.io7m.anethum.api;
+  requires com.io7m.jaffirm.core;
   requires com.io7m.jxe.core;
   requires com.io7m.lanark.core;
   requires com.io7m.seltzer.api;

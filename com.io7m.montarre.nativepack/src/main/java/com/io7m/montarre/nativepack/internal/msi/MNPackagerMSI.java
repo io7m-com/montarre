@@ -139,9 +139,9 @@ public final class MNPackagerMSI
     final var wixXML =
       wixDirectory.resolve("wix.xml");
 
-    try (var output =
+    try (final var output =
            Files.newOutputStream(wixXML, this.writeReplaceOptions())) {
-      try (var writer = wixWriters.create(
+      try (final var writer = wixWriters.create(
         packageV.packageDeclaration(),
         appImageRoot,
         output
@@ -158,7 +158,7 @@ public final class MNPackagerMSI
       wixDirectory.resolve(outputName);
 
     try {
-      final var r = this.processes.executeAndWait(
+      this.processes.executeAndWaitChecked(
         System.getenv(),
         new ConcurrentLinkedQueue<>(),
         new ConcurrentLinkedQueue<>(),
@@ -170,15 +170,6 @@ public final class MNPackagerMSI
           msiOut.toString()
         )
       );
-      if (r != 0) {
-        throw new MException(
-          "The wix tool returned a non-zero error code.",
-          "error-wix",
-          Map.ofEntries(
-            Map.entry("Error Code", Integer.toString(r))
-          )
-        );
-      }
     } catch (final InterruptedException e) {
       throw this.error(e);
     }

@@ -282,7 +282,7 @@ public final class MNPackagerAppImage
     LOG.info("Creating tar {}", outFile);
     LOG.debug("Input directory: {}", this.appImageRoot);
 
-    try (var streams = CloseableCollection.create()) {
+    try (final var streams = CloseableCollection.create()) {
       final var fileStream =
         streams.add(Files.walk(this.appImageRoot));
       final var fileList =
@@ -310,7 +310,7 @@ public final class MNPackagerAppImage
     final List<Path> fileList)
     throws IOException
   {
-    for (var file : fileList) {
+    for (final var file : fileList) {
       if (Files.isRegularFile(file)) {
         LOG.debug("[tar] {}", file);
 
@@ -345,7 +345,7 @@ public final class MNPackagerAppImage
     LOG.info("Creating zip {}", outputFile);
     LOG.debug("Input directory: {}", this.appImageRoot);
 
-    try (var streams = CloseableCollection.create()) {
+    try (final var streams = CloseableCollection.create()) {
       final var fileStream =
         streams.add(Files.walk(this.appImageRoot));
       final var fileList =
@@ -370,7 +370,7 @@ public final class MNPackagerAppImage
     final List<Path> fileList)
     throws IOException
   {
-    for (var file : fileList) {
+    for (final var file : fileList) {
       if (Files.isRegularFile(file)) {
         LOG.debug("[zip] {}", file);
 
