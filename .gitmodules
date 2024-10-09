@@ -1,0 +1,6 @@
+[submodule "com.io7m.montarre.tests/src/main/resources/com/io7m/montarre/tests/web"]
+	path = com.io7m.montarre.tests/src/main/resources/com/io7m/montarre/tests/web
+	url = https://github.com/wixtoolset/web
+[submodule "wixtoolset-web"]
+	path = wixtoolset-web
+	url = https://github.com/wixtoolset/web
