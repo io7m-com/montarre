@@ -15,40 +15,69 @@
  */
 
 
-package com.io7m.montarre.api;
-
-import com.io7m.immutables.styles.ImmutablesStyleType;
-import org.immutables.value.Value;
-
-import java.util.List;
+package com.io7m.montarre.maven_plugin;
 
 /**
- * A long description of the application.
+ * A text
+ *
+ * @see com.io7m.montarre.api.MText
  */
 
-@Value.Immutable
-@ImmutablesStyleType
-public interface MLongDescriptionType
+public final class Text
 {
+  private String language = "en";
+  private String text = "";
+
   /**
-   * @return The description language
+   * A text
+   *
+   * @see com.io7m.montarre.api.MText
    */
 
-  @Value.Default
-  default MLanguageCode language()
+  public Text()
   {
-    return new MLanguageCode("en");
+
   }
 
   /**
-   * @return The description paragraphs
+   * @return The language
    */
 
-  List<MParagraph> descriptions();
+  public String getLanguage()
+  {
+    return this.language;
+  }
 
   /**
-   * @return The feature list
+   * Set the language.
+   *
+   * @param newLanguage The language
    */
 
-  List<MFeature> features();
+  public void setLanguage(
+    final String newLanguage)
+  {
+    this.language = newLanguage;
+  }
+
+  /**
+   * @return The text
+   */
+
+  public String getText()
+  {
+    return this.text;
+  }
+
+  /**
+   * Set the text.
+   *
+   * @param newText The text
+   */
+
+  public void setText(
+    final String newText)
+  {
+    this.text = newText;
+  }
 }

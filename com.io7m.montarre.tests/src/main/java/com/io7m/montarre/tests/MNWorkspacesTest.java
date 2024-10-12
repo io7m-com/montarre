@@ -74,47 +74,6 @@ public final class MNWorkspacesTest implements Flow.Subscriber<STTransferStatist
   private static final Logger LOG =
     LoggerFactory.getLogger(MNWorkspacesTest.class);
 
-  private static final MPackageDeclaration EMPTY_PACKAGE =
-    MPackageDeclaration.builder()
-      .setMetadata(
-        MMetadata.builder()
-          .setCopying(
-            MCopying.builder()
-              .setCopyright("Copyright © 2024 Mark Raynsford <code@io7m.com> https://www.io7m.com")
-              .setLicense("ISC")
-              .build()
-          )
-          .setDescription("An example package.")
-          .setJavaInfo(
-            MJavaInfo.builder()
-              .setMainModule("com.io7m.example/com.io7m.example.Main")
-              .setRequiredJDKVersion(21)
-              .build()
-          )
-          .setApplicationKind(MApplicationKind.CONSOLE)
-          .setNames(
-            MNames.builder()
-              .setPackageName(new MPackageName(new RDottedName("com.io7m.example")))
-              .setShortName(new MShortName("example"))
-              .build()
-          )
-          .addLinks(new MLink(MLinkRole.HOME_PAGE, URI.create("https://www.example.com")))
-          .setVendor(new MVendor(
-            new MVendorID(new RDottedName("com.io7m")),
-            new MVendorName("io7m")
-          ))
-          .setVersion(
-            new MVersion(
-              Version.of(1, 0, 0),
-              LocalDate.parse("2024-10-06")
-            )
-          )
-          .build())
-      .setManifest(
-        MManifest.builder()
-          .build())
-      .build();
-
   private MNWorkspaces workspaces;
   private MPackageWriters writers;
   private MPackageReaders readers;
@@ -151,7 +110,7 @@ public final class MNWorkspacesTest implements Flow.Subscriber<STTransferStatist
       directory.resolve("out.mpk.tmp");
 
     try (var ignored =
-           this.writers.create(this.packageFile, outFileTmp, EMPTY_PACKAGE)) {
+           this.writers.create(this.packageFile, outFileTmp, MExamplePackages.EMPTY_PACKAGE)) {
       // Nothing
     }
   }

@@ -22,6 +22,7 @@ import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
 import com.io7m.blackthorne.core.BTQualifiedName;
 import com.io7m.montarre.api.MFeature;
+import com.io7m.montarre.api.MLanguageCode;
 import com.io7m.montarre.api.MLongDescription;
 import com.io7m.montarre.api.MLongDescriptionElementType;
 import com.io7m.montarre.api.MParagraph;
@@ -85,7 +86,9 @@ public final class Mx1LongDescription
     final Attributes attributes)
     throws VersionException
   {
-    this.builder.setLanguage(attributes.getValue("Language"));
+    this.builder.setLanguage(
+      new MLanguageCode(attributes.getValue("Language"))
+    );
   }
 
   @Override

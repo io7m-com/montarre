@@ -20,18 +20,19 @@ package com.io7m.montarre.api;
 import com.io7m.immutables.styles.ImmutablesStyleType;
 import org.immutables.value.Value;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * A long description of the application.
+ * A text with zero or more alternative translations.
  */
 
 @Value.Immutable
 @ImmutablesStyleType
-public interface MLongDescriptionType
+public interface MTranslatedTextType
 {
   /**
-   * @return The description language
+   * @return The base language
    */
 
   @Value.Default
@@ -41,14 +42,26 @@ public interface MLongDescriptionType
   }
 
   /**
-   * @return The description paragraphs
+   * @return The text in the base language
    */
 
-  List<MParagraph> descriptions();
+  String text();
 
   /**
-   * @return The feature list
+   * @return The translations
    */
 
-  List<MFeature> features();
+  Map<MLanguageCode, String> translations();
+
+
+  /**
+   * @return All texts including the base text and translations
+   */
+
+  default Map<MLanguageCode, String> all()
+  {
+    final var r = new HashMap<>(this.translations());
+    r.put(this.language(), this.text());
+    return Map.copyOf(r);
+  }
 }

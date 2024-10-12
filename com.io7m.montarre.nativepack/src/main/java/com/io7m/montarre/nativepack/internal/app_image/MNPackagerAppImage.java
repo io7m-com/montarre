@@ -116,7 +116,7 @@ public final class MNPackagerAppImage
     arguments.add("--copyright");
     arguments.add(metadata.copying().copyright());
     arguments.add("--description");
-    arguments.add(metadata.description());
+    arguments.add(metadata.description().text().text());
     arguments.add("--app-content");
     arguments.add(appDirectory.resolve("meta").toString());
     arguments.add("--app-version");

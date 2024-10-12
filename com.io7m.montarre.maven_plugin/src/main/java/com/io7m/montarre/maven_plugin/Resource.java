@@ -19,6 +19,9 @@ package com.io7m.montarre.maven_plugin;
 
 import com.io7m.montarre.api.MResourceRole;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A resource.
  */
@@ -28,6 +31,16 @@ public final class Resource
   private MResourceRole role = MResourceRole.BOM;
   private String file = "";
   private String entryName = "";
+  private List<Text> captions = new ArrayList<>();
+
+  /**
+   * @return The captions
+   */
+
+  public List<Text> getCaption()
+  {
+    return this.captions;
+  }
 
   /**
    * A resource.

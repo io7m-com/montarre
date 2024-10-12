@@ -73,7 +73,7 @@ public final class MLongDescriptionSerializer implements
       this.output.setDefaultNamespace(NS);
       this.output.writeStartElement(NS, "LongDescription");
       this.output.writeDefaultNamespace(NS);
-      this.output.writeAttribute("Language", value.language());
+      this.output.writeAttribute("Language", value.language().name());
 
       for (final var p : value.descriptions()) {
         this.output.writeStartElement(NS, "Paragraph");

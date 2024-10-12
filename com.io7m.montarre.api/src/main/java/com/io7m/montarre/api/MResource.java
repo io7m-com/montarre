@@ -18,27 +18,31 @@
 package com.io7m.montarre.api;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A resource item.
  *
- * @param file The file
- * @param hash The hash
- * @param role The role
+ * @param file    The file
+ * @param hash    The hash
+ * @param role    The role
+ * @param caption The resource caption
  */
 
 public record MResource(
   MFileName file,
   MHash hash,
-  MResourceRole role)
+  MResourceRole role,
+  Optional<MCaption> caption)
   implements MManifestItemType
 {
   /**
    * A resource item.
    *
-   * @param file The file
-   * @param hash The hash
-   * @param role The role
+   * @param file    The file
+   * @param hash    The hash
+   * @param role    The role
+   * @param caption The resource caption
    */
 
   public MResource
@@ -46,5 +50,6 @@ public record MResource(
     Objects.requireNonNull(file, "file");
     Objects.requireNonNull(hash, "hash");
     Objects.requireNonNull(role, "role");
+    Objects.requireNonNull(caption, "caption");
   }
 }

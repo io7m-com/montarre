@@ -38,6 +38,7 @@ module com.io7m.montarre.api
   exports com.io7m.montarre.api.io;
   exports com.io7m.montarre.api.natives;
   exports com.io7m.montarre.api.parsers;
+  exports com.io7m.montarre.api.validation;
   exports com.io7m.montarre.api.wix;
   exports com.io7m.montarre.api;
 

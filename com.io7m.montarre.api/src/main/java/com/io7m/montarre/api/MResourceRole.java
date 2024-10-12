@@ -75,7 +75,19 @@ public enum MResourceRole
    * A 128x128 application icon.
    */
 
-  ICON_128;
+  ICON_128,
+
+  /**
+   * A 256x256 application icon.
+   */
+
+  ICON_256,
+
+  /**
+   * A screenshot.
+   */
+
+  SCREENSHOT;
 
   /**
    * @return The priority of this role as an icon
@@ -92,6 +104,8 @@ public enum MResourceRole
       case ICON_48 -> 5;
       case ICON_64 -> 6;
       case ICON_128 -> 7;
+      case ICON_256 -> 8;
+      case SCREENSHOT -> 0;
     };
   }
 
@@ -102,14 +116,15 @@ public enum MResourceRole
   public boolean isIcon()
   {
     return switch (this) {
-      case BOM, LICENSE -> false;
+      case BOM, LICENSE, SCREENSHOT -> false;
       case ICO_WINDOWS,
            ICON_16,
            ICON_24,
            ICON_32,
            ICON_48,
            ICON_64,
-           ICON_128 -> true;
+           ICON_128,
+           ICON_256 -> true;
     };
   }
 }

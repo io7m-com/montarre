@@ -21,13 +21,16 @@ import com.io7m.anethum.api.ParsingException;
 import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.MApplicationKind;
 import com.io7m.montarre.api.MArchitectureName;
+import com.io7m.montarre.api.MCaptions;
 import com.io7m.montarre.api.MCategoryName;
 import com.io7m.montarre.api.MCopying;
+import com.io7m.montarre.api.MDescription;
 import com.io7m.montarre.api.MFileName;
 import com.io7m.montarre.api.MHash;
 import com.io7m.montarre.api.MHashAlgorithm;
 import com.io7m.montarre.api.MHashValue;
 import com.io7m.montarre.api.MJavaInfo;
+import com.io7m.montarre.api.MLanguageCode;
 import com.io7m.montarre.api.MLink;
 import com.io7m.montarre.api.MLinkRole;
 import com.io7m.montarre.api.MManifest;
@@ -41,6 +44,7 @@ import com.io7m.montarre.api.MPlatformDependentModule;
 import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.MResourceRole;
 import com.io7m.montarre.api.MShortName;
+import com.io7m.montarre.api.MTranslatedText;
 import com.io7m.montarre.api.MVendor;
 import com.io7m.montarre.api.MVendorID;
 import com.io7m.montarre.api.MVendorName;
@@ -61,6 +65,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.HexFormat;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -127,7 +133,14 @@ public final class MPackageParsersTest
               .setLicense("ISC")
               .build()
           )
-          .setDescription("An example package.")
+          .setDescription(
+            new MDescription(
+              MTranslatedText.builder()
+                .setLanguage(new MLanguageCode("en"))
+                .setText("An example package.")
+                .build()
+            )
+          )
           .setJavaInfo(
             MJavaInfo.builder()
               .setMainModule("com.io7m.example/com.io7m.example.Main")
@@ -171,7 +184,12 @@ public final class MPackageParsersTest
             new MResource(
               new MFileName("meta/bom.xml"),
               hashOf("meta/bom.xml"),
-              MResourceRole.BOM)
+              MResourceRole.BOM,
+              Optional.of(MCaptions.ofTranslations(
+                Map.entry(new MLanguageCode("en"), "A bill of materials."),
+                Map.entry(new MLanguageCode("fr"), "Une nomenclature.")
+              ))
+            )
           )
           .build())
       .build();

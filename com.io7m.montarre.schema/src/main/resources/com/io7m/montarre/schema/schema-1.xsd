@@ -372,6 +372,40 @@
     </xsd:complexType>
   </xsd:element>
 
+  <xsd:element name="Text">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A text element in a specific language.
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:complexType mixed="true">
+      <xsd:attribute name="Language"
+                     use="required"
+                     type="xsd:NMTOKEN"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="Description">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A humanly-readable package description.
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:complexType>
+      <xsd:sequence minOccurs="0"
+                    maxOccurs="1">
+        <xsd:element ref="mp:Text"/>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:unique name="DescriptionTextLanguageUnique">
+      <xsd:selector xpath="mp:Text"/>
+      <xsd:field xpath="@Language"/>
+    </xsd:unique>
+  </xsd:element>
+
   <xsd:element name="Feature">
     <xsd:complexType mixed="true"/>
   </xsd:element>
@@ -399,6 +433,26 @@
     </xsd:complexType>
   </xsd:element>
 
+  <xsd:element name="Caption">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A humanly-readable resource caption.
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:complexType>
+      <xsd:sequence minOccurs="1"
+                    maxOccurs="unbounded">
+        <xsd:element ref="mp:Text"/>
+      </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:unique name="CaptionTextLanguageUnique">
+      <xsd:selector xpath="mp:Text"/>
+      <xsd:field xpath="@Language"/>
+    </xsd:unique>
+  </xsd:element>
+
   <xsd:element name="Metadata">
     <xsd:complexType>
       <xsd:sequence>
@@ -407,6 +461,7 @@
           <xsd:element ref="mp:Category"/>
         </xsd:sequence>
         <xsd:element ref="mp:Copying"/>
+        <xsd:element ref="mp:Description"/>
         <xsd:sequence>
           <xsd:element ref="mp:Flatpak"
                        minOccurs="0"
@@ -426,15 +481,6 @@
         <xsd:element ref="mp:Version"/>
       </xsd:sequence>
 
-      <xsd:attribute name="Description"
-                     type="xsd:string"
-                     use="required">
-        <xsd:annotation>
-          <xsd:documentation xml:lang="en">
-            A humanly-readable package description.
-          </xsd:documentation>
-        </xsd:annotation>
-      </xsd:attribute>
       <xsd:attribute name="ApplicationKind"
                      type="mp:ApplicationKindType"
                      use="required">
@@ -544,14 +590,16 @@
   <xsd:simpleType name="ResourceRole">
     <xsd:restriction base="xsd:string">
       <xsd:enumeration value="BOM"/>
-      <xsd:enumeration value="LICENSE"/>
-      <xsd:enumeration value="ICO_WINDOWS"/>
+      <xsd:enumeration value="ICON_128"/>
       <xsd:enumeration value="ICON_16"/>
       <xsd:enumeration value="ICON_24"/>
+      <xsd:enumeration value="ICON_256"/>
       <xsd:enumeration value="ICON_32"/>
       <xsd:enumeration value="ICON_48"/>
       <xsd:enumeration value="ICON_64"/>
-      <xsd:enumeration value="ICON_128"/>
+      <xsd:enumeration value="ICO_WINDOWS"/>
+      <xsd:enumeration value="LICENSE"/>
+      <xsd:enumeration value="SCREENSHOT"/>
     </xsd:restriction>
   </xsd:simpleType>
 
@@ -563,6 +611,10 @@
     </xsd:annotation>
 
     <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="mp:Caption" minOccurs="0" maxOccurs="1"/>
+      </xsd:sequence>
+
       <xsd:attribute name="File"
                      type="xsd:string"
                      use="required">

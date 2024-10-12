@@ -19,6 +19,7 @@ package com.io7m.montarre.tests;
 
 import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.MApplicationKind;
+import com.io7m.montarre.api.MCaptions;
 import com.io7m.montarre.api.MCopying;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MFileName;
@@ -26,6 +27,7 @@ import com.io7m.montarre.api.MHash;
 import com.io7m.montarre.api.MHashAlgorithm;
 import com.io7m.montarre.api.MHashValue;
 import com.io7m.montarre.api.MJavaInfo;
+import com.io7m.montarre.api.MLanguageCode;
 import com.io7m.montarre.api.MLink;
 import com.io7m.montarre.api.MLinkRole;
 import com.io7m.montarre.api.MManifest;
@@ -56,54 +58,15 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class MPackageReadersTest
 {
-  private static final MPackageDeclaration EMPTY_PACKAGE =
-    MPackageDeclaration.builder()
-      .setMetadata(
-        MMetadata.builder()
-          .setCopying(
-            MCopying.builder()
-              .setCopyright("Copyright © 2024 Mark Raynsford <code@io7m.com> https://www.io7m.com")
-              .setLicense("ISC")
-              .build()
-          )
-          .setDescription("An example package.")
-          .setApplicationKind(MApplicationKind.CONSOLE)
-          .setJavaInfo(
-            MJavaInfo.builder()
-              .setMainModule("com.io7m.example/com.io7m.example.Main")
-              .setRequiredJDKVersion(21)
-              .build()
-          )
-          .setNames(
-            MNames.builder()
-              .setPackageName(new MPackageName(new RDottedName("com.io7m.example")))
-              .setShortName(new MShortName("example"))
-              .build()
-          )
-          .setVendor(new MVendor(
-            new MVendorID(new RDottedName("com.io7m")),
-            new MVendorName("io7m")
-          ))
-          .addLinks(new MLink(MLinkRole.HOME_PAGE, URI.create("https://www.example.com")))
-          .setVersion(
-            new MVersion(
-              Version.of(1, 0, 0),
-              LocalDate.parse("2024-10-06")
-            )
-          )
-          .build())
-      .setManifest(
-        MManifest.builder()
-          .build())
-      .build();
-
   private MPackageWriters writers;
   private Path directory;
   private MPackageReaders readers;
@@ -202,12 +165,12 @@ public final class MPackageReadersTest
       this.directory.resolve("out.mpk.tmp");
 
     try (var writer =
-           this.writers.create(outFile, outFileTmp, EMPTY_PACKAGE)) {
+           this.writers.create(outFile, outFileTmp, MExamplePackages.EMPTY_PACKAGE)) {
 
     }
 
     try (var reader = this.readers.open(outFile)) {
-      assertEquals(EMPTY_PACKAGE, reader.packageDeclaration());
+      assertEquals(MExamplePackages.EMPTY_PACKAGE, reader.packageDeclaration());
     }
   }
 
@@ -223,7 +186,7 @@ public final class MPackageReadersTest
       this.directory.resolve("out.mpk.tmp");
 
     final var p =
-      EMPTY_PACKAGE.withManifest(
+      MExamplePackages.EMPTY_PACKAGE.withManifest(
         MManifest.builder()
           .addItems(
             new MResource(
@@ -232,7 +195,11 @@ public final class MPackageReadersTest
                 new MHashAlgorithm("SHA-256"),
                 new MHashValue(
                   "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")),
-              MResourceRole.BOM
+              MResourceRole.BOM,
+              Optional.of(MCaptions.ofTranslations(
+                Map.entry(new MLanguageCode("en"), "A bill of materials."),
+                Map.entry(new MLanguageCode("fr"), "Une nomenclature.")
+              ))
             ))
           .build()
       );
@@ -257,7 +224,7 @@ public final class MPackageReadersTest
       this.directory.resolve("out.mpk");
 
     final var p =
-      EMPTY_PACKAGE.withManifest(
+      MExamplePackages.EMPTY_PACKAGE.withManifest(
         MManifest.builder()
           .addItems(
             new MResource(
@@ -266,7 +233,11 @@ public final class MPackageReadersTest
                 new MHashAlgorithm("SHA-256"),
                 new MHashValue(
                   "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")),
-              MResourceRole.BOM
+              MResourceRole.BOM,
+              Optional.of(MCaptions.ofTranslations(
+                Map.entry(new MLanguageCode("en"), "A bill of materials."),
+                Map.entry(new MLanguageCode("fr"), "Une nomenclature.")
+              ))
             ))
           .build()
       );

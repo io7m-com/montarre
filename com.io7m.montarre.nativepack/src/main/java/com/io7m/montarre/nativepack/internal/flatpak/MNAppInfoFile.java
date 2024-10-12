@@ -225,7 +225,7 @@ public final class MNAppInfoFile
         for (final var paragraph : description.descriptions()) {
           output.writeStartElement("p");
           if (!Objects.equals(language, "en")) {
-            output.writeAttribute("xml:lang", language);
+            output.writeAttribute("xml:lang", language.name());
           }
           output.writeCharacters(paragraph.text().trim());
           output.writeEndElement();
@@ -240,7 +240,7 @@ public final class MNAppInfoFile
         for (final var feature : description.features()) {
           output.writeStartElement("li");
           if (!Objects.equals(language, "en")) {
-            output.writeAttribute("xml:lang", language);
+            output.writeAttribute("xml:lang", language.name());
           }
           output.writeCharacters(feature.text().trim());
           output.writeEndElement();
@@ -278,7 +278,7 @@ public final class MNAppInfoFile
     throws XMLStreamException
   {
     final var noDotDescription =
-      metadata.description().replaceAll("\\.+$", "");
+      metadata.description().text().text().replaceAll("\\.+$", "");
 
     output.writeStartElement("summary");
     output.writeCharacters(noDotDescription);

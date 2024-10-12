@@ -14,41 +14,13 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-
-package com.io7m.montarre.api;
-
-import com.io7m.immutables.styles.ImmutablesStyleType;
-import org.immutables.value.Value;
-
-import java.util.List;
-
 /**
- * A long description of the application.
+ * Application packaging tools (API [Validation]).
  */
 
-@Value.Immutable
-@ImmutablesStyleType
-public interface MLongDescriptionType
-{
-  /**
-   * @return The description language
-   */
+@Export
+@Version("1.0.0")
+package com.io7m.montarre.api.validation;
 
-  @Value.Default
-  default MLanguageCode language()
-  {
-    return new MLanguageCode("en");
-  }
-
-  /**
-   * @return The description paragraphs
-   */
-
-  List<MParagraph> descriptions();
-
-  /**
-   * @return The feature list
-   */
-
-  List<MFeature> features();
-}
+import org.osgi.annotation.bundle.Export;
+import org.osgi.annotation.versioning.Version;

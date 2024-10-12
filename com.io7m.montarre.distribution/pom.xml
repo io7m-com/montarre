@@ -67,6 +67,8 @@
               <packageName>com.io7m.montarre</packageName>
               <shortName>montarre</shortName>
 
+              <description>Application packaging tools</description>
+
               <version>
                 <number>${project.version}</number>
                 <date>2024-10-06</date>
@@ -129,6 +131,11 @@
                   <role>ICON_128</role>
                   <file>${project.basedir}/src/main/meta/icon128.png</file>
                   <entryName>icon128.png</entryName>
+                </resource>
+                <resource>
+                  <role>SCREENSHOT</role>
+                  <file>${project.basedir}/src/main/meta/screenshot.png</file>
+                  <entryName>screenshot.png</entryName>
                 </resource>
                 <resource>
                   <role>ICO_WINDOWS</role>

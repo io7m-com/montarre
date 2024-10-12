@@ -15,40 +15,27 @@
  */
 
 
-package com.io7m.montarre.api;
+package com.io7m.montarre.api.validation;
 
-import com.io7m.immutables.styles.ImmutablesStyleType;
-import org.immutables.value.Value;
+import com.io7m.montarre.api.MException;
 
 import java.util.List;
 
 /**
- * A long description of the application.
+ * A validator.
  */
 
-@Value.Immutable
-@ImmutablesStyleType
-public interface MLongDescriptionType
+public interface MValidatorType
+  extends AutoCloseable
 {
   /**
-   * @return The description language
+   * Execute the validator, returning any validation issues.
+   * @return The issues, if any
    */
 
-  @Value.Default
-  default MLanguageCode language()
-  {
-    return new MLanguageCode("en");
-  }
+  List<MValidationIssue> execute();
 
-  /**
-   * @return The description paragraphs
-   */
-
-  List<MParagraph> descriptions();
-
-  /**
-   * @return The feature list
-   */
-
-  List<MFeature> features();
+  @Override
+  void close()
+    throws MException;
 }

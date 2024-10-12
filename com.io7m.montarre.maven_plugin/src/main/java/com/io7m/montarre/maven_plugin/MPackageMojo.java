@@ -21,8 +21,11 @@ import com.io7m.anethum.api.ParsingException;
 import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.MApplicationKind;
 import com.io7m.montarre.api.MArchitectureName;
+import com.io7m.montarre.api.MCaption;
+import com.io7m.montarre.api.MCaptions;
 import com.io7m.montarre.api.MCategoryName;
 import com.io7m.montarre.api.MCopying;
+import com.io7m.montarre.api.MDescription;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MFileFilter;
 import com.io7m.montarre.api.MFileName;
@@ -30,6 +33,7 @@ import com.io7m.montarre.api.MHash;
 import com.io7m.montarre.api.MHashAlgorithm;
 import com.io7m.montarre.api.MHashValue;
 import com.io7m.montarre.api.MJavaInfo;
+import com.io7m.montarre.api.MLanguageCode;
 import com.io7m.montarre.api.MLink;
 import com.io7m.montarre.api.MLinkRole;
 import com.io7m.montarre.api.MLongDescription;
@@ -45,12 +49,16 @@ import com.io7m.montarre.api.MPlatformDependentModule;
 import com.io7m.montarre.api.MPlatformFileFilter;
 import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.MShortName;
+import com.io7m.montarre.api.MTranslatedText;
 import com.io7m.montarre.api.MVendor;
 import com.io7m.montarre.api.MVendorID;
 import com.io7m.montarre.api.MVendorName;
 import com.io7m.montarre.api.MVersion;
 import com.io7m.montarre.api.io.MPackageWriterType;
+import com.io7m.montarre.api.validation.MValidationIssue;
+import com.io7m.montarre.io.MPackageReaders;
 import com.io7m.montarre.io.MPackageWriters;
+import com.io7m.montarre.io.MValidators;
 import com.io7m.montarre.xml.MLongDescriptionParsers;
 import com.io7m.seltzer.api.SStructuredErrorType;
 import com.io7m.verona.core.VersionException;
@@ -91,10 +99,12 @@ import java.util.HexFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PACKAGE;
 
@@ -267,6 +277,13 @@ public final class MPackageMojo extends AbstractMojo
   @Parameter(defaultValue = "${session}", readonly = true, required = true)
   private MavenSession session;
 
+  /**
+   * Whether validation warnings should be errors.
+   */
+
+  @Parameter()
+  private boolean validationWarningsAreErrors;
+
   @Component
   private DependencyGraphBuilder dependencyGraphBuilder;
 
@@ -325,6 +342,19 @@ public final class MPackageMojo extends AbstractMojo
       .ifPresent(throwable -> logger.error("  Exception: ", throwable));
   }
 
+  static void logStructuredWarning(
+    final Logger logger,
+    final MValidationIssue error)
+  {
+    logger.warn("{}: {}", error.errorCode(), error.message());
+    for (final var entry : error.attributes().entrySet()) {
+      logger.warn("  {}: {}", entry.getKey(), entry.getValue());
+    }
+    error.exception()
+      .ifPresent(throwable -> logger.warn("  Exception: ", throwable));
+  }
+
+
   @Override
   public void execute()
     throws MojoExecutionException
@@ -349,6 +379,8 @@ public final class MPackageMojo extends AbstractMojo
         this.writeFiles(writer);
       }
 
+      this.validatePackage(output);
+
       this.mavenProjectHelper.attachArtifact(
         this.project,
         "mpk",
@@ -363,6 +395,45 @@ public final class MPackageMojo extends AbstractMojo
       throw new MojoExecutionException(e);
     }
   }
+
+  private void validatePackage(
+    final Path output)
+    throws MException, MojoExecutionException
+  {
+    var failed = false;
+
+    final var readers = new MPackageReaders();
+    try (final var reader = readers.open(output)) {
+      final var validators = new MValidators();
+      try (final var validator =
+             validators.create(reader.packageDeclaration())) {
+        final var errors =
+          validator.execute();
+
+        for (final var error : errors) {
+          switch (error.kind()) {
+            case WARNING -> {
+              logStructuredWarning(LOG, error);
+              if (this.validationWarningsAreErrors) {
+                failed = true;
+              }
+            }
+            case ERROR -> {
+              logStructuredError(LOG, error);
+              failed = true;
+            }
+          }
+        }
+      }
+    }
+
+    if (failed) {
+      throw new MojoExecutionException(
+        "One or more validation errors occurred."
+      );
+    }
+  }
+
 
   private void writeFiles(
     final MPackageWriterType writer)
@@ -403,7 +474,9 @@ public final class MPackageMojo extends AbstractMojo
         final var file = artifact.getFile();
         final var fileName = file.getName();
         final var entryName = "lib/" + fileName;
-        this.filesToWrite.add(Map.entry(new MFileName(entryName), file.toPath()));
+        this.filesToWrite.add(Map.entry(
+          new MFileName(entryName),
+          file.toPath()));
       }
     }
   }
@@ -434,11 +507,11 @@ public final class MPackageMojo extends AbstractMojo
 
     final var metaBuilder =
       MMetadata.builder()
-        .setApplicationKind(this.applicationKind)
-        .setDescription(this.description.trim());
+        .setApplicationKind(this.applicationKind);
 
     this.setNames(metaBuilder);
     this.setCopying(metaBuilder);
+    this.setDescription(metaBuilder);
     this.setJavaInfo(metaBuilder);
     this.setVersion(metaBuilder);
     this.setVendor(metaBuilder);
@@ -465,6 +538,19 @@ public final class MPackageMojo extends AbstractMojo
 
     builder.setManifest(manifestBuilder.build());
     this.packageV = builder.build();
+  }
+
+  private void setDescription(
+    final MMetadata.Builder metaBuilder)
+  {
+    metaBuilder.setDescription(
+      new MDescription(
+        MTranslatedText.builder()
+          .setLanguage(new MLanguageCode("en"))
+          .setText(this.description)
+          .build()
+      )
+    );
   }
 
   private void setNames(
@@ -617,8 +703,30 @@ public final class MPackageMojo extends AbstractMojo
         hashOf(Paths.get(resource.getFile()).toFile());
 
       manifestBuilder.addItems(
-        new MResource(new MFileName(entryName), sha256, resource.getRole()));
+        new MResource(
+          new MFileName(entryName),
+          sha256,
+          resource.getRole(),
+          captionOf(resource.getCaption())
+        )
+      );
     }
+  }
+
+  private Optional<MCaption> captionOf(
+    final List<Text> caption)
+  {
+    if (caption.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(
+      MCaptions.ofTranslations(
+        caption.stream()
+          .map(t -> Map.entry(new MLanguageCode(t.getLanguage()), t.getText()))
+          .collect(Collectors.toUnmodifiableList())
+          .toArray(new Map.Entry[0])
+      ));
   }
 
   private void buildManifestForPlatformDependentModules(

@@ -15,40 +15,23 @@
  */
 
 
-package com.io7m.montarre.api;
-
-import com.io7m.immutables.styles.ImmutablesStyleType;
-import org.immutables.value.Value;
-
-import java.util.List;
+package com.io7m.montarre.api.validation;
 
 /**
- * A long description of the application.
+ * A warning or error.
  */
 
-@Value.Immutable
-@ImmutablesStyleType
-public interface MLongDescriptionType
+public enum MValidationKind
 {
   /**
-   * @return The description language
+   * A warning.
    */
 
-  @Value.Default
-  default MLanguageCode language()
-  {
-    return new MLanguageCode("en");
-  }
+  WARNING,
 
   /**
-   * @return The description paragraphs
+   * An error.
    */
 
-  List<MParagraph> descriptions();
-
-  /**
-   * @return The feature list
-   */
-
-  List<MFeature> features();
+  ERROR
 }

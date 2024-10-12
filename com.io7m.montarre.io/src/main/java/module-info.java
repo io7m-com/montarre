@@ -28,6 +28,7 @@ module com.io7m.montarre.io
 
   requires com.io7m.anethum.api;
   requires com.io7m.jmulticlose.core;
+  requires com.io7m.lanark.core;
   requires org.apache.commons.compress;
   requires org.apache.commons.io;
   requires org.slf4j;

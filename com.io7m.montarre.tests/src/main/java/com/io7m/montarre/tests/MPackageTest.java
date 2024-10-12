@@ -20,11 +20,13 @@ package com.io7m.montarre.tests;
 import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.MApplicationKind;
 import com.io7m.montarre.api.MCopying;
+import com.io7m.montarre.api.MDescription;
 import com.io7m.montarre.api.MFileName;
 import com.io7m.montarre.api.MHash;
 import com.io7m.montarre.api.MHashAlgorithm;
 import com.io7m.montarre.api.MHashValue;
 import com.io7m.montarre.api.MJavaInfo;
+import com.io7m.montarre.api.MLanguageCode;
 import com.io7m.montarre.api.MLink;
 import com.io7m.montarre.api.MLinkRole;
 import com.io7m.montarre.api.MManifest;
@@ -34,6 +36,7 @@ import com.io7m.montarre.api.MNames;
 import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.MPackageName;
 import com.io7m.montarre.api.MShortName;
+import com.io7m.montarre.api.MTranslatedText;
 import com.io7m.montarre.api.MVendor;
 import com.io7m.montarre.api.MVendorID;
 import com.io7m.montarre.api.MVendorName;
@@ -67,7 +70,14 @@ public final class MPackageTest
                   .setLicense("ISC")
                   .build()
               )
-              .setDescription("An example package.")
+              .setDescription(
+                new MDescription(
+                  MTranslatedText.builder()
+                    .setLanguage(new MLanguageCode("en"))
+                    .setText("An example package.")
+                    .build()
+                )
+              )
               .setJavaInfo(
                 MJavaInfo.builder()
                   .setMainModule("com.io7m.example/com.io7m.example.Main")

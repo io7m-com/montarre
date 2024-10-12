@@ -20,6 +20,7 @@ package com.io7m.montarre.xml.internal;
 import com.io7m.anethum.api.SerializationException;
 import com.io7m.montarre.api.MCategoryName;
 import com.io7m.montarre.api.MCopyingType;
+import com.io7m.montarre.api.MDescription;
 import com.io7m.montarre.api.MFlatpakRuntime;
 import com.io7m.montarre.api.MJavaInfoType;
 import com.io7m.montarre.api.MLink;
@@ -33,6 +34,7 @@ import com.io7m.montarre.api.MNamesType;
 import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.MPlatformDependentModule;
 import com.io7m.montarre.api.MResource;
+import com.io7m.montarre.api.MTranslatedText;
 import com.io7m.montarre.api.MVendor;
 import com.io7m.montarre.api.MVersion;
 import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
@@ -46,6 +48,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -175,6 +178,14 @@ public final class MPackageDeclarationSerializer implements
     this.output.writeAttribute("HashAlgorithm", i.hash().algorithm().name());
     this.output.writeAttribute("HashValue", i.hash().value().value());
     this.output.writeAttribute("Role", i.role().name());
+
+    if (i.caption().isPresent()) {
+      final var caption = i.caption().get();
+      this.output.writeStartElement(NS, "Caption");
+      this.writeText(caption.text());
+      this.output.writeEndElement();
+    }
+
     this.output.writeEndElement();
   }
 
@@ -188,13 +199,10 @@ public final class MPackageDeclarationSerializer implements
       "ApplicationKind",
       metadata.applicationKind().name()
     );
-    this.output.writeAttribute(
-      "Description",
-      metadata.description()
-    );
 
     this.writeCategories(metadata.categories());
     this.writeCopying(metadata.copying());
+    this.writeDescription(metadata.description());
     this.writeFlatpak(metadata.flatpak());
     this.writeJavaInfo(metadata.javaInfo());
     this.writeLinks(metadata.links());
@@ -203,6 +211,34 @@ public final class MPackageDeclarationSerializer implements
     this.writeVendor(metadata.vendor());
     this.writeVersion(metadata.version());
     this.output.writeEndElement();
+  }
+
+  private void writeDescription(
+    final MDescription description)
+    throws XMLStreamException
+  {
+    this.output.writeStartElement(NS, "Description");
+    this.writeText(description.text());
+    this.output.writeEndElement();
+  }
+
+  private void writeText(
+    final MTranslatedText text)
+    throws XMLStreamException
+  {
+    final var sortedEntries =
+      text.all()
+        .entrySet()
+        .stream()
+        .sorted(Map.Entry.comparingByKey())
+        .toList();
+
+    for (final var entry : sortedEntries) {
+      this.output.writeStartElement(NS, "Text");
+      this.output.writeAttribute("Language", entry.getKey().name());
+      this.output.writeCharacters(entry.getValue());
+      this.output.writeEndElement();
+    }
   }
 
   private void writeNames(
@@ -291,7 +327,7 @@ public final class MPackageDeclarationSerializer implements
     throws XMLStreamException
   {
     this.output.writeStartElement(NS, "LongDescription");
-    this.output.writeAttribute("Language", value.language());
+    this.output.writeAttribute("Language", value.language().name());
 
     for (final var p : value.descriptions()) {
       this.output.writeStartElement(NS, "Paragraph");

@@ -17,38 +17,43 @@
 
 package com.io7m.montarre.api;
 
-import com.io7m.immutables.styles.ImmutablesStyleType;
-import org.immutables.value.Value;
-
-import java.util.List;
+import java.util.Objects;
 
 /**
- * A long description of the application.
+ * A language code.
+ *
+ * @param name The name
+ *
+ * @see "https://en.wikipedia.org/wiki/IETF_language_tag"
  */
 
-@Value.Immutable
-@ImmutablesStyleType
-public interface MLongDescriptionType
+public record MLanguageCode(
+  String name)
+  implements Comparable<MLanguageCode>
 {
   /**
-   * @return The description language
+   * A language code.
+   *
+   * @param name The name
+   *
+   * @see "https://en.wikipedia.org/wiki/IETF_language_tag"
    */
 
-  @Value.Default
-  default MLanguageCode language()
+  public MLanguageCode
   {
-    return new MLanguageCode("en");
+    Objects.requireNonNull(name, "name");
   }
 
-  /**
-   * @return The description paragraphs
-   */
+  @Override
+  public String toString()
+  {
+    return this.name;
+  }
 
-  List<MParagraph> descriptions();
-
-  /**
-   * @return The feature list
-   */
-
-  List<MFeature> features();
+  @Override
+  public int compareTo(
+    final MLanguageCode other)
+  {
+    return this.name.compareTo(other.name);
+  }
 }

@@ -20,8 +20,11 @@ package com.io7m.montarre.api;
 import com.io7m.immutables.styles.ImmutablesStyleType;
 import org.immutables.value.Value;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -59,7 +62,7 @@ public non-sealed interface MMetadataType
    * @return The package description
    */
 
-  String description();
+  MDescription description();
 
   /**
    * @return The various package links.
@@ -86,11 +89,31 @@ public non-sealed interface MMetadataType
   @Value.Default
   default List<MLongDescriptionType> longDescriptions()
   {
-    return List.of(
+    final var results = new ArrayList<MLongDescriptionType>();
+
+    results.add(
       MLongDescription.builder()
-        .addDescriptions(new MParagraph(this.description()))
+        .setLanguage(this.description().text().language())
+        .addDescriptions(new MParagraph(this.description().text().text()))
         .build()
     );
+
+    this.description()
+      .text()
+      .translations()
+      .entrySet()
+      .stream()
+      .sorted(Comparator.comparing(Map.Entry::getKey))
+      .forEach(e -> {
+        results.add(
+          MLongDescription.builder()
+            .setLanguage(e.getKey())
+            .addDescriptions(new MParagraph(e.getValue()))
+            .build()
+        );
+      });
+
+    return List.copyOf(results);
   }
 
   /**
@@ -100,9 +123,9 @@ public non-sealed interface MMetadataType
    */
 
   @Value.Derived
-  default SortedMap<String, MLongDescriptionType> longDescriptionsByLanguage()
+  default SortedMap<MLanguageCode, MLongDescriptionType> longDescriptionsByLanguage()
   {
-    final var map = new TreeMap<String, MLongDescriptionType>();
+    final var map = new TreeMap<MLanguageCode, MLongDescriptionType>();
     for (final var description : this.longDescriptions()) {
       final var language = description.language();
       if (map.containsKey(language)) {

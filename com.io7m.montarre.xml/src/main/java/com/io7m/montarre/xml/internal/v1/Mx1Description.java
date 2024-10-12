@@ -21,17 +21,12 @@ import com.io7m.blackthorne.core.BTElementHandlerConstructorType;
 import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
 import com.io7m.blackthorne.core.BTQualifiedName;
-import com.io7m.montarre.api.MCaption;
-import com.io7m.montarre.api.MFileName;
-import com.io7m.montarre.api.MHash;
-import com.io7m.montarre.api.MHashAlgorithm;
-import com.io7m.montarre.api.MHashValue;
-import com.io7m.montarre.api.MResource;
-import com.io7m.montarre.api.MResourceRole;
-import org.xml.sax.Attributes;
+import com.io7m.montarre.api.MDescription;
+import com.io7m.montarre.api.MText;
+import com.io7m.montarre.api.MTranslatedText;
 
+import java.util.ArrayList;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.io7m.montarre.xml.internal.v1.Mx1.element;
 
@@ -39,13 +34,10 @@ import static com.io7m.montarre.xml.internal.v1.Mx1.element;
  * A parser.
  */
 
-public final class Mx1Resource
-  implements BTElementHandlerType<MCaption, MResource>
+public final class Mx1Description
+  implements BTElementHandlerType<MText, MDescription>
 {
-  private Optional<MCaption> captionOpt = Optional.empty();
-  private MFileName fileName;
-  private MHash hash;
-  private MResourceRole role;
+  private ArrayList<MText> texts;
 
   /**
    * A parser.
@@ -53,21 +45,21 @@ public final class Mx1Resource
    * @param context The context
    */
 
-  public Mx1Resource(
+  public Mx1Description(
     final BTElementParsingContextType context)
   {
-
+    this.texts = new ArrayList<>();
   }
 
   @Override
-  public Map<BTQualifiedName, BTElementHandlerConstructorType<?, ? extends MCaption>>
+  public Map<BTQualifiedName, BTElementHandlerConstructorType<?, ? extends MText>>
   onChildHandlersRequested(
     final BTElementParsingContextType context)
   {
     return Map.ofEntries(
       Map.entry(
-        element("Caption"),
-        Mx1Caption::new
+        element("Text"),
+        Mx1Text::new
       )
     );
   }
@@ -75,40 +67,25 @@ public final class Mx1Resource
   @Override
   public void onChildValueProduced(
     final BTElementParsingContextType context,
-    final MCaption result)
+    final MText result)
   {
-    this.captionOpt = Optional.of(result);
+    this.texts.add(result);
   }
 
   @Override
-  public void onElementStart(
-    final BTElementParsingContextType context,
-    final Attributes attributes)
-  {
-    this.fileName =
-      new MFileName(attributes.getValue("File"));
-    this.hash =
-      new MHash(
-        new MHashAlgorithm(
-          attributes.getValue("HashAlgorithm")
-        ),
-        new MHashValue(
-          attributes.getValue("HashValue")
-        )
-      );
-    this.role =
-      MResourceRole.valueOf(attributes.getValue("Role"));
-  }
-
-  @Override
-  public MResource onElementFinished(
+  public MDescription onElementFinished(
     final BTElementParsingContextType context)
   {
-    return new MResource(
-      this.fileName,
-      this.hash,
-      this.role,
-      this.captionOpt
-    );
+    final var base = this.texts.removeFirst();
+
+    final var builder = MTranslatedText.builder();
+    builder.setLanguage(base.language());
+    builder.setText(base.text());
+
+    for (final var text : this.texts) {
+      builder.putTranslations(Map.entry(text.language(), text.text()));
+    }
+
+    return new MDescription(builder.build());
   }
 }

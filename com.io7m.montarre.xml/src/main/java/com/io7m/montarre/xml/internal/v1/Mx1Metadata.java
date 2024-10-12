@@ -24,6 +24,7 @@ import com.io7m.blackthorne.core.BTQualifiedName;
 import com.io7m.montarre.api.MApplicationKind;
 import com.io7m.montarre.api.MCategoryName;
 import com.io7m.montarre.api.MCopying;
+import com.io7m.montarre.api.MDescription;
 import com.io7m.montarre.api.MJavaInfo;
 import com.io7m.montarre.api.MLink;
 import com.io7m.montarre.api.MLongDescription;
@@ -66,15 +67,16 @@ public final class Mx1Metadata
     final BTElementParsingContextType context)
   {
     return Map.ofEntries(
-      Map.entry(element("Flatpak"), Mx1Flatpak::new),
       Map.entry(element("Category"), Mx1Category::new),
+      Map.entry(element("Copying"), Mx1Copying::new),
+      Map.entry(element("Description"), Mx1Description::new),
+      Map.entry(element("Flatpak"), Mx1Flatpak::new),
+      Map.entry(element("JavaInfo"), Mx1JavaInfo::new),
       Map.entry(element("Link"), Mx1Link::new),
       Map.entry(element("LongDescription"), Mx1LongDescription::new),
+      Map.entry(element("Names"), Mx1Names::new),
       Map.entry(element("Vendor"), Mx1Vendor::new),
-      Map.entry(element("Version"), Mx1Version::new),
-      Map.entry(element("JavaInfo"), Mx1JavaInfo::new),
-      Map.entry(element("Copying"), Mx1Copying::new),
-      Map.entry(element("Names"), Mx1Names::new)
+      Map.entry(element("Version"), Mx1Version::new)
     );
   }
 
@@ -111,6 +113,9 @@ public final class Mx1Metadata
       case final MLongDescription longDescription -> {
         this.builder.addLongDescriptions(longDescription);
       }
+      case final MDescription description -> {
+        this.builder.setDescription(description);
+      }
       default -> {
         throw new IllegalStateException("Unexpected value: " + result);
       }
@@ -123,8 +128,6 @@ public final class Mx1Metadata
     final Attributes attributes)
     throws VersionException
   {
-    this.builder.setDescription(
-      attributes.getValue("Description"));
     this.builder.setApplicationKind(
       MApplicationKind.valueOf(attributes.getValue("ApplicationKind")));
   }

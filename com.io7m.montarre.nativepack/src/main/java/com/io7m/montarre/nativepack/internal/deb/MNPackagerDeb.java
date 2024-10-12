@@ -223,7 +223,7 @@ public final class MNPackagerDeb
     arguments.add("--copyright");
     arguments.add(metadata.copying().copyright());
     arguments.add("--description");
-    arguments.add(metadata.description());
+    arguments.add(metadata.description().text().text());
     arguments.add("--linux-package-name");
     arguments.add(metadata.names().shortName().name());
 

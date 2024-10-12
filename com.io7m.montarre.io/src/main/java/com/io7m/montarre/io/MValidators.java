@@ -15,40 +15,32 @@
  */
 
 
-package com.io7m.montarre.api;
+package com.io7m.montarre.io;
 
-import com.io7m.immutables.styles.ImmutablesStyleType;
-import org.immutables.value.Value;
-
-import java.util.List;
+import com.io7m.montarre.api.MPackageDeclaration;
+import com.io7m.montarre.api.validation.MValidatorFactoryType;
+import com.io7m.montarre.api.validation.MValidatorType;
+import com.io7m.montarre.io.internal.MValidator;
 
 /**
- * A long description of the application.
+ * The default validators.
  */
 
-@Value.Immutable
-@ImmutablesStyleType
-public interface MLongDescriptionType
+public final class MValidators implements MValidatorFactoryType
 {
   /**
-   * @return The description language
+   * The default validators.
    */
 
-  @Value.Default
-  default MLanguageCode language()
+  public MValidators()
   {
-    return new MLanguageCode("en");
+
   }
 
-  /**
-   * @return The description paragraphs
-   */
-
-  List<MParagraph> descriptions();
-
-  /**
-   * @return The feature list
-   */
-
-  List<MFeature> features();
+  @Override
+  public MValidatorType create(
+    final MPackageDeclaration declaration)
+  {
+    return new MValidator(declaration);
+  }
 }

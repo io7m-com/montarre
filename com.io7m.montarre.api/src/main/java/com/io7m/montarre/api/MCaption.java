@@ -17,38 +17,25 @@
 
 package com.io7m.montarre.api;
 
-import com.io7m.immutables.styles.ImmutablesStyleType;
-import org.immutables.value.Value;
-
-import java.util.List;
+import java.util.Objects;
 
 /**
- * A long description of the application.
+ * A resource caption.
+ *
+ * @param text The text
  */
 
-@Value.Immutable
-@ImmutablesStyleType
-public interface MLongDescriptionType
+public record MCaption(
+  MTranslatedText text)
 {
   /**
-   * @return The description language
+   * A resource caption.
+   *
+   * @param text The text
    */
 
-  @Value.Default
-  default MLanguageCode language()
+  public MCaption
   {
-    return new MLanguageCode("en");
+    Objects.requireNonNull(text, "text");
   }
-
-  /**
-   * @return The description paragraphs
-   */
-
-  List<MParagraph> descriptions();
-
-  /**
-   * @return The feature list
-   */
-
-  List<MFeature> features();
 }
