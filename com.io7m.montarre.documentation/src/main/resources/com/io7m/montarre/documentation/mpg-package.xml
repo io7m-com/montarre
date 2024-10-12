@@ -83,6 +83,40 @@
       </FormalItem>
     </Subsection>
 
+    <Subsection title="flatpak">
+      <Paragraph>
+        The <Term type="element">flatpak</Term> element specifies a Flatpak parameters. The element accepts
+        a <Term type="element">runtimes</Term> element that specifies dependencies on Flatpak runtimes, and
+        a <Term type="element">permissions</Term> element that specifies Flatpak permissions that will be requested
+        for the application.
+      </Paragraph>
+      <Paragraph>
+        If this element is not provided, a default Flatpak runtime is chosen, and no permissions are specified.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<flatpak>
+  <runtimes>
+    <runtime>
+      <name>org.freedesktop.Sdk</name>
+      <version>24.08</version>
+      <role>SDK</role>
+    </runtime>
+    <runtime>
+      <name>org.freedesktop.Platform</name>
+      <version>24.08</version>
+      <role>PLATFORM</role>
+    </runtime>
+  </runtimes>
+  <permissions>
+    <permission>--share=network</permission>
+    <permission>--filesystem=home:rw</permission>
+  </permissions>
+</flatpak>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
     <Subsection title="humanName">
       <Paragraph>
         The <Term type="element">humanName</Term> element specifies a humanly-readable application name.
