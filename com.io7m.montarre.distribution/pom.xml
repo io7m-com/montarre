@@ -89,6 +89,25 @@
 
               <requiredJDKVersion>21</requiredJDKVersion>
 
+              <flatpak>
+                <runtimes>
+                  <runtime>
+                    <name>org.freedesktop.Sdk</name>
+                    <version>24.08</version>
+                    <role>SDK</role>
+                  </runtime>
+                  <runtime>
+                    <name>org.freedesktop.Platform</name>
+                    <version>24.08</version>
+                    <role>PLATFORM</role>
+                  </runtime>
+                </runtimes>
+                <permissions>
+                  <permission>--share=network</permission>
+                  <permission>--filesystem=home:rw</permission>
+                </permissions>
+              </flatpak>
+
               <libraries>
                 <excludes>
                   <exclude>com\.io7m\.montarre\.cmdline-.*-main\.jar</exclude>

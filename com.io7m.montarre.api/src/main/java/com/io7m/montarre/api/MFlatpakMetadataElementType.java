@@ -17,43 +17,13 @@
 
 package com.io7m.montarre.api;
 
-import com.io7m.immutables.styles.ImmutablesStyleType;
-import org.immutables.value.Value;
-
-import java.util.List;
-
 /**
- * Package metadata specific to Flatpak.
+ * The type of flatpak-related metadata elements.
  */
 
-@Value.Immutable
-@ImmutablesStyleType
-public interface MMetadataFlatpakType
+public sealed interface MFlatpakMetadataElementType
+  permits MFlatpakPermission,
+  MFlatpakRuntime
 {
-  /**
-   * @return The required application permissions
-   */
 
-  List<MFlatpakPermission> permissions();
-
-  /**
-   * @return The required runtimes
-   */
-
-  @Value.Default
-  default List<MFlatpakRuntime> runtimes()
-  {
-    return List.of(
-      new MFlatpakRuntime(
-        "org.freedesktop.Sdk",
-        "24.08",
-        MFlatpakRuntimeRole.SDK
-      ),
-      new MFlatpakRuntime(
-        "org.freedesktop.Platform",
-        "24.08",
-        MFlatpakRuntimeRole.PLATFORM
-      )
-    );
-  }
 }

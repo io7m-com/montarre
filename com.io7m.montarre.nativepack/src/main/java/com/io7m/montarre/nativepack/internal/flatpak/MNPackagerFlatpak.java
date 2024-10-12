@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -215,7 +216,7 @@ public final class MNPackagerFlatpak
       this.flatpakWriteDesktopFile(build, packageV);
       this.flatpakWriteAppInfoFile(build, packageV);
       this.flatpakWriteIcons(reader, build, packageV);
-      this.flatpakBuildFinish(build);
+      this.flatpakBuildFinish(build, packageV);
       this.flatpakBuildExport(build, repos);
       this.flatpakBuildBundle(repos, outputFile, packageV);
 
@@ -396,21 +397,26 @@ public final class MNPackagerFlatpak
   }
 
   private void flatpakBuildFinish(
-    final Path directory)
+    final Path directory,
+    final MPackageDeclaration packageV)
     throws MException, InterruptedException
   {
     LOG.info("Finishing Flatpak build.");
+
+    final var arguments = new ArrayList<String>();
+    arguments.add("flatpak");
+    arguments.add("build-finish");
+    arguments.add("--verbose");
+    for (final var permissions : packageV.metadata().flatpak().permissions()) {
+      arguments.add(permissions.permission());
+    }
+    arguments.add(directory.toString());
 
     this.processes.executeAndWaitChecked(
       System.getenv(),
       new ConcurrentLinkedQueue<>(),
       new ConcurrentLinkedQueue<>(),
-      List.of(
-        "flatpak",
-        "build-finish",
-        "--verbose",
-        directory.toString()
-      )
+      List.copyOf(arguments)
     );
   }
 

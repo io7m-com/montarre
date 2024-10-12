@@ -125,6 +125,17 @@
     </xsd:restriction>
   </xsd:simpleType>
 
+  <xsd:simpleType name="FlatpakPermissionType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A flatpak permission.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="--[a-z\-]+(=[a-zA-Z0-9\\._\-/:~]+)?"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
   <xsd:element name="Version">
     <xsd:annotation>
       <xsd:documentation xml:lang="en">
@@ -325,6 +336,20 @@
     </xsd:restriction>
   </xsd:simpleType>
 
+  <xsd:element name="FlatpakPermission">
+    <xsd:complexType>
+      <xsd:attribute name="Value"
+                     use="required"
+                     type="mp:FlatpakPermissionType">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            A flatpak permission such as "--share=network", "--share=ipc", etc.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+
   <xsd:element name="FlatpakRuntime">
     <xsd:complexType>
       <xsd:attribute name="Name"
@@ -365,9 +390,15 @@
     </xsd:annotation>
 
     <xsd:complexType>
-      <xsd:sequence minOccurs="0"
-                    maxOccurs="unbounded">
-        <xsd:element ref="mp:FlatpakRuntime"/>
+      <xsd:sequence>
+        <xsd:sequence minOccurs="0"
+                      maxOccurs="unbounded">
+          <xsd:element ref="mp:FlatpakPermission"/>
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0"
+                      maxOccurs="unbounded">
+          <xsd:element ref="mp:FlatpakRuntime"/>
+        </xsd:sequence>
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>

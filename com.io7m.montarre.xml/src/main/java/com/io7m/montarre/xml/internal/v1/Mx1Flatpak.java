@@ -21,6 +21,8 @@ import com.io7m.blackthorne.core.BTElementHandlerConstructorType;
 import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
 import com.io7m.blackthorne.core.BTQualifiedName;
+import com.io7m.montarre.api.MFlatpakMetadataElementType;
+import com.io7m.montarre.api.MFlatpakPermission;
 import com.io7m.montarre.api.MFlatpakRuntime;
 import com.io7m.montarre.api.MMetadataFlatpak;
 
@@ -33,7 +35,7 @@ import static com.io7m.montarre.xml.internal.v1.Mx1.element;
  */
 
 public final class Mx1Flatpak
-  implements BTElementHandlerType<MFlatpakRuntime, MMetadataFlatpak>
+  implements BTElementHandlerType<MFlatpakMetadataElementType, MMetadataFlatpak>
 {
   private final MMetadataFlatpak.Builder builder;
 
@@ -50,7 +52,7 @@ public final class Mx1Flatpak
   }
 
   @Override
-  public Map<BTQualifiedName, BTElementHandlerConstructorType<?, ? extends MFlatpakRuntime>>
+  public Map<BTQualifiedName, BTElementHandlerConstructorType<?, ? extends MFlatpakMetadataElementType>>
   onChildHandlersRequested(
     final BTElementParsingContextType context)
   {
@@ -58,6 +60,10 @@ public final class Mx1Flatpak
       Map.entry(
         element("FlatpakRuntime"),
         Mx1FlatpakRuntime::new
+      ),
+      Map.entry(
+        element("FlatpakPermission"),
+        Mx1FlatpakPermission::new
       )
     );
   }
@@ -65,9 +71,16 @@ public final class Mx1Flatpak
   @Override
   public void onChildValueProduced(
     final BTElementParsingContextType context,
-    final MFlatpakRuntime result)
+    final MFlatpakMetadataElementType result)
   {
-    this.builder.addRuntimes(result);
+    switch (result) {
+      case final MFlatpakRuntime runtime -> {
+        this.builder.addRuntimes(runtime);
+      }
+      case final MFlatpakPermission permission -> {
+        this.builder.addPermissions(permission);
+      }
+    }
   }
 
   @Override

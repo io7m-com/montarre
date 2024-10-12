@@ -15,45 +15,48 @@
  */
 
 
-package com.io7m.montarre.api;
+package com.io7m.montarre.maven_plugin;
 
-import com.io7m.immutables.styles.ImmutablesStyleType;
-import org.immutables.value.Value;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Package metadata specific to Flatpak.
+ * Flatpak info.
+ *
+ * @see com.io7m.montarre.api.MMetadataFlatpakType
  */
 
-@Value.Immutable
-@ImmutablesStyleType
-public interface MMetadataFlatpakType
+public final class Flatpak
 {
-  /**
-   * @return The required application permissions
-   */
-
-  List<MFlatpakPermission> permissions();
+  private List<String> permissions = new ArrayList<>();
+  private List<FlatpakRuntime> runtimes = new ArrayList<>();
 
   /**
-   * @return The required runtimes
+   * @return The permissions
    */
 
-  @Value.Default
-  default List<MFlatpakRuntime> runtimes()
+  public List<String> getPermissions()
   {
-    return List.of(
-      new MFlatpakRuntime(
-        "org.freedesktop.Sdk",
-        "24.08",
-        MFlatpakRuntimeRole.SDK
-      ),
-      new MFlatpakRuntime(
-        "org.freedesktop.Platform",
-        "24.08",
-        MFlatpakRuntimeRole.PLATFORM
-      )
-    );
+    return this.permissions;
+  }
+
+  /**
+   * @return The runtimes
+   */
+
+  public List<FlatpakRuntime> getRuntimes()
+  {
+    return this.runtimes;
+  }
+
+  /**
+   * Flatpak info.
+   *
+   * @see com.io7m.montarre.api.MMetadataFlatpakType
+   */
+
+  public Flatpak()
+  {
+
   }
 }

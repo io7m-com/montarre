@@ -21,6 +21,7 @@ import com.io7m.anethum.api.SerializationException;
 import com.io7m.montarre.api.MCategoryName;
 import com.io7m.montarre.api.MCopyingType;
 import com.io7m.montarre.api.MDescription;
+import com.io7m.montarre.api.MFlatpakPermission;
 import com.io7m.montarre.api.MFlatpakRuntime;
 import com.io7m.montarre.api.MJavaInfoType;
 import com.io7m.montarre.api.MLink;
@@ -372,9 +373,21 @@ public final class MPackageDeclarationSerializer implements
     throws XMLStreamException
   {
     this.output.writeStartElement(NS, "Flatpak");
+    for (final var permission : flatpak.permissions()) {
+      this.writeFlatpakPermission(permission);
+    }
     for (final var runtime : flatpak.runtimes()) {
       this.writeFlatpakRuntime(runtime);
     }
+    this.output.writeEndElement();
+  }
+
+  private void writeFlatpakPermission(
+    final MFlatpakPermission permission)
+    throws XMLStreamException
+  {
+    this.output.writeStartElement(NS, "FlatpakPermission");
+    this.output.writeAttribute("Value", permission.permission());
     this.output.writeEndElement();
   }
 

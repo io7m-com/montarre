@@ -29,6 +29,8 @@ import com.io7m.montarre.api.MDescription;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MFileFilter;
 import com.io7m.montarre.api.MFileName;
+import com.io7m.montarre.api.MFlatpakPermission;
+import com.io7m.montarre.api.MFlatpakRuntime;
 import com.io7m.montarre.api.MHash;
 import com.io7m.montarre.api.MHashAlgorithm;
 import com.io7m.montarre.api.MHashValue;
@@ -39,6 +41,7 @@ import com.io7m.montarre.api.MLinkRole;
 import com.io7m.montarre.api.MLongDescription;
 import com.io7m.montarre.api.MManifest;
 import com.io7m.montarre.api.MMetadata;
+import com.io7m.montarre.api.MMetadataFlatpak;
 import com.io7m.montarre.api.MModule;
 import com.io7m.montarre.api.MNames;
 import com.io7m.montarre.api.MOperatingSystemName;
@@ -259,6 +262,13 @@ public final class MPackageMojo extends AbstractMojo
 
   @Parameter(required = false)
   private List<String> categories = new ArrayList<>();
+
+  /**
+   * The flatpak configuration.
+   */
+
+  @Parameter(required = false)
+  private Flatpak flatpak = new Flatpak();
 
   /**
    * Access to the Maven project.
@@ -509,6 +519,7 @@ public final class MPackageMojo extends AbstractMojo
       MMetadata.builder()
         .setApplicationKind(this.applicationKind);
 
+    this.setFlatpak(metaBuilder);
     this.setNames(metaBuilder);
     this.setCopying(metaBuilder);
     this.setDescription(metaBuilder);
@@ -538,6 +549,32 @@ public final class MPackageMojo extends AbstractMojo
 
     builder.setManifest(manifestBuilder.build());
     this.packageV = builder.build();
+  }
+
+  private void setFlatpak(
+    final MMetadata.Builder metaBuilder)
+  {
+    final var flat = MMetadataFlatpak.builder();
+
+    for (final var perm : this.flatpak.getPermissions()) {
+      flat.addPermissions(new MFlatpakPermission(perm));
+    }
+
+    if (!this.flatpak.getRuntimes().isEmpty()) {
+      final var r = new ArrayList<MFlatpakRuntime>();
+      for (final var fr : this.flatpak.getRuntimes()) {
+        r.add(
+          new MFlatpakRuntime(
+            fr.getName(),
+            fr.getVersion(),
+            fr.getRole()
+          )
+        );
+      }
+      flat.setRuntimes(r);
+    }
+
+    metaBuilder.setFlatpak(flat.build());
   }
 
   private void setDescription(

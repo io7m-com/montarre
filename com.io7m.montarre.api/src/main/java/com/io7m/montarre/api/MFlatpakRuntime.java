@@ -31,6 +31,7 @@ public record MFlatpakRuntime(
   String name,
   String version,
   MFlatpakRuntimeRole role)
+  implements MFlatpakMetadataElementType
 {
   /**
    * A flatpak runtime.

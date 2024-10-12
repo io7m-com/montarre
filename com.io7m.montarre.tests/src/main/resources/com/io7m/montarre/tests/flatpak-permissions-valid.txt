@@ -1,0 +1,16 @@
+--share=network
+--socket=x11
+--share=ipc
+--allow=bluetooth
+--device=dri
+--socket=wayland
+--socket=pulseaudio
+--talk-name=org.freedesktop.secrets
+--system-talk-name=org.freedesktop.GeoClue2
+--socket=system-bus
+--filesystem=host:rw
+--filesystem=home:ro
+--filesystem=/some/dir:rw
+--filesystem=~/some/dir:ro
+--filesystem=xdg-videos
+--filesystem=xdg-documents/path:create
