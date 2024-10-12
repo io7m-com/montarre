@@ -26,6 +26,7 @@ import com.io7m.montarre.cmdline.internal.MCPackageExtractDeclaration;
 import com.io7m.montarre.cmdline.internal.MCPackagePack;
 import com.io7m.montarre.cmdline.internal.MCPackageSchema;
 import com.io7m.montarre.cmdline.internal.MCPackageUnpack;
+import com.io7m.montarre.cmdline.internal.MCPackageValidate;
 import com.io7m.montarre.cmdline.internal.MCWixXML;
 import com.io7m.quarrel.core.QApplication;
 import com.io7m.quarrel.core.QApplicationMetadata;
@@ -92,6 +93,7 @@ public final class MMain implements Runnable
       g.addCommand(new MCPackagePack());
       g.addCommand(new MCPackageSchema());
       g.addCommand(new MCPackageUnpack());
+      g.addCommand(new MCPackageValidate());
     }
 
     {

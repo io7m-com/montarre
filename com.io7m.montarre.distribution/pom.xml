@@ -54,6 +54,8 @@
             </goals>
             <phase>package</phase>
             <configuration>
+              <validationWarningsAreErrors>true</validationWarningsAreErrors>
+
               <applicationKind>CONSOLE</applicationKind>
 
               <categories>
@@ -67,7 +69,7 @@
               <packageName>com.io7m.montarre</packageName>
               <shortName>montarre</shortName>
 
-              <description>Application packaging tools</description>
+              <description>Package Java applications</description>
 
               <version>
                 <number>${project.version}</number>

@@ -38,4 +38,16 @@ final class MCSLogging
     error.exception()
       .ifPresent(throwable -> logger.error("  Exception: ", throwable));
   }
+
+  public static void logStructuredWarning(
+    final Logger logger,
+    final SStructuredErrorType<?> error)
+  {
+    logger.warn("{}: {}", error.errorCode(), error.message());
+    for (final var entry : error.attributes().entrySet()) {
+      logger.warn("  {}: {}", entry.getKey(), entry.getValue());
+    }
+    error.exception()
+      .ifPresent(throwable -> logger.warn("  Exception: ", throwable));
+  }
 }

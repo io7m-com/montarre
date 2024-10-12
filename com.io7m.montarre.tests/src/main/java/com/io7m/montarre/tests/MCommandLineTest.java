@@ -17,45 +17,26 @@
 
 package com.io7m.montarre.tests;
 
-import com.io7m.lanark.core.RDottedName;
-import com.io7m.montarre.api.MApplicationKind;
 import com.io7m.montarre.api.MCaptions;
-import com.io7m.montarre.api.MCopying;
-import com.io7m.montarre.api.MDescription;
 import com.io7m.montarre.api.MFileName;
 import com.io7m.montarre.api.MHash;
 import com.io7m.montarre.api.MHashAlgorithm;
 import com.io7m.montarre.api.MHashValue;
-import com.io7m.montarre.api.MJavaInfo;
 import com.io7m.montarre.api.MLanguageCode;
-import com.io7m.montarre.api.MLink;
-import com.io7m.montarre.api.MLinkRole;
 import com.io7m.montarre.api.MManifest;
-import com.io7m.montarre.api.MMetadata;
-import com.io7m.montarre.api.MNames;
 import com.io7m.montarre.api.MPackageDeclaration;
-import com.io7m.montarre.api.MPackageName;
 import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.MResourceRole;
-import com.io7m.montarre.api.MShortName;
-import com.io7m.montarre.api.MTranslatedText;
-import com.io7m.montarre.api.MVendor;
-import com.io7m.montarre.api.MVendorID;
-import com.io7m.montarre.api.MVendorName;
-import com.io7m.montarre.api.MVersion;
 import com.io7m.montarre.cmdline.MMain;
 import com.io7m.montarre.io.MPackageWriters;
-import com.io7m.verona.core.Version;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -247,6 +228,41 @@ public final class MCommandLineTest
       -1L,
       Files.mismatch(inputFile, outputFile)
     );
+  }
+
+  @Test
+  public void testPackageValidate(
+    final @TempDir Path directory)
+    throws Exception
+  {
+    final var inputFile =
+      directory.resolve("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk");
+
+    this.resource("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk", inputFile);
+
+    final var r0 = MMain.mainExitless(
+      new String[]{
+        "package",
+        "validate",
+        "--file",
+        inputFile.toString(),
+        "--warnings-as-errors",
+        "true"
+      }
+    );
+    assertEquals(0, r0);
+
+    final var r1 = MMain.mainExitless(
+      new String[]{
+        "package",
+        "validate",
+        "--file",
+        inputFile.toString(),
+        "--warnings-as-errors",
+        "false"
+      }
+    );
+    assertEquals(0, r1);
   }
 
   @Test

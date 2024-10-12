@@ -38,10 +38,6 @@
   </Feature>
 
   <Feature>
-    Comprehensively documented.
-  </Feature>
-
-  <Feature>
     A carefully-engineered Java API for creating, manipulating, and transforming packages.
   </Feature>
 
@@ -51,18 +47,6 @@
 
   <Feature>
     A Maven plugin for producing packages from any Maven module.
-  </Feature>
-
-  <Feature>
-    OSGi-ready.
-  </Feature>
-
-  <Feature>
-    JPMS-ready.
-  </Feature>
-
-  <Feature>
-    ISC license.
   </Feature>
 
 </LongDescription>
