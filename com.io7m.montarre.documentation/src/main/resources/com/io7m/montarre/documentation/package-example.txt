@@ -2,11 +2,16 @@ $ unzip -p com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-
 
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="urn:com.io7m.montarre.package:1">
-  <Metadata ApplicationKind="CONSOLE" Description="Application packaging tools (CLI distribution).">
+  <Metadata ApplicationKind="CONSOLE">
     <Category Name="Building"/>
     <Category Name="Development"/>
     <Copying Copyright="Copyright © 2024 Mark Raynsford &lt;code@io7m.com&gt; https://www.io7m.com" License="ISC"/>
+    <Description>
+      <Text Language="en">Package Java applications</Text>
+    </Description>
     <Flatpak>
+      <FlatpakPermission Value="--share=network"/>
+      <FlatpakPermission Value="--filesystem=home:rw"/>
       <FlatpakRuntime Name="org.freedesktop.Sdk" Version="24.08" Role="SDK"/>
       <FlatpakRuntime Name="org.freedesktop.Platform" Version="24.08" Role="PLATFORM"/>
     </Flatpak>
@@ -15,19 +20,20 @@ $ unzip -p com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-
     <Link Role="ISSUES" Target="https://www.github.com/io7m-com/montarre/issues"/>
     <Link Role="HOME_PAGE" Target="https://www.io7m.com/software/montarre"/>
     <LongDescription Language="en">
-      <Paragraph>The Montarre package provides a set of tools for producing native platform artifacts from platform-independent Java packages.</Paragraph>
-      <Feature>A rich, strictly-defined, and well-specified packaging format that remains platform-independent whilst allowing straightforward zero-configuration transformations to a wide range of platform-specific package formats.</Feature>
+      <Paragraph>The Montarre package provides a set of tools for producing native platform artifacts from platform-independent Java
+    packages.</Paragraph>
+      <Feature>A rich, strictly-defined, and well-specified packaging format that remains platform-independent whilst allowing
+    straightforward zero-configuration transformations to a wide range of platform-specific package formats.</Feature>
+      <Feature>Extensive, type-driven, ahead-of-time checking; if your package validates, you should get working native packages on
+    all platforms.</Feature>
+      <Feature>Reproducible builds by default.</Feature>
       <Feature>Support for producing simple jpackage "app-image" executables on any platform.</Feature>
       <Feature>Support for producing Debian .deb packages.</Feature>
       <Feature>Support for producing Windows MSI installers.</Feature>
       <Feature>Support for producing Flatpaks.</Feature>
-      <Feature>Comprehensively documented.</Feature>
       <Feature>A carefully-engineered Java API for creating, manipulating, and transforming packages.</Feature>
       <Feature>A full command-line interface built on top of the Java API.</Feature>
       <Feature>A Maven plugin for producing packages from any Maven module.</Feature>
-      <Feature>OSGi-ready.</Feature>
-      <Feature>JPMS-ready.</Feature>
-      <Feature>ISC license.</Feature>
     </LongDescription>
     <Names Name="com.io7m.montarre" ShortName="montarre" HumanName="Montarre"/>
     <Vendor ID="com.io7m" Name="io7m"/>
@@ -47,12 +53,12 @@ $ unzip -p com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-
     <Module File="lib/com.io7m.jxtrand.api-2.1.0.jar" HashAlgorithm="SHA-256" HashValue="53c1a2cc739b6359441ba7aacc2aee74166ea416060b197ef6530e8a60052b27"/>
     <Module File="lib/com.io7m.jxtrand.vanilla-2.1.0.jar" HashAlgorithm="SHA-256" HashValue="c1bbcea8b4ec0a99093e1ec745036e7849f98687158ad3b777179618052ce9b2"/>
     <Module File="lib/com.io7m.lanark.core-1.2.0.jar" HashAlgorithm="SHA-256" HashValue="c725d2de4b82b9632cc2d72219b27f5d4c4700dde3dd2905f965f06894f04503"/>
-    <Module File="lib/com.io7m.montarre.api-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="7fac14b8783763688a8489321281db56b48ea18d10ea21134c9c6984b65fbf84"/>
-    <Module File="lib/com.io7m.montarre.cmdline-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="849602c857096cdea6afb42d96c877c3224ec20d7bb54b75b272f5b2c3695061"/>
-    <Module File="lib/com.io7m.montarre.io-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="d12934fa63005bec2368f4772735c640d9f0aee06dcaedba62c18104f58159be"/>
-    <Module File="lib/com.io7m.montarre.nativepack-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="67ad2343039c1e37ac92303d859b29fd5259834478a3bee3fa0539d6bdc7a2ae"/>
-    <Module File="lib/com.io7m.montarre.schema-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="f9f18971ffab2026a03e1e52deff068cda545b1f85b0d947fdc14864d9e5509d"/>
-    <Module File="lib/com.io7m.montarre.xml-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="d198baa1e10ba1b3cbfb98c1029cc6a318b6a5639679b7b6474b8691b741ec55"/>
+    <Module File="lib/com.io7m.montarre.api-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="422cec4a9e1f121fce1e7cd08b874332f3c701d857e6487212e49ade7e77e514"/>
+    <Module File="lib/com.io7m.montarre.cmdline-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="b81a64c5b021fb665b44293cc5c0d5d20a58c26a18efe0d23320409d8cf06657"/>
+    <Module File="lib/com.io7m.montarre.io-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="934e8f4977aa0fce84fe35aaedde49071ff09454dae10e98078ac8b9a308caec"/>
+    <Module File="lib/com.io7m.montarre.nativepack-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="e4f8df715f65217f3385a2bad8e1233a44fe85f1ade68cc5768e36d2299a8b33"/>
+    <Module File="lib/com.io7m.montarre.schema-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="ac07a269348ed42908a220630c7355155adeda3e60300061077b882360961b19"/>
+    <Module File="lib/com.io7m.montarre.xml-0.0.1-SNAPSHOT.jar" HashAlgorithm="SHA-256" HashValue="a2f90d25f105121e1b2c5f6f92db637d7265b40a139bdd69e9b1931c6721f906"/>
     <Module File="lib/com.io7m.quarrel.core-1.6.1.jar" HashAlgorithm="SHA-256" HashValue="20047834fc6d68a57ea251bccc52822de8bac068c4a13dcb6ae99111e542be90"/>
     <Module File="lib/com.io7m.quarrel.ext.logback-1.6.1.jar" HashAlgorithm="SHA-256" HashValue="48827e4267a6e85c5900649381bf73ddfb0ccee9e4e181834d3c17bd12e4fb48"/>
     <Module File="lib/com.io7m.seltzer.api-1.1.0.jar" HashAlgorithm="SHA-256" HashValue="1097d2d28fcf12e6a9699fc9b527712f954ebe8d25467ccfa8201e445eeadf96"/>
@@ -65,7 +71,7 @@ $ unzip -p com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-
     <Module File="lib/logback-classic-1.5.8.jar" HashAlgorithm="SHA-256" HashValue="89b0f7bec5fa8a9c9246acd1e99f0e84d6cb3bbadaa5b095a14c2cd0f4732d05"/>
     <Module File="lib/logback-core-1.5.8.jar" HashAlgorithm="SHA-256" HashValue="a698e4cff3eac45eec9b2755df93bb7a9725d853f7938030654ce5430b37c41d"/>
     <Module File="lib/slf4j-api-2.0.16.jar" HashAlgorithm="SHA-256" HashValue="a12578dde1ba00bd9b816d388a0b879928d00bab3c83c240f7013bf4196c579a"/>
-    <Resource File="meta/bom.xml" HashAlgorithm="SHA-256" HashValue="2de51bad276f6bc2728cd70aac66a9a70b9bcba0dccffa764078819b4fa0dbd1" Role="BOM"/>
+    <Resource File="meta/bom.xml" HashAlgorithm="SHA-256" HashValue="c3e51b7fbb2e7a2170e0d036472d629a39931e3c54053e7dcc7a60ac0ba42f9f" Role="BOM"/>
     <Resource File="meta/icon.ico" HashAlgorithm="SHA-256" HashValue="a36ce859182d76a764bfdb2260b05e0c00580a191e7bc36155a00062ccd06b0e" Role="ICO_WINDOWS"/>
     <Resource File="meta/icon128.png" HashAlgorithm="SHA-256" HashValue="404b0d848df4c98a02804b6e7566b4c4bf27430f7c584381d32cf43a0b3e4028" Role="ICON_128"/>
     <Resource File="meta/icon16.png" HashAlgorithm="SHA-256" HashValue="47734e7530a565bca0d8b3c2015600441b31fe151c59855b4f0af535360e1cf9" Role="ICON_16"/>
@@ -74,5 +80,10 @@ $ unzip -p com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-
     <Resource File="meta/icon48.png" HashAlgorithm="SHA-256" HashValue="35d5ada26910c3f707f9b8cfb016b1dca9a575c940018fa5048d71258581b0fc" Role="ICON_48"/>
     <Resource File="meta/icon64.png" HashAlgorithm="SHA-256" HashValue="c30a14e51ade414a6110daa447e8d44cfa10808fa9ce06b4bb67f37def7fd04e" Role="ICON_64"/>
     <Resource File="meta/license.txt" HashAlgorithm="SHA-256" HashValue="cb2db7e26966764c369e6fb4ca08a989e752d926016dd132661a8c64b25149f4" Role="LICENSE"/>
+    <Resource File="meta/screenshot.png" HashAlgorithm="SHA-256" HashValue="8341f4b229fea93885c52d7ad3797da8803d4e291b3a9e6f8c2c4d4d641637aa" Role="SCREENSHOT">
+      <Caption>
+        <Text Language="en">The main command-line entry point.</Text>
+      </Caption>
+    </Resource>
   </Manifest>
 </Package>
