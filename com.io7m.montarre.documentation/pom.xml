@@ -18,6 +18,7 @@
   <url>https://www.io7m.com/software/montarre/</url>
 
   <properties>
+    <checkstyle.skip>true</checkstyle.skip>
     <mdep.analyze.skip>true</mdep.analyze.skip>
   </properties>
 
@@ -116,6 +117,46 @@
           </execution>
 
           <execution>
+            <id>copy-documentation-coq</id>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <outputDirectory>${project.build.directory}/documentation/Montarre/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/coq/Montarre/</directory>
+                  <filtering>false</filtering>
+                  <includes>
+                    <include>**/*.v</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>copy-epub-coq</id>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <outputDirectory>${project.build.directory}/epub/Montarre/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/coq/Montarre/</directory>
+                  <filtering>false</filtering>
+                  <includes>
+                    <include>**/*.v</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+          <execution>
             <id>copy-generated-epub</id>
             <phase>site</phase>
             <goals>
@@ -188,6 +229,38 @@
                 <argument>${project.build.directory}/documentation/apidocs</argument>
                 <argument>${project.build.directory}/javadoc-log.txt</argument>
                 <argument>${project.build.directory}/javadoc-options</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>excerpts-documentation</id>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <mainClass>com.io7m.montarre.documentation.Excerpts</mainClass>
+              <arguments>
+                <argument>${project.basedir}/src/main/coq</argument>
+                <argument>${project.basedir}/src/main/coq/excerpts.txt</argument>
+                <argument>${project.build.directory}/documentation/</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>excerpts-epub</id>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <phase>package</phase>
+            <configuration>
+              <mainClass>com.io7m.montarre.documentation.Excerpts</mainClass>
+              <arguments>
+                <argument>${project.basedir}/src/main/coq</argument>
+                <argument>${project.basedir}/src/main/coq/excerpts.txt</argument>
+                <argument>${project.build.directory}/epub/</argument>
               </arguments>
             </configuration>
           </execution>

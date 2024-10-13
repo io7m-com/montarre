@@ -46,7 +46,7 @@ Definition LicenseT :=
 Definition CopyrightT :=
   string.
 
-Inductive copying := Copying {
+Inductive CopyingT := Copying {
   license   : LicenseT;
   copyright : CopyrightT
 }.
@@ -115,3 +115,64 @@ Inductive VersionT := Version {
   versionNumber : VersionNumberT;
   versionDate   : VersionDateT
 }.
+
+Definition ParagraphT :=
+  string.
+
+Definition FeatureT :=
+  string.
+
+Inductive LongDescriptionT := LongDescription {
+  descriptionLanguage : LanguageT;
+  descriptions        : list ParagraphT;
+  features            : list FeatureT
+}.
+
+Inductive FlatpakRuntimeRoleT :=
+  | SDK
+  | PLATFORM
+  .
+
+Definition FlatpakPermissionT :=
+  string.
+
+Inductive FlatpakRuntimeT := FlatpakRuntime {
+  flatpakRuntimeName    : string;
+  flatpakRuntimeVersion : string;
+  flatpakRuntimeRole    : FlatpakRuntimeRoleT
+}.
+
+Inductive FlatpakT := Flatpak {
+  flatpakPermissions : list FlatpakPermissionT;
+  flatpakRuntimes    : list FlatpakRuntimeT
+}.
+
+Definition PackageNameT :=
+  string.
+
+Definition ShortNameT :=
+  string.
+
+Definition HumanNameT :=
+  string.
+
+Inductive NamesT := Names {
+  namePackage : PackageNameT;
+  nameShort   : ShortNameT;
+  nameHuman   : HumanNameT
+}.
+
+Inductive MetadataT := Metadata {
+  metaApplicationKind  : ApplicationKindT;
+  metaCategories       : list CategoryT;
+  metaCopying          : CopyingT;
+  metaDescription      : DescriptionT;
+  metaFlatpak          : FlatpakT;
+  metaJavaInfo         : JavaInfoT;
+  metaLinks            : list LinkT;
+  metaLongDescriptions : LanguageMaps.t LongDescriptionT;
+  metaNames            : NamesT;
+  metaVendor           : VendorT;
+  metaVersion          : VersionT
+}.
+

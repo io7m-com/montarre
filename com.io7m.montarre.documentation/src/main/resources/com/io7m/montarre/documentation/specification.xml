@@ -2,6 +2,7 @@
 
 <Section title="Package Format 1 Specification"
          xmlns="urn:com.io7m.structural:8:0"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
          id="72b44499-f0cb-4d2a-96dd-ebb02985976c">
 
   <Subsection title="Overview">
@@ -29,9 +30,15 @@
       <LinkExternal target="https://en.wikipedia.org/wiki/IETF_language_tag">IETF BCP 47</LinkExternal>
       language tag identifying a language.
     </Paragraph>
+    <FormalItem title="Language">
+      <Verbatim>
+        <xi:include href="6.txt"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
     <Paragraph>
       Example <Term type="term">language</Term> values include: <Term type="constant">"en"</Term>,
-      <Term type="constant">yi-Hebr</Term>, <Term type="constant">gsw-u-sd-chzh</Term>.
+      <Term type="constant">"yi-Hebr"</Term>, <Term type="constant">"gsw-u-sd-chzh"</Term>.
     </Paragraph>
   </Subsection>
 
@@ -43,10 +50,34 @@
       in a specified <Link target="da316988-7a2e-4244-aa10-d705bbb31ec1">language</Link>, along with a map consisting of
       translations of that text indexed by language.
     </Paragraph>
+    <FormalItem title="Translated Text">
+      <Verbatim>
+        <xi:include href="7.txt"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
   </Subsection>
 
   <Subsection title="Metadata"
               id="6a83334c-e6e4-4c6d-ac6a-869cc1186815">
+
+    <Subsection title="Overview"
+                id="ad863557-5a5b-45e2-8619-f1493efd09d7">
+      <Paragraph>
+        The <Term type="term">metadata</Term> for the package is a record describing the package itself. It provides
+        important information pertaining to the <Term type="term">identity</Term> of the package, information pertaining
+        to the runtime environment required to <Term type="term">run</Term> the package, and information used to produce
+        listings in packaging environments such as
+        <LinkExternal target="https://www.flatpak.org">Flatpak</LinkExternal>.
+      </Paragraph>
+      <FormalItem title="Metadata">
+        <Verbatim>
+          <xi:include href="0.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+    </Subsection>
+
     <Subsection title="ApplicationKind"
                 id="cfe0fbb2-5d64-422c-a946-4b907ae94d32">
       <Paragraph>
@@ -72,6 +103,12 @@
           </Row>
         </Table>
       </FormalItem>
+      <FormalItem title="Application Kind">
+        <Verbatim>
+          <xi:include href="1.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
     </Subsection>
 
     <Subsection title="Categories"
@@ -81,6 +118,12 @@
         <Term type="constant">[A-Z][A-Za-z0-9_-]{0,128}</Term>. A package has zero or more
         <Term type="term">categories</Term>.
       </Paragraph>
+      <FormalItem title="Category">
+        <Verbatim>
+          <xi:include href="2.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
       <Paragraph>
         Categories should be taken from the
         <LinkExternal target="https://specifications.freedesktop.org/menu-spec/latest/category-registry.html">
@@ -101,6 +144,12 @@
           and a
           <Link target="475543ef-72ec-4287-96e3-ed9081b224d9">copyright</Link>.
         </Paragraph>
+        <FormalItem title="Copying">
+          <Verbatim>
+            <xi:include href="5.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
       </Subsection>
       <Subsection title="License"
                   id="e70ae0d3-b750-4672-a449-dc16c12e9c6c">
@@ -109,6 +158,12 @@
           <LinkExternal target="https://spdx.org/licenses/">SPDX</LinkExternal>
           license identifier denoting the license of the package.
         </Paragraph>
+        <FormalItem title="License">
+          <Verbatim>
+            <xi:include href="3.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
         <Paragraph>
           Example <Term type="term">license</Term> values include:
           <Term type="constant">"ISC"</Term>, <Term type="constant">"Apache-2.0"</Term>,
@@ -121,6 +176,12 @@
           A <Term type="term">copyright</Term> is a simple copyright string that indicates the current holder of the
           copyright on the package.
         </Paragraph>
+        <FormalItem title="Copyright">
+          <Verbatim>
+            <xi:include href="4.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
         <Paragraph>
           An example <Term type="term">copyright</Term> value is:
           <Term type="constant">"Copyright © 2024 Mark Raynsford &lt;code@io7m.com&gt; https://www.io7m.com"</Term>.
@@ -135,11 +196,82 @@
         <Link target="151036fc-5d1f-45b9-8019-3209f9aaff17">translated text</Link>
         that provides a summary of the package.
       </Paragraph>
+      <FormalItem title="Description">
+        <Verbatim>
+          <xi:include href="8.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
     </Subsection>
 
     <Subsection title="Flatpak"
                 id="214852c9-31df-48fc-b7ab-986a97b30f32">
-      <Paragraph>...</Paragraph>
+      <Subsection title="Overview">
+        <Paragraph>
+          The <Term type="term">Flatpak</Term> information for a package provides extra metadata used to produce
+          <LinkExternal target="https://flatpak.org">Flatpaks</LinkExternal>.
+        </Paragraph>
+        <FormalItem title="Flatpak">
+          <Verbatim>
+            <xi:include href="24.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
+      </Subsection>
+      <Subsection title="Runtimes">
+        <Paragraph>
+          A <Term type="term">Flatpak runtime</Term> consists of a
+          <Term type="term">name</Term>, a <Term type="term">version</Term>, and a
+          <Term type="term">role</Term>.
+        </Paragraph>
+        <FormalItem title="Flatpak Runtime">
+          <Verbatim>
+            <xi:include href="23.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
+        <Paragraph>
+          Roles may be one of the following values:
+        </Paragraph>
+        <FormalItem title="Flatpak Roles">
+          <Table type="genericTable">
+            <Columns>
+              <Column>Value</Column>
+              <Column>Description</Column>
+            </Columns>
+            <Row>
+              <Cell>SDK</Cell>
+              <Cell>A runtime for building applications.</Cell>
+            </Row>
+            <Row>
+              <Cell>PLATFORM</Cell>
+              <Cell>A runtime for running applications.</Cell>
+            </Row>
+          </Table>
+        </FormalItem>
+        <FormalItem title="Flatpak Runtime Role">
+          <Verbatim>
+            <xi:include href="21.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
+      </Subsection>
+      <Subsection title="Permissions">
+        <Paragraph>
+          A <Term type="term">Flatpak permission</Term> denotes that the named permission will be granted to the
+          application when it runs as a Flatpak.
+        </Paragraph>
+        <FormalItem title="Flatpak Permission">
+          <Verbatim>
+            <xi:include href="22.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
+        <Paragraph>
+          Example <Term type="term">permission</Term> values include:
+          <Term type="constant">"--share=net"</Term>, <Term type="constant">"--socket=x11"</Term>.
+        </Paragraph>
+      </Subsection>
     </Subsection>
 
     <Subsection title="JavaInfo"
@@ -151,6 +283,12 @@
           and a
           <Link target="0c2456eb-bc8f-4a7c-9148-bcb4c5369824">main module</Link>.
         </Paragraph>
+        <FormalItem title="Java Info">
+          <Verbatim>
+            <xi:include href="9.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
       </Subsection>
       <Subsection title="Required JDK Version"
                   id="8b2d6ace-8cda-45bc-9cf4-59e6d47b7f94">
@@ -186,6 +324,12 @@
           The <Term type="term">target</Term> of a link must be a valid
           <LinkExternal target="https://datatracker.ietf.org/doc/html/rfc3986">RFC 3986 URI</LinkExternal>.
         </Paragraph>
+        <FormalItem title="Link">
+          <Verbatim>
+            <xi:include href="11.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
       </Subsection>
       <Subsection title="Roles">
         <Paragraph>
@@ -231,12 +375,61 @@
             </Row>
           </Table>
         </FormalItem>
+        <FormalItem title="Link Role">
+          <Verbatim>
+            <xi:include href="10.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
       </Subsection>
     </Subsection>
 
     <Subsection title="LongDescription"
                 id="fe91e28e-d080-47b3-9349-0e87c7e52768">
-      <Paragraph>...</Paragraph>
+      <Subsection title="Overview">
+        <Paragraph>
+          The <Term type="term">long description</Term> information for a package is a set of
+          <Link target="866fb881-ea9b-4542-a819-8e21ab79c520">paragraphs</Link>
+          and
+          <Link target="58e431b4-0fab-4f00-a2d5-73a575b6ea13">features</Link>. A
+          <Term type="term">long description</Term>
+          has an associated
+          <Link target="da316988-7a2e-4244-aa10-d705bbb31ec1">language</Link>
+          and there may be at most one <Term type="term">long description</Term> per language in a given package.
+        </Paragraph>
+        <FormalItem title="Long Description">
+          <Verbatim>
+            <xi:include href="20.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
+      </Subsection>
+      <Subsection title="Paragraph"
+                  id="866fb881-ea9b-4542-a819-8e21ab79c520">
+        <Paragraph>
+          A <Term type="term">paragraph</Term> is a humanly readable description of some aspect of the package for
+          marketing purposes.
+        </Paragraph>
+        <FormalItem title="Paragraph">
+          <Verbatim>
+            <xi:include href="18.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
+      </Subsection>
+      <Subsection title="Feature"
+                  id="58e431b4-0fab-4f00-a2d5-73a575b6ea13">
+        <Paragraph>
+          A <Term type="term">feature</Term> is a humanly readable description of one of the features provided by the
+          package for marketing purposes.
+        </Paragraph>
+        <FormalItem title="Feature">
+          <Verbatim>
+            <xi:include href="19.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
+      </Subsection>
     </Subsection>
 
     <Subsection title="Names"
@@ -246,6 +439,12 @@
           The <Term type="term">names</Term> information for a package is a record consisting of a set of different
           types of names for the package.
         </Paragraph>
+        <FormalItem title="Names">
+          <Verbatim>
+            <xi:include href="28.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
       </Subsection>
       <Subsection title="Package Name"
                   id="9d02d402-92ae-4267-be43-1ebb08e8e1bc">
@@ -254,6 +453,12 @@
           <LinkExternal target="https://www.io7m.com/software/lanark/">Lanark</LinkExternal>
           dotted string.
         </Paragraph>
+        <FormalItem title="Package Name">
+          <Verbatim>
+            <xi:include href="25.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
         <Paragraph>
           Example <Term type="term">package name</Term> values include:
           <Term type="constant">"com.io7m.montarre"</Term>, <Term type="constant">"com.io7m.lanark"</Term>.
@@ -264,6 +469,12 @@
         <Paragraph>
           The <Term type="term">human name</Term> is a friendly, human-readable name for the package.
         </Paragraph>
+        <FormalItem title="Human Name">
+          <Verbatim>
+            <xi:include href="27.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
         <Paragraph>
           An example <Term type="term">human name</Term> value is
           <Term type="constant">"Montarre"</Term>.
@@ -272,9 +483,16 @@
       <Subsection title="Short Name"
                   id="60d790cb-85b9-48fc-9211-47241747042b">
         <Paragraph>
-          The <Term type="term">short name</Term> is a filesystem-safe name conforming to the regular
-          expression <Term type="constant">[a-z][a-z0-9_-]{0,128}</Term>.
+          The <Term type="term">short name</Term> is a name conforming to the regular
+          expression <Term type="constant">[a-z][a-z0-9_-]{0,128}</Term>
+          <LinkFootnote target="73ee3320-8877-43cb-8f44-2fc20263ad49"/>.
         </Paragraph>
+        <FormalItem title="Short Name">
+          <Verbatim>
+            <xi:include href="26.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
         <Paragraph>
           An example <Term type="term">short name</Term> value is
           <Term type="constant">"montarre"</Term>.
@@ -287,21 +505,45 @@
       <Subsection title="Overview">
         <Paragraph>
           The <Term type="term">vendor</Term> information for a package is a record consisting of a vendor
-          <Link target="e3f64de8-3f2a-4926-b07e-cd9101c39d83">name</Link> and a unique vendor
+          <Link target="e3f64de8-3f2a-4926-b07e-cd9101c39d83">name</Link>
+          and a unique vendor
           <Link target="eda0dc2a-9037-4957-8383-63042647cf80">ID</Link>.
         </Paragraph>
+        <FormalItem title="Vendor">
+          <Verbatim>
+            <xi:include href="14.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
       </Subsection>
-      <Subsection title="Name" id="e3f64de8-3f2a-4926-b07e-cd9101c39d83">
+      <Subsection title="Name"
+                  id="e3f64de8-3f2a-4926-b07e-cd9101c39d83">
         <Paragraph>
-          The <Term type="term">vendor name</Term> is the humanly-readable name of the vendor of the package.
+          The <Term type="term">vendor name</Term> is the humanly-readable name of the vendor of the package, conforming
+          to the regular expression
+          <Term type="constant">[a-zA-Z][A-Za-z0-9_-]{0,128}</Term>
+          <LinkFootnote target="f98a2394-09cc-41ad-944d-49c6405c7b19"/>.
         </Paragraph>
+        <FormalItem title="Vendor Name">
+          <Verbatim>
+            <xi:include href="12.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
       </Subsection>
-      <Subsection title="ID" id="eda0dc2a-9037-4957-8383-63042647cf80">
+      <Subsection title="ID"
+                  id="eda0dc2a-9037-4957-8383-63042647cf80">
         <Paragraph>
           The <Term type="term">vendor ID</Term> is a unique identifier for the vendor of the package, specified as a
           <LinkExternal target="https://www.io7m.com/software/lanark/">Lanark</LinkExternal>
           dotted string.
         </Paragraph>
+        <FormalItem title="Vendor ID">
+          <Verbatim>
+            <xi:include href="13.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
         <Paragraph>
           Example <Term type="term">vendor ID</Term> values include:
           <Term type="constant">"com.io7m"</Term>, <Term type="constant">"com.example"</Term>.
@@ -314,22 +556,44 @@
       <Subsection title="Overview">
         <Paragraph>
           The <Term type="term">version</Term> information for a package is a record consisting of a version
-          <Link target="e3f64de8-3f2a-4926-b07e-cd9101c39d83">name</Link> and a version/release
+          <Link target="e3f64de8-3f2a-4926-b07e-cd9101c39d83">name</Link>
+          and a version/release
           <Link target="eda0dc2a-9037-4957-8383-63042647cf80">date</Link>.
         </Paragraph>
+        <FormalItem title="Version">
+          <Verbatim>
+            <xi:include href="17.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
       </Subsection>
-      <Subsection title="Number" id="06fa0349-3cc9-4415-b481-4cb3c8b4c255">
+      <Subsection title="Number"
+                  id="06fa0349-3cc9-4415-b481-4cb3c8b4c255">
         <Paragraph>
           The <Term type="term">version number</Term> is the
-          <LinkExternal target="https://semver.org">semantic version</LinkExternal> of the package.
+          <LinkExternal target="https://semver.org">semantic version</LinkExternal>
+          of the package.
         </Paragraph>
+        <FormalItem title="Version Number">
+          <Verbatim>
+            <xi:include href="15.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
       </Subsection>
-      <Subsection title="Date" id="13c94835-6e40-4199-b89a-f88d35bbcfca">
+      <Subsection title="Date"
+                  id="13c94835-6e40-4199-b89a-f88d35bbcfca">
         <Paragraph>
           The <Term type="term">version date</Term> is an
           <LinkExternal target="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</LinkExternal>
           date string denoting the release date of this version of the package.
         </Paragraph>
+        <FormalItem title="Version Date">
+          <Verbatim>
+            <xi:include href="16.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
         <Paragraph>
           Example <Term type="term">version date</Term> values include:
           <Term type="constant">"2024-10-13"</Term>, <Term type="constant">"2001-01-23"</Term>.
@@ -360,5 +624,15 @@
       ...
     </Paragraph>
   </Subsection>
+
+  <Footnote id="f98a2394-09cc-41ad-944d-49c6405c7b19">
+    Vendor names are used in some native packaging systems as installation directories and are therefore required to be
+    filesystem-safe.
+  </Footnote>
+
+  <Footnote id="73ee3320-8877-43cb-8f44-2fc20263ad49">
+    Short names are used in some native packaging systems as executable names and are therefore required to be
+    filesystem-safe.
+  </Footnote>
 
 </Section>
