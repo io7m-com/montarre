@@ -70,4 +70,76 @@
     </dependency>
   </dependencies>
 
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.io7m.stmp</groupId>
+        <artifactId>string-template-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-arch</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>renderTemplate</goal>
+            </goals>
+            <configuration>
+              <template>
+                <inputFile>src/main/string-template/MArchitectureNames.st</inputFile>
+                <name>MArchitectureNames</name>
+                <outputFile>
+                  ${project.build.directory}/generated-sources/string-template/com/io7m/montarre/api/MArchitectureNames.java
+                </outputFile>
+                <properties>
+                  <packageName>com.io7m.montarre.api</packageName>
+                </properties>
+              </template>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-os</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>renderTemplate</goal>
+            </goals>
+            <configuration>
+              <template>
+                <inputFile>src/main/string-template/MOperatingSystemNames.st</inputFile>
+                <name>MOperatingSystemNames</name>
+                <outputFile>
+                  ${project.build.directory}/generated-sources/string-template/com/io7m/montarre/api/MOperatingSystemNames.java
+                </outputFile>
+                <properties>
+                  <packageName>com.io7m.montarre.api</packageName>
+                </properties>
+              </template>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-sources</id>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <phase>
+              generate-sources
+            </phase>
+            <configuration>
+              <sources>
+                <source>
+                  ${project.build.directory}/generated-sources/string-template
+                </source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
 </project>

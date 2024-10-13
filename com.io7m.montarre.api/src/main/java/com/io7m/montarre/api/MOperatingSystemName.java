@@ -17,7 +17,6 @@
 
 package com.io7m.montarre.api;
 
-import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -35,7 +34,7 @@ public record MOperatingSystemName(
     Pattern.compile("[a-z][a-z0-9_-]{0,32}");
 
   private static final MOperatingSystemName UNKNOWN =
-    new MOperatingSystemName("unknown");
+    new MOperatingSystemName(MOperatingSystemNames.unknown());
 
   /**
    * @return The pattern that defines validity
@@ -83,41 +82,7 @@ public record MOperatingSystemName(
   public static MOperatingSystemName infer(
     final String name)
   {
-    final var upper = name.toUpperCase(Locale.ROOT);
-    if (upper.startsWith("AIX")) {
-      return aix();
-    }
-    if (upper.startsWith("HPUX")) {
-      return hpux();
-    }
-    if (upper.startsWith("OS400")) {
-      return os400();
-    }
-    if (upper.startsWith("LINUX")) {
-      return linux();
-    }
-    if (upper.startsWith("MAC") || upper.startsWith("OSX")) {
-      return osx();
-    }
-    if (upper.startsWith("FREEBSD")) {
-      return freebsd();
-    }
-    if (upper.startsWith("OPENBSD")) {
-      return openbsd();
-    }
-    if (upper.startsWith("NETBSD")) {
-      return netbsd();
-    }
-    if (upper.startsWith("SOLARIS") || upper.startsWith("SUNOS")) {
-      return solaris();
-    }
-    if (upper.startsWith("WINDOWS")) {
-      return windows();
-    }
-    if (upper.startsWith("ZOS")) {
-      return zos();
-    }
-    return UNKNOWN;
+    return new MOperatingSystemName(MOperatingSystemNames.infer(name));
   }
 
   /**
@@ -125,7 +90,7 @@ public record MOperatingSystemName(
    */
   public static MOperatingSystemName zos()
   {
-    return new MOperatingSystemName("zos");
+    return new MOperatingSystemName(MOperatingSystemNames.zos());
   }
 
   /**
@@ -133,7 +98,7 @@ public record MOperatingSystemName(
    */
   public static MOperatingSystemName windows()
   {
-    return new MOperatingSystemName("windows");
+    return new MOperatingSystemName(MOperatingSystemNames.windows());
   }
 
   /**
@@ -141,7 +106,7 @@ public record MOperatingSystemName(
    */
   public static MOperatingSystemName solaris()
   {
-    return new MOperatingSystemName("solaris");
+    return new MOperatingSystemName(MOperatingSystemNames.solaris());
   }
 
   /**
@@ -149,7 +114,7 @@ public record MOperatingSystemName(
    */
   public static MOperatingSystemName netbsd()
   {
-    return new MOperatingSystemName("netbsd");
+    return new MOperatingSystemName(MOperatingSystemNames.netbsd());
   }
 
   /**
@@ -157,7 +122,7 @@ public record MOperatingSystemName(
    */
   public static MOperatingSystemName openbsd()
   {
-    return new MOperatingSystemName("openbsd");
+    return new MOperatingSystemName(MOperatingSystemNames.openbsd());
   }
 
   /**
@@ -165,7 +130,7 @@ public record MOperatingSystemName(
    */
   public static MOperatingSystemName freebsd()
   {
-    return new MOperatingSystemName("freebsd");
+    return new MOperatingSystemName(MOperatingSystemNames.freebsd());
   }
 
   /**
@@ -173,7 +138,7 @@ public record MOperatingSystemName(
    */
   public static MOperatingSystemName osx()
   {
-    return new MOperatingSystemName("osx");
+    return new MOperatingSystemName(MOperatingSystemNames.osx());
   }
 
   /**
@@ -181,7 +146,7 @@ public record MOperatingSystemName(
    */
   public static MOperatingSystemName linux()
   {
-    return new MOperatingSystemName("linux");
+    return new MOperatingSystemName(MOperatingSystemNames.linux());
   }
 
   /**
@@ -189,7 +154,7 @@ public record MOperatingSystemName(
    */
   public static MOperatingSystemName os400()
   {
-    return new MOperatingSystemName("os400");
+    return new MOperatingSystemName(MOperatingSystemNames.os400());
   }
 
   /**
@@ -197,7 +162,7 @@ public record MOperatingSystemName(
    */
   public static MOperatingSystemName hpux()
   {
-    return new MOperatingSystemName("hpux");
+    return new MOperatingSystemName(MOperatingSystemNames.hpux());
   }
 
   /**
@@ -205,7 +170,7 @@ public record MOperatingSystemName(
    */
   public static MOperatingSystemName aix()
   {
-    return new MOperatingSystemName("aix");
+    return new MOperatingSystemName(MOperatingSystemNames.aix());
   }
 
   @Override

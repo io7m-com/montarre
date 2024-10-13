@@ -29,6 +29,12 @@
       <artifactId>com.io7m.montarre.xml</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>com.io7m.montarre.launchstub</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>com.io7m.verona</groupId>
@@ -88,6 +94,35 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+
+        <configuration>
+          <failOnWarning>true</failOnWarning>
+          <ignoredUnusedDeclaredDependencies>
+            <ignoredUnusedDeclaredDependency>${project.groupId}:com.io7m.montarre.launchstub::*</ignoredUnusedDeclaredDependency>
+          </ignoredUnusedDeclaredDependencies>
+        </configuration>
+
+        <executions>
+          <execution>
+            <id>copy-launcher-stub</id>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <classifier>main</classifier>
+              <includeGroupIds>${project.groupId}</includeGroupIds>
+              <includeArtifactIds>com.io7m.montarre.launchstub</includeArtifactIds>
+              <outputDirectory>${project.build.directory}/generated-resources/launch/com/io7m/montarre/nativepack/internal</outputDirectory>
+              <stripClassifier>true</stripClassifier>
+              <stripVersion>true</stripVersion>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
@@ -120,7 +155,7 @@
         <artifactId>build-helper-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>add-resources</id>
+            <id>add-resources-0</id>
             <phase>generate-resources</phase>
             <goals>
               <goal>add-resource</goal>
@@ -129,6 +164,21 @@
               <resources>
                 <resource>
                   <directory>${project.build.directory}/generated-resources/wix</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-resources-1</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>add-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>${project.build.directory}/generated-resources/launch</directory>
                   <filtering>false</filtering>
                 </resource>
               </resources>

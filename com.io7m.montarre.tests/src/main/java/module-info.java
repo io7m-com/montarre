@@ -35,6 +35,7 @@ open module com.io7m.montarre.tests
   requires com.io7m.montarre.io;
   requires com.io7m.montarre.nativepack;
   requires com.io7m.montarre.xml;
+  requires com.io7m.montarre.launchstub;
 
   requires com.io7m.anethum.api;
   requires com.io7m.lanark.core;

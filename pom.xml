@@ -27,6 +27,7 @@
     <module>com.io7m.montarre.distribution</module>
     <module>com.io7m.montarre.documentation</module>
     <module>com.io7m.montarre.io</module>
+    <module>com.io7m.montarre.launchstub</module>
     <module>com.io7m.montarre.maven_plugin</module>
     <module>com.io7m.montarre.nativepack</module>
     <module>com.io7m.montarre.schema</module>

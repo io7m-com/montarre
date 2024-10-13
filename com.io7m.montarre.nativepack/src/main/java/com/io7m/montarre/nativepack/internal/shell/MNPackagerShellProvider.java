@@ -15,7 +15,7 @@
  */
 
 
-package com.io7m.montarre.nativepack.internal.msi;
+package com.io7m.montarre.nativepack.internal.shell;
 
 import com.io7m.lanark.core.RDottedName;
 import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
@@ -23,20 +23,20 @@ import com.io7m.montarre.api.natives.MNativePackagerServiceType;
 import com.io7m.montarre.api.natives.MNativeProcessesType;
 
 /**
- * A native packager that produces MSI packages.
+ * A native packager that produces shell packages.
  */
 
-public final class MNPackagerMSIProvider
+public final class MNPackagerShellProvider
   implements MNativePackagerServiceProviderType
 {
   private static final RDottedName NAME =
-    new RDottedName("com.io7m.montarre.msi_wix");
+    new RDottedName("com.io7m.montarre.shell");
 
   /**
-   * A native packager that produces MSI packages.
+   * A native packager that produces shell packages.
    */
 
-  public MNPackagerMSIProvider()
+  public MNPackagerShellProvider()
   {
 
   }
@@ -50,13 +50,13 @@ public final class MNPackagerMSIProvider
   @Override
   public String describe()
   {
-    return "Produces MSI packages.";
+    return "Produces shell packages.";
   }
 
   @Override
   public MNativePackagerServiceType create(
     final MNativeProcessesType processes)
   {
-    return new MNPackagerMSI(this, processes);
+    return new MNPackagerShell(this);
   }
 }

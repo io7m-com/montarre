@@ -19,6 +19,7 @@ import com.io7m.montarre.nativepack.internal.app_image.MNPackagerAppImageProvide
 import com.io7m.montarre.nativepack.internal.deb.MNPackagerDebProvider;
 import com.io7m.montarre.nativepack.internal.flatpak.MNPackagerFlatpakProvider;
 import com.io7m.montarre.nativepack.internal.msi.MNPackagerMSIProvider;
+import com.io7m.montarre.nativepack.internal.shell.MNPackagerShellProvider;
 
 /**
  * Application packaging tools (Native packaging).
@@ -49,6 +50,7 @@ module com.io7m.montarre.nativepack
     with MNPackagerAppImageProvider,
       MNPackagerDebProvider,
       MNPackagerMSIProvider,
+      MNPackagerShellProvider,
       MNPackagerFlatpakProvider;
 
   uses MNativePackagerServiceProviderType;
@@ -64,5 +66,7 @@ module com.io7m.montarre.nativepack
   exports com.io7m.montarre.nativepack.internal.deb
     to com.io7m.montarre.tests;
   exports com.io7m.montarre.nativepack.internal.msi
+    to com.io7m.montarre.tests;
+  exports com.io7m.montarre.nativepack.internal.shell
     to com.io7m.montarre.tests;
 }

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>com.io7m.montarre</artifactId>
+    <groupId>com.io7m.montarre</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>com.io7m.montarre.launchstub</artifactId>
+
+  <name>com.io7m.montarre.launchstub</name>
+  <description>Application packaging tools (Launch stub).</description>
+  <url>https://www.io7m.com/software/montarre</url>
+
+  <properties>
+    <io7m.java.targetJavaVersion>9</io7m.java.targetJavaVersion>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.io7m.stmp</groupId>
+        <artifactId>string-template-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-arch</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>renderTemplate</goal>
+            </goals>
+            <configuration>
+              <template>
+                <inputFile>${project.basedir}/../com.io7m.montarre.api/src/main/string-template/MArchitectureNames.st</inputFile>
+                <name>MArchitectureNames</name>
+                <outputFile>
+                  ${project.build.directory}/generated-sources/string-template/com/io7m/montarre/launchstub/MArchitectureNames.java
+                </outputFile>
+                <properties>
+                  <packageName>com.io7m.montarre.launchstub</packageName>
+                </properties>
+              </template>
+            </configuration>
+          </execution>
+          <execution>
+            <id>generate-os</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>renderTemplate</goal>
+            </goals>
+            <configuration>
+              <template>
+                <inputFile>${project.basedir}/../com.io7m.montarre.api/src/main/string-template/MOperatingSystemNames.st</inputFile>
+                <name>MOperatingSystemNames</name>
+                <outputFile>
+                  ${project.build.directory}/generated-sources/string-template/com/io7m/montarre/launchstub/MOperatingSystemNames.java
+                </outputFile>
+                <properties>
+                  <packageName>com.io7m.montarre.launchstub</packageName>
+                </properties>
+              </template>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-sources</id>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <phase>
+              generate-sources
+            </phase>
+            <configuration>
+              <sources>
+                <source>
+                  ${project.build.directory}/generated-sources/string-template
+                </source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>biz.aQute.bnd</groupId>
+        <artifactId>bnd-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-osgi-manifest</id>
+            <goals>
+              <goal>bnd-process</goal>
+            </goals>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>onejar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <minimizeJar>true</minimizeJar>
+              <shadedClassifierName>main</shadedClassifierName>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <manifestEntries>
+                    <Main-Class>com.io7m.montarre.launchstub.MLSMain</Main-Class>
+                  </manifestEntries>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+              </transformers>
+              <artifactSet>
+                <includes>
+                  <include>com.io7m.montarre:com.io7m.montarre.launchstub:*</include>
+                </includes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>LICENSE</exclude>
+                    <exclude>META-INF/**</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/maven/**</exclude>
+                    <exclude>META-INF/versions/**</exclude>
+                    <exclude>NOTICE</exclude>
+                    <exclude>OSGI-OPT/**</exclude>
+                    <exclude>about.html</exclude>
+                    <exclude>img/**</exclude>
+                    <exclude>org/osgi/resource/**</exclude>
+                    <exclude>readme.md</exclude>
+                    <exclude>**/package-info.class</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Make the jar reproducible. -->
+      <plugin>
+        <groupId>io.github.zlika</groupId>
+        <artifactId>reproducible-build-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

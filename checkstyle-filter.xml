@@ -6,9 +6,9 @@
 
 <suppressions>
   <!-- Switches over strings. -->
-  <suppress files="MOperatingSystemName.java"
+  <suppress files="MOperatingSystemNames.java"
             checks="NPathComplexity"/>
-  <suppress files="MArchitectureName.java"
+  <suppress files="MArchitectureNames.java"
             checks="CyclomaticComplexity"/>
 
   <suppress files=".*\.java"
