@@ -17,15 +17,10 @@
 
 package com.io7m.montarre.nativepack;
 
-import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.wix.MWiXValidatorFactoryType;
 import com.io7m.montarre.api.wix.MWiXValidatorType;
-import com.io7m.montarre.api.wix.MWiXWriterFactoryType;
-import com.io7m.montarre.api.wix.MWiXWriterType;
 import com.io7m.montarre.nativepack.internal.MWiXValidator;
-import com.io7m.montarre.nativepack.internal.MWiXWriter;
 
-import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.Objects;
 
