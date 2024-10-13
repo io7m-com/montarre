@@ -25,7 +25,7 @@
       A <Term type="term">shell</Term> distribution is a <Term type="file">tar</Term> file
       <LinkFootnote target="1f53a22f-8574-4dd1-9834-6632e1d91e28"/>
       containing the following files (where
-      <Term type="variable">SHORTNAME</Term>
+      <Term type="variable">${SHORT_NAME}</Term>
       is the <Term type="term">short name</Term> of the application):
     </Paragraph>
     <FormalItem title="Files"
@@ -37,42 +37,42 @@
         </Columns>
         <Row>
           <Cell>
-            <Term type="file">SHORTNAME/META-INF/MONTARRE/PACKAGE.XML</Term>
+            <Term type="file">${SHORT_NAME}/META-INF/MONTARRE/PACKAGE.XML</Term>
           </Cell>
           <Cell>The original <Term type="term">package declaration</Term> taken from the input package.
           </Cell>
         </Row>
         <Row>
           <Cell>
-            <Term type="file">SHORTNAME/bin/launch.jar</Term>
+            <Term type="file">${SHORT_NAME}/bin/launch.jar</Term>
           </Cell>
           <Cell>The <Link target="2d44fc22-6a6e-4f0b-9920-73743043cc27">launch jar</Link>.
           </Cell>
         </Row>
         <Row>
           <Cell>
-            <Term type="file">SHORTNAME/bin/montarre</Term>
+            <Term type="file">${SHORT_NAME}/bin/${SHORT_NAME}</Term>
           </Cell>
           <Cell>The <Link target="4b242e71-a7bb-447f-b742-6b70e2da1e2e">shell script</Link> for POSIX-like systems.
           </Cell>
         </Row>
         <Row>
           <Cell>
-            <Term type="file">SHORTNAME/bin/montarre.bat</Term>
+            <Term type="file">${SHORT_NAME}/bin/${SHORT_NAME}.bat</Term>
           </Cell>
           <Cell>The <Link target="a1f09337-5f91-4cfb-b999-8ebaf9ab994b">batch file</Link> for Windows-like systems.
           </Cell>
         </Row>
         <Row>
           <Cell>
-            <Term type="file">SHORTNAME/lib</Term>
+            <Term type="file">${SHORT_NAME}/lib</Term>
           </Cell>
           <Cell>The <Term type="term">platform-neutral</Term> jar files for the application.
           </Cell>
         </Row>
         <Row>
           <Cell>
-            <Term type="file">SHORTNAME/lib/${ARCH}/${OS}</Term>
+            <Term type="file">${SHORT_NAME}/lib/${ARCH}/${OS}</Term>
           </Cell>
           <Cell>
             The <Term type="term">platform-specific</Term> jar files for the application, organized by architecture and
@@ -81,7 +81,7 @@
         </Row>
         <Row>
           <Cell>
-            <Term type="file">SHORTNAME/meta/*</Term>
+            <Term type="file">${SHORT_NAME}/meta/*</Term>
           </Cell>
           <Cell>The <Term type="term">metadata</Term> files taken from the input package.
           </Cell>
