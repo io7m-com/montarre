@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section title="Packagers"
+         xmlns="urn:com.io7m.structural:8:0"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="ee60e32c-8e30-4081-a32c-53ee7744b9be">
+  <xi:include href="pkg-app_image.xml"/>
+  <xi:include href="pkg-deb.xml"/>
+  <xi:include href="pkg-flatpak.xml"/>
+  <xi:include href="pkg-msi.xml"/>
+  <xi:include href="pkg-shell.xml"/>
+</Section>

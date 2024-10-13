@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section title="com.io7m.montarre.msi"
+         xmlns="urn:com.io7m.structural:8:0"
+         id="c45b5bb5-e7a7-4b7d-90f0-7b08869c6de3">
+  <Subsection title="Overview">
+    <Paragraph>
+      Create MSI installers.
+    </Paragraph>
+  </Subsection>
+</Section>

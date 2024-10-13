@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section title="com.io7m.montarre.shell"
+         xmlns="urn:com.io7m.structural:8:0"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="a69aad53-8567-4ded-8b3c-cfe4a50712c4">
+  <Subsection title="Overview">
+    <Paragraph>
+      Create platform-independent <Term type="term">shell</Term> distributions.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Description">
+    <Paragraph>
+      The <Term type="module">com.io7m.montarre.shell</Term> packager takes a
+      <Term type="package">montarre</Term>
+      package and produces a platform-independent <Term type="term">shell</Term> distribution. The term
+      <Term type="term">shell</Term>
+      is used here to indicate that the distribution is really nothing more than simply running the system's
+      <Term type="command">java</Term>
+      command on the <Term type="file">jar</Term> files contained within the package using the
+      system's <Term type="term">shell</Term>.
+    </Paragraph>
+    <Paragraph>
+      A <Term type="term">shell</Term> distribution is a <Term type="file">tar</Term> file
+      <LinkFootnote target="1f53a22f-8574-4dd1-9834-6632e1d91e28"/>
+      containing the following files (where
+      <Term type="variable">SHORTNAME</Term>
+      is the <Term type="term">short name</Term> of the application):
+    </Paragraph>
+    <FormalItem title="Files"
+                id="1b26ef5d-571a-4d3f-a92e-59efd959b4db">
+      <Table type="genericTable">
+        <Columns>
+          <Column>File</Column>
+          <Column>Description</Column>
+        </Columns>
+        <Row>
+          <Cell>
+            <Term type="file">SHORTNAME/META-INF/MONTARRE/PACKAGE.XML</Term>
+          </Cell>
+          <Cell>The original <Term type="term">package declaration</Term> taken from the input package.
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="file">SHORTNAME/bin/launch.jar</Term>
+          </Cell>
+          <Cell>The <Link target="2d44fc22-6a6e-4f0b-9920-73743043cc27">launch jar</Link>.
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="file">SHORTNAME/bin/montarre</Term>
+          </Cell>
+          <Cell>The <Link target="4b242e71-a7bb-447f-b742-6b70e2da1e2e">shell script</Link> for POSIX-like systems.
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="file">SHORTNAME/bin/montarre.bat</Term>
+          </Cell>
+          <Cell>The <Link target="a1f09337-5f91-4cfb-b999-8ebaf9ab994b">batch file</Link> for Windows-like systems.
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="file">SHORTNAME/lib</Term>
+          </Cell>
+          <Cell>The <Term type="term">platform-neutral</Term> jar files for the application.
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="file">SHORTNAME/lib/${ARCH}/${OS}</Term>
+          </Cell>
+          <Cell>
+            The <Term type="term">platform-specific</Term> jar files for the application, organized by architecture and
+            operating system.
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="file">SHORTNAME/meta/*</Term>
+          </Cell>
+          <Cell>The <Term type="term">metadata</Term> files taken from the input package.
+          </Cell>
+        </Row>
+      </Table>
+    </FormalItem>
+    <Paragraph>
+      Assuming that the current hardware architecture is <Term type="expression">${ARCH}</Term>, the operating system is
+      <Term type="expression">${OS}</Term>, the application's main class is
+      <Term type="expression">${MAIN_CLASS}</Term>, and the short name of the application is
+      <Term type="expression">${SHORT_NAME}</Term>, then the application can be trivially executed with the following
+      <Term type="command">java</Term>
+      invocation:
+    </Paragraph>
+    <FormalItem title="Example Invocation">
+      <Verbatim><![CDATA[
+$ java -p "${SHORT_NAME}/lib:${SHORT_NAME}/lib/${ARCH}/${OS}" -m "${MAIN_CLASS}"
+]]></Verbatim>
+    </FormalItem>
+    <Paragraph>
+      However, the simplicity of the above invocation hides a few important details:
+    </Paragraph>
+    <FormalItem title="Missing Details">
+      <ListUnordered>
+        <Item>
+          How does the caller assign a suitable value for <Term type="expression">${ARCH}</Term>?
+        </Item>
+        <Item>
+          How does the caller assign a suitable value for <Term type="expression">${OS}</Term>?
+        </Item>
+        <Item>
+          What happens on a system that uses <Term type="constant">;</Term> as a
+          <Term type="term">module path separator</Term> instead of <Term type="constant">:</Term> ?
+        </Item>
+        <Item>
+          What happens on a system that uses <Term type="constant">\</Term> as a
+          <Term type="term">file path separator</Term> instead of <Term type="constant">/</Term> ?
+        </Item>
+        <Item>
+          What happens if the package requires JDK 21, but the user is only running JDK 20 (or some other
+          insufficient version)?
+        </Item>
+      </ListUnordered>
+    </FormalItem>
+    <Paragraph>
+      To solve the above problems, the packager provides a
+      <Link target="a1f09337-5f91-4cfb-b999-8ebaf9ab994b">batch file</Link> (for Windows-like systems), and
+      a
+      <Link target="4b242e71-a7bb-447f-b742-6b70e2da1e2e">shell script</Link> (for POSIX-like systems) that
+      perform the above invocations in a platform-appropriate way, making calls into an included
+      <Link target="2d44fc22-6a6e-4f0b-9920-73743043cc27">launch jar</Link> that knows how to fetch
+      hardware architecture names in a system-independent manner, fetch operating system names in a
+      system-independent manner, build module paths correctly, and check for the correct Java version.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Batch File"
+              id="a1f09337-5f91-4cfb-b999-8ebaf9ab994b">
+    <Paragraph>
+      The <Term type="term">shell</Term> distribution contains a Windows <Term type="term">batch file</Term> that
+      can be used to execute the application on Windows-like platforms. The batch file is generated based on the
+      Java version requirement given in the input package, and the short name of the application. The short name
+      is converted to uppercase and suffixed with the string <Term type="constant">_HOME</Term> to produce the
+      name of an environment variable that will be consulted to find the location of the unpacked distribution.
+      For example, in an application named <Term type="package">montarre</Term>, the environment variable named
+      <Term type="constant">MONTARRE_HOME</Term> will be consulted and is expected to contain the full path to
+      the unpacked <Term type="term">shell</Term> distribution. The application would therefore be executed as
+      follows:
+    </Paragraph>
+    <FormalItem title="Example Batch">
+      <Verbatim><![CDATA[
+c:> cd montarre
+
+c:\montarre> dir
+ Volume in drive C has no label.
+ Volume Serial Number is 187C-D7E2
+
+ Directory of c:\montarre
+
+13/10/2024  18:34    <DIR>          .
+13/10/2024  18:34    <DIR>          ..
+13/10/2024  16:03    <DIR>          bin
+13/10/2024  16:03    <DIR>          lib
+13/10/2024  16:03    <DIR>          meta
+13/10/2024  15:34    <DIR>          META-INF
+               6 Dir(s)  485,913,133,056 bytes free
+
+c:\montarre> bin\montarre.bat
+MONTARRE_HOME is unset
+
+c:\montarre> set MONTARRE_HOME=c:\montarre
+
+c:\montarre> bin\montarre.bat
+montarre: usage: montarre [command] [arguments ...]
+
+  The montarre command-line application.
+...
+]]></Verbatim>
+    </FormalItem>
+    <Paragraph>
+      As an example, the batch file generated for the <Term type="package">montarre</Term> application looks like
+      this:
+    </Paragraph>
+    <FormalItem title="Example Batch File">
+      <Verbatim><xi:include href="pkg-shell-batch.txt" parse="text"/></Verbatim>
+    </FormalItem>
+  </Subsection>
+
+  <Subsection title="Shell Script"
+              id="4b242e71-a7bb-447f-b742-6b70e2da1e2e">
+    <Paragraph>
+      The <Term type="term">shell</Term> distribution contains a POSIX <Term type="term">bourne shell script</Term> that
+      can be used to execute the application on POSIX-like platforms. The shell script is generated based on the
+      Java version requirement given in the input package, and the short name of the application. The short name
+      is converted to uppercase and suffixed with the string <Term type="constant">_HOME</Term> to produce the
+      name of an environment variable that will be consulted to find the location of the unpacked distribution.
+      For example, in an application named <Term type="package">montarre</Term>, the environment variable named
+      <Term type="constant">MONTARRE_HOME</Term> will be consulted and is expected to contain the full path to
+      the unpacked <Term type="term">shell</Term> distribution. The application would therefore be executed as
+      follows:
+    </Paragraph>
+    <FormalItem title="Example Batch">
+      <Verbatim><![CDATA[
+$ cd montarre
+
+$ ls
+META-INF  bin  lib  meta
+
+$ ./bin/montarre
+MONTARRE_HOME is unset
+
+$ export MONTARRE_HOME=$(realpath .)
+
+$ ./bin/montarre
+montarre: usage: montarre [command] [arguments ...]
+
+  The montarre command-line application.
+...
+]]></Verbatim>
+    </FormalItem>
+    <Paragraph>
+      As an example, the shell script generated for the <Term type="package">montarre</Term> application looks like
+      this:
+    </Paragraph>
+    <FormalItem title="Example Shell Script">
+      <Verbatim><xi:include href="pkg-shell-sh.txt" parse="text"/></Verbatim>
+    </FormalItem>
+  </Subsection>
+
+  <Subsection title="Launch Jar"
+              id="2d44fc22-6a6e-4f0b-9920-73743043cc27">
+    <Subsection title="Overview">
+      <Paragraph>
+        The <Term type="term">launch jar</Term> is a tiny <Term type="file">jar</Term> file that exposes
+        a command-line interface to perform some necessary startup tasks in a platform-independent manner.
+      </Paragraph>
+      <Paragraph>
+        The <Term type="term">launch jar</Term> is compiled as JDK 9 bytecode and is not supported on systems
+        running Java versions older than that.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="Get-Arch">
+      <Paragraph>
+        The <Term type="command">Get-Arch</Term> command returns the name of the current hardware architecture.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+$ java -jar bin/launch.jar Get-Arch
+x86_64
+
+C:> java -jar bin\launch.jar Get-Arch
+x86_64
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Get-OS">
+      <Paragraph>
+        The <Term type="command">Get-OS</Term> command returns the name of the current operating system.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+$ java -jar bin/launch.jar Get-OS
+linux
+
+C:> java -jar bin\launch.jar Get-OS
+windows
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Check-Java-Version">
+      <Paragraph>
+        The <Term type="command">Check-Java-Version</Term> command checks to see if the current Java runtime
+        version is greater than or equal to the provided major version argument. If the current Java runtime version
+        is sufficient, the command says nothing.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+$ java --version
+openjdk 21.0.4 2024-07-16
+OpenJDK Runtime Environment (build 21.0.4+7)
+OpenJDK 64-Bit Server VM (build 21.0.4+7, mixed mode, sharing)
+
+$ java -jar bin/launch.jar Check-Java-Version 21
+
+$ java -jar bin/launch.jar Check-Java-Version 11
+
+$ java -jar bin/launch.jar Check-Java-Version 22
+Exception in thread "main" java.lang.RuntimeException: At least Java 22 is required, but this Java runtime is version 21.0.4+7
+	at com.io7m.montarre.launchstub.MLSMain.doCheckJava(MLSMain.java:102)
+	at com.io7m.montarre.launchstub.MLSMain.main(MLSMain.java:70)
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Get-Module-Path">
+      <Paragraph>
+        The <Term type="command">Get-Module-Path</Term> command constructs a module path given a base directory.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+$ java -jar bin/launch.jar Get-Module-Path /example
+/example/lib:/example/lib/x86_64/linux
+
+C:> java -jar bin\launch.jar Get-Module-Path c:\example
+c:\example\lib;c:\example\lib\x86_64\windows
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
+  <Footnote id="1f53a22f-8574-4dd1-9834-6632e1d91e28">
+    The <Term type="file">tar</Term> format is used because it is necessary to preserve the executable permissions on
+    files in the archive when running in POSIX-like systems. The more common <Term type="file">zip</Term> format does
+    not contain a standard mechanism to preserve this information.
+  </Footnote>
+
+</Section>

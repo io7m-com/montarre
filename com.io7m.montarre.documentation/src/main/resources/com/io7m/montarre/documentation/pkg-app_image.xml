@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section title="com.io7m.montarre.app_image"
+         xmlns="urn:com.io7m.structural:8:0"
+         id="284bfca8-7cee-4bc0-a654-af8582e1906d">
+  <Subsection title="Overview">
+    <Paragraph>
+      Create <Term type="package">jpackage</Term> "app image" executables.
+    </Paragraph>
+  </Subsection>
+</Section>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section title="com.io7m.montarre.deb"
+         xmlns="urn:com.io7m.structural:8:0"
+         id="093a873f-4488-495b-b154-f822934edb98">
+  <Subsection title="Overview">
+    <Paragraph>
+      Create <LinkExternal target="https://www.debian.org">Debian</LinkExternal> packages.
+    </Paragraph>
+  </Subsection>
+</Section>

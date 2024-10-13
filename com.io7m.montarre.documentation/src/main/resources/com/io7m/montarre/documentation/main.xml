@@ -23,6 +23,7 @@
   <xi:include href="usage.xml"/>
   <xi:include href="maven.xml"/>
   <xi:include href="cmdline.xml"/>
+  <xi:include href="packagers.xml"/>
   <xi:include href="specification.xml"/>
 
 </Document>

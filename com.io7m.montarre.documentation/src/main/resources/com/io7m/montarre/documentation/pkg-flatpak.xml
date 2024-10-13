@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Section title="com.io7m.montarre.flatpak"
+         xmlns="urn:com.io7m.structural:8:0"
+         id="ded1ac99-9556-4ef9-b01f-3f689a164733">
+  <Subsection title="Overview">
+    <Paragraph>
+      Create <LinkExternal target="https://www.flatpak.org">Flatpaks</LinkExternal>.
+    </Paragraph>
+  </Subsection>
+</Section>
