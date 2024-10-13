@@ -15,14 +15,14 @@
  */
 
 
-package com.io7m.montarre.cmdline.internal;
+package com.io7m.montarre.nativepack.internal.msi;
 
 import com.io7m.seltzer.api.SStructuredErrorType;
 import org.slf4j.Logger;
 
-final class MCSLogging
+final class MNSLogging
 {
-  private MCSLogging()
+  private MNSLogging()
   {
 
   }

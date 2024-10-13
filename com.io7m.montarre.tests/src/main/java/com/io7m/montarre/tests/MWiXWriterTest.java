@@ -28,6 +28,7 @@ import com.io7m.montarre.api.natives.MNativeWorkspaceType;
 import com.io7m.montarre.io.MPackageReaders;
 import com.io7m.montarre.nativepack.MNWorkspaces;
 import com.io7m.montarre.nativepack.MNativeProcesses;
+import com.io7m.montarre.nativepack.MWiXValidators;
 import com.io7m.montarre.nativepack.MWiXWriters;
 import com.io7m.montarre.nativepack.internal.deb.MNPackagerDebProvider;
 import org.junit.jupiter.api.AfterEach;
@@ -48,9 +49,11 @@ import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public final class MWiXWriterTest
@@ -123,23 +126,15 @@ public final class MWiXWriterTest
   {
     LOG.debug("Validating: {}", new String(byteArray, StandardCharsets.UTF_8));
 
-    final var schemaPath =
-      schemaDir.resolve("wix.xsd");
+    final var file =
+      schemaDir.resolve("out.xml");
 
-    this.resource("wix.xsd", schemaPath);
+    Files.write(file, byteArray);
 
-    final var factory =
-      SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-    final var schemaFile =
-      new StreamSource(Files.newInputStream(schemaPath));
-    final var schema =
-      factory.newSchema(schemaFile);
-    final var validator =
-      schema.newValidator();
-
-    validator.validate(
-      new StreamSource(new ByteArrayInputStream(byteArray))
-    );
+    final var validators = new MWiXValidators();
+    try (final var validator = validators.create(file)) {
+      assertEquals(List.of(), validator.execute());
+    }
   }
 
   private void resource(

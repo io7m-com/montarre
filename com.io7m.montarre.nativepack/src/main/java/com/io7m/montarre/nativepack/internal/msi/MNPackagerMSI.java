@@ -25,12 +25,15 @@ import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceType;
 import com.io7m.montarre.api.natives.MNativeProcessesType;
 import com.io7m.montarre.api.natives.MNativeWorkspaceType;
+import com.io7m.montarre.nativepack.MWiXValidators;
 import com.io7m.montarre.nativepack.MWiXWriters;
 import com.io7m.montarre.nativepack.internal.MNPackagerAbstract;
 import com.io7m.montarre.nativepack.internal.app_image.MNPackagerAppImage;
 import com.io7m.montarre.nativepack.internal.app_image.MNPackagerAppImageProvider;
 import com.io7m.seltzer.api.SStructuredError;
 import com.io7m.seltzer.api.SStructuredErrorType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -49,6 +52,9 @@ public final class MNPackagerMSI
   extends MNPackagerAbstract
   implements MNativePackagerServiceType
 {
+  private static final Logger LOG =
+    LoggerFactory.getLogger(MNPackagerMSI.class);
+
   private final MNativeProcessesType processes;
 
   /**
@@ -133,6 +139,7 @@ public final class MNPackagerMSI
 
     final var wixWriters =
       new MWiXWriters();
+
     final var wixDirectory =
       workspace.createWorkDirectory();
 
@@ -151,6 +158,8 @@ public final class MNPackagerMSI
     } catch (final IOException e) {
       throw this.error(e);
     }
+
+    this.validateWiX(wixXML);
 
     final var outputName =
       msiName(workspace, packageV.packageDeclaration().metadata());
@@ -175,6 +184,36 @@ public final class MNPackagerMSI
     }
 
     return msiOut;
+  }
+
+  private void validateWiX(
+    final Path file)
+    throws MException
+  {
+    final var wixValidators = new MWiXValidators();
+    try (final var validator = wixValidators.create(file)) {
+      final var errors = validator.execute();
+      if (errors.isEmpty()) {
+        return;
+      }
+
+      for (final var error : errors) {
+        switch (error.kind()) {
+          case WARNING -> {
+            MNSLogging.logStructuredWarning(LOG, error);
+          }
+          case ERROR -> {
+            MNSLogging.logStructuredError(LOG, error);
+          }
+        }
+      }
+
+      throw new MException(
+        "One or more WiX validation errors occurred.",
+        "error-wix-internal",
+        Map.ofEntries()
+      );
+    }
   }
 
   private static String msiName(
