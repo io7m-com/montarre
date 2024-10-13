@@ -5,7 +5,24 @@
          id="284bfca8-7cee-4bc0-a654-af8582e1906d">
   <Subsection title="Overview">
     <Paragraph>
-      Create <Term type="package">jpackage</Term> "app image" executables.
+      The <Term type="module">com.io7m.montarre.app_image</Term> packager creates
+      <Term type="package">jpackage</Term> "app image" executables.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Description">
+    <Paragraph>
+      The <Term type="module">com.io7m.montarre.app_image</Term> packager takes a
+      <Term type="package">montarre</Term>
+      package and produces a platform-specific <Term type="term">app image</Term> distribution using
+      the <Term type="command">jpackage</Term> tool.
+    </Paragraph>
+    <Paragraph>
+      The output of the <Term type="module">com.io7m.montarre.app_image</Term> packager is typically used as
+      input to other platform-specific packagers such as
+      <Link target="093a873f-4488-495b-b154-f822934edb98">com.io7m.montarre.deb</Link>
+      and
+      <Link target="c45b5bb5-e7a7-4b7d-90f0-7b08869c6de3">com.io7m.montarre.msi</Link>, amongst others.
     </Paragraph>
   </Subsection>
 </Section>

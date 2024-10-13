@@ -1,9 +1,364 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Section title="Specification"
+<Section title="Package Format 1 Specification"
          xmlns="urn:com.io7m.structural:8:0"
          id="72b44499-f0cb-4d2a-96dd-ebb02985976c">
-  <Paragraph>
-    Specification...
-  </Paragraph>
+
+  <Subsection title="Overview">
+    <Paragraph>
+      This section specifies the format of version
+      <Term type="constant">1</Term>
+      <Term type="package">montarre</Term>
+      <Term type="term">packages</Term>.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Package">
+    <Paragraph>
+      A <Term type="package">montarre</Term> package contains a single
+      <Term type="term">package declaration</Term>
+      which specifies <Link target="6a83334c-e6e4-4c6d-ac6a-869cc1186815">metadata</Link> and a
+      <Link target="2ca47572-5e33-43ba-94ba-1902b3c6ba2f">manifest</Link>.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Language"
+              id="da316988-7a2e-4244-aa10-d705bbb31ec1">
+    <Paragraph>
+      A <Term type="term">language</Term> value is an
+      <LinkExternal target="https://en.wikipedia.org/wiki/IETF_language_tag">IETF BCP 47</LinkExternal>
+      language tag identifying a language.
+    </Paragraph>
+    <Paragraph>
+      Example <Term type="term">language</Term> values include: <Term type="constant">"en"</Term>,
+      <Term type="constant">yi-Hebr</Term>, <Term type="constant">gsw-u-sd-chzh</Term>.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="TranslatedText"
+              id="151036fc-5d1f-45b9-8019-3209f9aaff17">
+    <Paragraph>
+      A <Term type="term">translated text</Term> value is a record consisting of a piece of
+      <Term type="term">text</Term>
+      in a specified <Link target="da316988-7a2e-4244-aa10-d705bbb31ec1">language</Link>, along with a map consisting of
+      translations of that text indexed by language.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Metadata"
+              id="6a83334c-e6e4-4c6d-ac6a-869cc1186815">
+    <Subsection title="ApplicationKind"
+                id="cfe0fbb2-5d64-422c-a946-4b907ae94d32">
+      <Paragraph>
+        The <Term type="term">application kind</Term> of a package is one of the following values:
+      </Paragraph>
+      <FormalItem title="ApplicationKind">
+        <Table type="genericTable">
+          <Columns>
+            <Column>Value</Column>
+            <Column>Description</Column>
+          </Columns>
+          <Row>
+            <Cell>
+              <Term type="constant">CONSOLE</Term>
+            </Cell>
+            <Cell>The application is a text-only console application.</Cell>
+          </Row>
+          <Row>
+            <Cell>
+              <Term type="constant">GRAPHICAL</Term>
+            </Cell>
+            <Cell>The application is a graphical application.</Cell>
+          </Row>
+        </Table>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="Categories"
+                id="2b3ad869-c6d0-416a-9413-a3f74ad6c570">
+      <Paragraph>
+        A <Term type="term">category</Term> is a string conforming to the regular expression
+        <Term type="constant">[A-Z][A-Za-z0-9_-]{0,128}</Term>. A package has zero or more
+        <Term type="term">categories</Term>.
+      </Paragraph>
+      <Paragraph>
+        Categories should be taken from the
+        <LinkExternal target="https://specifications.freedesktop.org/menu-spec/latest/category-registry.html">
+          Freedesktop.org category registry</LinkExternal>.
+      </Paragraph>
+      <Paragraph>
+        Example <Term type="term">category</Term> values include:
+        <Term type="constant">"Building"</Term>, <Term type="constant">"Development"</Term>.
+      </Paragraph>
+    </Subsection>
+
+    <Subsection title="Copying"
+                id="8fa9f20d-606a-405b-a949-44ae095ebe78">
+      <Subsection title="Overview">
+        <Paragraph>
+          The <Term type="term">copying</Term> information for a package is a record consisting of a
+          <Link target="e70ae0d3-b750-4672-a449-dc16c12e9c6c">license</Link>
+          and a
+          <Link target="475543ef-72ec-4287-96e3-ed9081b224d9">copyright</Link>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="License"
+                  id="e70ae0d3-b750-4672-a449-dc16c12e9c6c">
+        <Paragraph>
+          A <Term type="term">license</Term> is an
+          <LinkExternal target="https://spdx.org/licenses/">SPDX</LinkExternal>
+          license identifier denoting the license of the package.
+        </Paragraph>
+        <Paragraph>
+          Example <Term type="term">license</Term> values include:
+          <Term type="constant">"ISC"</Term>, <Term type="constant">"Apache-2.0"</Term>,
+          <Term type="constant">"BSD-3-Clause"</Term>, <Term type="constant">"GPL-3.0-or-later"</Term>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Copyright"
+                  id="475543ef-72ec-4287-96e3-ed9081b224d9">
+        <Paragraph>
+          A <Term type="term">copyright</Term> is a simple copyright string that indicates the current holder of the
+          copyright on the package.
+        </Paragraph>
+        <Paragraph>
+          An example <Term type="term">copyright</Term> value is:
+          <Term type="constant">"Copyright © 2024 Mark Raynsford &lt;code@io7m.com&gt; https://www.io7m.com"</Term>.
+        </Paragraph>
+      </Subsection>
+    </Subsection>
+
+    <Subsection title="Description"
+                id="21e8ab90-fcf4-4d1d-96aa-01c2ce7d1af0">
+      <Paragraph>
+        A <Term type="term">description</Term> is a short
+        <Link target="151036fc-5d1f-45b9-8019-3209f9aaff17">translated text</Link>
+        that provides a summary of the package.
+      </Paragraph>
+    </Subsection>
+
+    <Subsection title="Flatpak"
+                id="214852c9-31df-48fc-b7ab-986a97b30f32">
+      <Paragraph>...</Paragraph>
+    </Subsection>
+
+    <Subsection title="JavaInfo"
+                id="f55a177d-e226-49d8-a78d-41dae66e1710">
+      <Subsection title="Overview">
+        <Paragraph>
+          The <Term type="term">java info</Term> information for a package is a record consisting of a
+          <Link target="8b2d6ace-8cda-45bc-9cf4-59e6d47b7f94">required JDK version</Link>
+          and a
+          <Link target="0c2456eb-bc8f-4a7c-9148-bcb4c5369824">main module</Link>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Required JDK Version"
+                  id="8b2d6ace-8cda-45bc-9cf4-59e6d47b7f94">
+        <Paragraph>
+          The <Term type="term">required JDK version</Term> specifies the lower bound of the major version of the Java
+          runtime required to use this package.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Main Module"
+                  id="0c2456eb-bc8f-4a7c-9148-bcb4c5369824">
+        <Paragraph>
+          The <Term type="term">main module</Term> specifies the fully-qualified name of the application's
+          <Term type="term">main class</Term>.
+        </Paragraph>
+        <Paragraph>
+          An example <Term type="term">main module</Term> value is:
+          <Term type="constant">"com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain"</Term>.
+        </Paragraph>
+      </Subsection>
+    </Subsection>
+
+    <Subsection title="Links"
+                id="5d729983-f47e-4bdb-90ce-70c98a4ddea4">
+      <Subsection title="Overview">
+        <Paragraph>
+          A <Term type="term">link</Term> is a
+          <Term type="term">target</Term>
+          reference to an external website or entity, along with a
+          <Term type="term">role</Term>
+          describing the relationship between that entity and the package.
+        </Paragraph>
+        <Paragraph>
+          The <Term type="term">target</Term> of a link must be a valid
+          <LinkExternal target="https://datatracker.ietf.org/doc/html/rfc3986">RFC 3986 URI</LinkExternal>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Roles">
+        <Paragraph>
+          A <Term type="term">role</Term> is one of the following values:
+        </Paragraph>
+        <FormalItem title="Role Values">
+          <Table type="genericTable">
+            <Columns>
+              <Column>Value</Column>
+              <Column>Description</Column>
+            </Columns>
+            <Row>
+              <Cell>ISSUES</Cell>
+              <Cell>A link to an issue tracker.</Cell>
+            </Row>
+            <Row>
+              <Cell>HOME_PAGE</Cell>
+              <Cell>A link to a home page.</Cell>
+            </Row>
+            <Row>
+              <Cell>DONATION</Cell>
+              <Cell>A link to a donation page.</Cell>
+            </Row>
+            <Row>
+              <Cell>CONTACT</Cell>
+              <Cell>A link to a contact page.</Cell>
+            </Row>
+            <Row>
+              <Cell>FAQ</Cell>
+              <Cell>A link to an FAQ page.</Cell>
+            </Row>
+            <Row>
+              <Cell>TRANSLATE</Cell>
+              <Cell>A link to a translation page.</Cell>
+            </Row>
+            <Row>
+              <Cell>CONTRIBUTE</Cell>
+              <Cell>A link to a contribution page.</Cell>
+            </Row>
+            <Row>
+              <Cell>SCM</Cell>
+              <Cell>A link to an SCM repository.</Cell>
+            </Row>
+          </Table>
+        </FormalItem>
+      </Subsection>
+    </Subsection>
+
+    <Subsection title="LongDescription"
+                id="fe91e28e-d080-47b3-9349-0e87c7e52768">
+      <Paragraph>...</Paragraph>
+    </Subsection>
+
+    <Subsection title="Names"
+                id="9fe543a3-7375-415e-be9f-35b1fa3712bb">
+      <Subsection title="Overview">
+        <Paragraph>
+          The <Term type="term">names</Term> information for a package is a record consisting of a set of different
+          types of names for the package.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Package Name"
+                  id="9d02d402-92ae-4267-be43-1ebb08e8e1bc">
+        <Paragraph>
+          The <Term type="term">package name</Term> is a unique identifier for the package, specified as a
+          <LinkExternal target="https://www.io7m.com/software/lanark/">Lanark</LinkExternal>
+          dotted string.
+        </Paragraph>
+        <Paragraph>
+          Example <Term type="term">package name</Term> values include:
+          <Term type="constant">"com.io7m.montarre"</Term>, <Term type="constant">"com.io7m.lanark"</Term>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Human Name"
+                  id="2d10beff-a279-4bad-8129-a1176fe9e9b7">
+        <Paragraph>
+          The <Term type="term">human name</Term> is a friendly, human-readable name for the package.
+        </Paragraph>
+        <Paragraph>
+          An example <Term type="term">human name</Term> value is
+          <Term type="constant">"Montarre"</Term>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Short Name"
+                  id="60d790cb-85b9-48fc-9211-47241747042b">
+        <Paragraph>
+          The <Term type="term">short name</Term> is a filesystem-safe name conforming to the regular
+          expression <Term type="constant">[a-z][a-z0-9_-]{0,128}</Term>.
+        </Paragraph>
+        <Paragraph>
+          An example <Term type="term">short name</Term> value is
+          <Term type="constant">"montarre"</Term>.
+        </Paragraph>
+      </Subsection>
+    </Subsection>
+
+    <Subsection title="Vendor"
+                id="4c7f8ebe-c8ce-46d9-9f6b-7923eb2eb230">
+      <Subsection title="Overview">
+        <Paragraph>
+          The <Term type="term">vendor</Term> information for a package is a record consisting of a vendor
+          <Link target="e3f64de8-3f2a-4926-b07e-cd9101c39d83">name</Link> and a unique vendor
+          <Link target="eda0dc2a-9037-4957-8383-63042647cf80">ID</Link>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Name" id="e3f64de8-3f2a-4926-b07e-cd9101c39d83">
+        <Paragraph>
+          The <Term type="term">vendor name</Term> is the humanly-readable name of the vendor of the package.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="ID" id="eda0dc2a-9037-4957-8383-63042647cf80">
+        <Paragraph>
+          The <Term type="term">vendor ID</Term> is a unique identifier for the vendor of the package, specified as a
+          <LinkExternal target="https://www.io7m.com/software/lanark/">Lanark</LinkExternal>
+          dotted string.
+        </Paragraph>
+        <Paragraph>
+          Example <Term type="term">vendor ID</Term> values include:
+          <Term type="constant">"com.io7m"</Term>, <Term type="constant">"com.example"</Term>.
+        </Paragraph>
+      </Subsection>
+    </Subsection>
+
+    <Subsection title="Version"
+                id="620d80a0-8d4c-4634-8c0a-662d9a774348">
+      <Subsection title="Overview">
+        <Paragraph>
+          The <Term type="term">version</Term> information for a package is a record consisting of a version
+          <Link target="e3f64de8-3f2a-4926-b07e-cd9101c39d83">name</Link> and a version/release
+          <Link target="eda0dc2a-9037-4957-8383-63042647cf80">date</Link>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Number" id="06fa0349-3cc9-4415-b481-4cb3c8b4c255">
+        <Paragraph>
+          The <Term type="term">version number</Term> is the
+          <LinkExternal target="https://semver.org">semantic version</LinkExternal> of the package.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Date" id="13c94835-6e40-4199-b89a-f88d35bbcfca">
+        <Paragraph>
+          The <Term type="term">version date</Term> is an
+          <LinkExternal target="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601</LinkExternal>
+          date string denoting the release date of this version of the package.
+        </Paragraph>
+        <Paragraph>
+          Example <Term type="term">version date</Term> values include:
+          <Term type="constant">"2024-10-13"</Term>, <Term type="constant">"2001-01-23"</Term>.
+        </Paragraph>
+      </Subsection>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="Manifest"
+              id="2ca47572-5e33-43ba-94ba-1902b3c6ba2f">
+    <Subsection title="Modules"
+                id="343e1ca0-5714-415f-a2dc-4d34eafbe7cb">
+      <Paragraph>...</Paragraph>
+    </Subsection>
+    <Subsection title="PlatformModules"
+                id="3a3abed4-762e-4416-8bdf-854b62eada11">
+      <Paragraph>...</Paragraph>
+    </Subsection>
+    <Subsection title="Resources"
+                id="880bd7bb-8e17-4bad-88e4-7890b4bf6288">
+      <Paragraph>...</Paragraph>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="Serialization"
+              id="79f206ac-7d1c-41b9-86f9-f8478237e311">
+    <Paragraph>
+      ...
+    </Paragraph>
+  </Subsection>
+
 </Section>

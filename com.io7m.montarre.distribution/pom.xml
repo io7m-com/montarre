@@ -157,6 +157,12 @@
                   <role>SCREENSHOT</role>
                   <file>${project.basedir}/src/main/meta/screenshot.png</file>
                   <entryName>screenshot.png</entryName>
+                  <captions>
+                    <caption>
+                      <language>en</language>
+                      <text>The main command-line entry point.</text>
+                    </caption>
+                  </captions>
                 </resource>
                 <resource>
                   <role>ICO_WINDOWS</role>

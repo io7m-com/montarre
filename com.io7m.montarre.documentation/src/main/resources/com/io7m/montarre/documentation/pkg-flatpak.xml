@@ -5,7 +5,8 @@
          id="ded1ac99-9556-4ef9-b01f-3f689a164733">
   <Subsection title="Overview">
     <Paragraph>
-      Create <LinkExternal target="https://www.flatpak.org">Flatpaks</LinkExternal>.
+      The <Term type="module">com.io7m.montarre.flatpak</Term> packager creates
+      <LinkExternal target="https://www.flatpak.org">Flatpaks</LinkExternal>.
     </Paragraph>
   </Subsection>
 </Section>

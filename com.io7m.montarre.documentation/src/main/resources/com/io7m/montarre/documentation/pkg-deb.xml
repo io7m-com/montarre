@@ -5,7 +5,8 @@
          id="093a873f-4488-495b-b154-f822934edb98">
   <Subsection title="Overview">
     <Paragraph>
-      Create <LinkExternal target="https://www.debian.org">Debian</LinkExternal> packages.
+      The <Term type="module">com.io7m.montarre.deb</Term> packager creates
+      <LinkExternal target="https://www.debian.org">Debian</LinkExternal> packages.
     </Paragraph>
   </Subsection>
 </Section>
