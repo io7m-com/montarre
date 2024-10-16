@@ -3,10 +3,12 @@
 <Section title="com.io7m.montarre.app_image"
          xmlns="urn:com.io7m.structural:8:0"
          id="284bfca8-7cee-4bc0-a654-af8582e1906d">
+
   <Subsection title="Overview">
     <Paragraph>
       The <Term type="module">com.io7m.montarre.app_image</Term> packager creates
-      <Term type="package">jpackage</Term> "app image" executables.
+      <Term type="package">jpackage</Term>
+      "app image" executables.
     </Paragraph>
   </Subsection>
 
@@ -14,15 +16,41 @@
     <Paragraph>
       The <Term type="module">com.io7m.montarre.app_image</Term> packager takes a
       <Term type="package">montarre</Term>
-      package and produces a platform-specific <Term type="term">app image</Term> distribution using
-      the <Term type="command">jpackage</Term> tool.
+      package and produces a platform-specific <Term type="term">app image</Term> distribution using the
+      <Term type="command">jpackage</Term>
+      tool.
     </Paragraph>
     <Paragraph>
-      The output of the <Term type="module">com.io7m.montarre.app_image</Term> packager is typically used as
-      input to other platform-specific packagers such as
+      The output of the <Term type="module">com.io7m.montarre.app_image</Term> packager is typically used as input to
+      other platform-specific packagers such as
       <Link target="093a873f-4488-495b-b154-f822934edb98">com.io7m.montarre.deb</Link>
       and
       <Link target="c45b5bb5-e7a7-4b7d-90f0-7b08869c6de3">com.io7m.montarre.msi</Link>, amongst others.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Outputs">
+    <Paragraph>
+      Given a <Link target="9d02d402-92ae-4267-be43-1ebb08e8e1bc">package name</Link>,
+      <Link target="06fa0349-3cc9-4415-b481-4cb3c8b4c255">version number</Link>,
+      <Link target="93e7d41c-b41f-4731-9393-6790cec2e9aa">architecture name</Link>, and
+      <Link target="cff1dbc4-6f3d-4d39-9e64-7e293649bed3">operating system name</Link>, the output of the packager will
+      be one of the following:
+    </Paragraph>
+    <FormalItem title="Outputs">
+      <ListUnordered>
+        <Item>
+          <Term type="file">${PACKAGE_NAME}-${PACKAGE_VERSION}-${ARCH_NAME}-${OS_NAME}.zip</Term>
+          on Windows-like platforms.
+        </Item>
+        <Item>
+          <Term type="file">${PACKAGE_NAME}-${PACKAGE_VERSION}-${ARCH_NAME}-${OS_NAME}.tgz</Term>
+          on POSIX-like platforms.
+        </Item>
+      </ListUnordered>
+    </FormalItem>
+    <Paragraph>
+      An example output of the packager is <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.tgz</Term>.
     </Paragraph>
   </Subsection>
 </Section>

@@ -32,13 +32,38 @@ Module StringMaps : FMapInterface.WS
   with Definition E.eq := @Logic.eq string
 := FMapWeakList.Make StringDec.
 
+(** The opaque, abstract type of regular expressions. *)
+Parameter RegularExpressionT : string -> Set.
+
+(** For the sake of specification simplicity, we assume that all
+    strings are valid regular expressions. *)
+Parameter regex : forall (s : string), RegularExpressionT s.
+
+(** A proposition that states that a given regular expression
+    matches a given string. *)
+Parameter matches : forall (s : string) {e : string},
+  RegularExpressionT e -> Prop.
+
+(** Whether a string matches a regular expression is decidable. *)
+Parameter matchesDecidable : forall 
+  (s : string)
+  {e : string}
+  (r : RegularExpressionT e),
+    {matches s r}+{~matches s r}.
+
+Definition lanarkDottedString :=
+  forall (s : string),
+    matches s (regex "([a-z][a-z0-9_-]{0,63})(\.[a-z][a-z0-9_-]{0,62}){0,15}").
+
 Inductive ApplicationKindT :=
   | CONSOLE
   | GRAPHICAL
   .
 
-Definition CategoryT :=
-  string.
+Inductive CategoryT :=
+  Category : forall (s : string),
+    matches s (regex "[A-Z][A-Za-z0-9_-]{0,128}")
+      -> CategoryT.
 
 Definition LicenseT :=
   string.
@@ -90,11 +115,13 @@ Inductive LinkT := Link {
   linkTarget : string
 }.
 
-Definition VendorNameT :=
-  string.
+Inductive VendorNameT :=
+  VendorName : forall (s : string),
+    matches s (regex "[a-zA-Z][A-Za-z0-9_-]{0,128}")
+      -> VendorNameT.
 
 Definition VendorIDT :=
-  string.
+  lanarkDottedString.
 
 Inductive VendorT := Vendor {
   vendorId   : VendorIDT;
@@ -108,8 +135,10 @@ Inductive VersionNumberT := VersionNumber {
   qualifier : option string
 }.
 
-Definition VersionDateT :=
-  string.
+Inductive VersionDateT :=
+  VersionDate : forall (s : string),
+    matches s (regex "[0-9]{4}-[0-9]{2}-[0-9]{2}")
+      -> VersionDateT.
 
 Inductive VersionT := Version {
   versionNumber : VersionNumberT;
@@ -148,10 +177,12 @@ Inductive FlatpakT := Flatpak {
 }.
 
 Definition PackageNameT :=
-  string.
+  lanarkDottedString.
 
-Definition ShortNameT :=
-  string.
+Inductive ShortNameT :=
+  ShortName : forall (s : string),
+    matches s (regex "[a-z][a-z0-9_-]{0,128}")
+      -> ShortNameT.
 
 Definition HumanNameT :=
   string.
@@ -175,4 +206,111 @@ Inductive MetadataT := Metadata {
   metaVendor           : VendorT;
   metaVersion          : VersionT
 }.
+
+Definition HashAlgorithmT :=
+  string.
+
+Inductive HashValueT :=
+  HashValue : forall (s : string),
+    matches s (regex "[a-f0-9]{2,256}")
+      -> HashValueT.
+
+Inductive HashT := Hash {
+  hashAlgorithm : HashAlgorithmT;
+  hashValue     : HashValueT
+}.
+
+Inductive ArchitectureNameT :=
+  ArchitectureName : forall (s : string),
+    matches s (regex "[a-z][a-z0-9_-]{0,32}")
+      -> ArchitectureNameT.
+
+Inductive OperatingSystemNameT :=
+  OperatingSystemName : forall (s : string),
+    matches s (regex "[a-z][a-z0-9_-]{0,32}")
+      -> OperatingSystemNameT.
+
+Inductive PlatformT := Platform {
+  platformArch : ArchitectureNameT;
+  platformOS   : OperatingSystemNameT
+}.
+
+(** A function that produces an uppercase version of the given string. *)
+Parameter uppercaseOf : string -> string.
+
+Definition uppercaseSame (s t : string) :=
+  uppercaseOf s = uppercaseOf t.
+
+Inductive FileNameT :=
+  FileName : forall (s : string),
+    matches s (regex "([\p{L}\p{N}_\-.+]+)(/[\p{L}\p{N}_\-.+]+)*")
+      -> FileNameT.
+
+(** A proposition that states that two file names are the same if their
+    uppercase transformations are the same. *)
+Definition fileNamesSame (s t : FileNameT) :=
+  match s, t with
+  | FileName fs _, FileName ft _ => uppercaseSame fs ft
+  end.
+
+Inductive ResourceRoleT :=
+  | BOM
+  | LICENSE
+  | ICO_WINDOWS
+  | ICON_16
+  | ICON_24
+  | ICON_32
+  | ICON_48
+  | ICON_64
+  | ICON_128
+  | ICON_256
+  | ICON_512
+  | ICON_SVG
+  | SCREENSHOT
+  .
+
+Definition CaptionT :=
+  TranslatedTextT.
+
+Inductive ModuleT :=
+  Module : FileNameT -> HashT -> ModuleT.
+
+Inductive PlatformModuleT :=
+  PlatformModule : FileNameT -> HashT -> PlatformT -> PlatformModuleT.
+
+Inductive ResourceT :=
+  Resource : FileNameT -> HashT -> ResourceRoleT -> CaptionT -> ResourceT.
+
+Inductive ItemT :=
+  | ItemModule         : ModuleT         -> ItemT
+  | ItemPlatformModule : PlatformModuleT -> ItemT
+  | ItemResource       : ResourceT       -> ItemT
+  .
+
+Definition itemFileName (i : ItemT) : FileNameT :=
+  match i with
+  | ItemModule         (Module f _)           => f
+  | ItemPlatformModule (PlatformModule f _ _) => f
+  | ItemResource       (Resource f _ _ _)     => f
+  end.
+
+Definition itemHash (i : ItemT) : HashT :=
+  match i with
+  | ItemModule         (Module _ h)           => h
+  | ItemPlatformModule (PlatformModule _ h _) => h
+  | ItemResource       (Resource _ h _ _)     => h
+  end.
+
+Inductive ManifestT := Manifest {
+  manifestItems : list ItemT
+}.
+
+Definition manifesItemsFilenamesUnique :=
+  forall (m : ManifestT),
+    forall (i0 : ItemT),
+      In i0 (manifestItems m)
+        -> ~(exists i1 : ItemT,
+               (In i1 (manifestItems m))
+            /\ (i0 <> i1)
+            /\ (fileNamesSame (itemFileName i0) (itemFileName i1))).
 

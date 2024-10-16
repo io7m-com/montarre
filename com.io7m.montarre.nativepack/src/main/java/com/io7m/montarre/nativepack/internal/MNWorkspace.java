@@ -76,7 +76,7 @@ public final class MNWorkspace implements MNativeWorkspaceType
     LoggerFactory.getLogger(MNWorkspace.class);
 
   private static final Instant SOURCE_EPOCH =
-    Instant.parse("2010-01-01T00:00:00+00:00");
+    Instant.parse("2024-10-14T00:00:00+00:00");
   private static final FileTime SOURCE_EPOCH_FILETIME =
     FileTime.from(SOURCE_EPOCH);
   private static final HexFormat HEX =

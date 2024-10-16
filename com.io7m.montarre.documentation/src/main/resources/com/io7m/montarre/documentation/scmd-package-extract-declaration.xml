@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Section xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="675cf408-a5da-3cb5-9bee-34d73e6a0f21"
+         title="package extract-declaration"
+         xmlns="urn:com.io7m.structural:8:0">
+  <Subsection title="Name">
+    <Paragraph>
+      <Term type="command">package extract-declaration</Term>
+      - Extract a package declaration from a file without validation.
+    </Paragraph>
+  </Subsection>
+  <Subsection title="Description">
+    <Paragraph>
+      The
+      <Term type="command">package extract-declaration</Term>
+      command prints the
+      <Link target="e518631a-c925-4623-be95-b0f1aaca2ef9">serialized package declaration</Link>
+      from the given package file.
+    </Paragraph>
+  </Subsection>
+  <xi:include href="scmd-package-extract-declaration-parameters.xml"/>
+  <Subsection title="Examples">
+    <FormalItem title="Example"
+                type="example">
+      <Verbatim><![CDATA[
+$ montarre package extract-declaration --file com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk
+<Package xmlns="urn:com.io7m.montarre.package:1">
+    <Metadata ApplicationKind="CONSOLE">
+        <Category Name="Building"></Category>
+...
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+</Section>
+

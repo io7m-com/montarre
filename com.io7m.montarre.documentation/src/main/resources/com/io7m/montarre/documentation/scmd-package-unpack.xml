@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Section xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="6c9e9eb8-c575-3ed5-9c16-554577361284"
+         title="package unpack"
+         xmlns="urn:com.io7m.structural:8:0">
+  <Subsection title="Name">
+    <Paragraph>
+      <Term type="command">package unpack</Term>
+      - Unpack a package file.
+    </Paragraph>
+  </Subsection>
+  <Subsection title="Description">
+    <Paragraph>
+      The
+      <Term type="command">package unpack</Term>
+      command unpacks every file from the given package file.
+    </Paragraph>
+    <Paragraph>
+      The command is the inverse of the
+      <Link target="d3fc2619-cd4b-3e99-bbd5-3d520aa8f6a1">package pack</Link> command. Unpacking and then repacking
+      should yield a byte-for-byte identical package file.
+    </Paragraph>
+  </Subsection>
+  <xi:include href="scmd-package-unpack-parameters.xml"/>
+  <Subsection title="Examples">
+    <FormalItem title="Example"
+                type="example">
+      <Verbatim><![CDATA[
+$ montarre package unpack \
+  --file com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk \
+  --output-directory /tmp/out2
+
+$ ls -alF /tmp/out2/
+total 0
+drwxr-xr-x  5 montarre   montarre   100 Oct 13 12:19 ./
+drwxrwxrwt 30 root       root       860 Oct 13 12:19 ../
+drwxr-xr-x  3 montarre   montarre    60 Oct 13 12:19 META-INF/
+drwxr-xr-x  2 montarre   montarre   660 Oct 13 12:19 lib/
+drwxr-xr-x  2 montarre   montarre   240 Oct 13 12:19 meta/
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+</Section>
+

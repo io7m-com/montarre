@@ -87,7 +87,7 @@
 
               <mainModule>com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain</mainModule>
 
-              <requiredJDKVersion>21</requiredJDKVersion>
+              <requiredJDKVersion>${io7m.java.targetJavaVersion}</requiredJDKVersion>
 
               <flatpak>
                 <runtimes>

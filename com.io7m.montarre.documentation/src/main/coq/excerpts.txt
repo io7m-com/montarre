@@ -1,6 +1,6 @@
 0 ! Inductive MetadataT
 1 ! Inductive ApplicationKindT :=
-2 ! Definition CategoryT :=
+2 ! Inductive CategoryT :=
 3 ! Definition LicenseT :=
 4 ! Definition CopyrightT :=
 5 ! Inductive CopyingT := Copying
@@ -10,11 +10,11 @@
 9 ! Inductive JavaInfoT := JavaInfo
 10 ! Inductive LinkRoleT :=
 11 ! Inductive LinkT := Link
-12 ! Definition VendorNameT :=
+12 ! Inductive VendorNameT :=
 13 ! Definition VendorIDT :=
 14 ! Inductive VendorT := Vendor
 15 ! Inductive VersionNumberT := VersionNumber
-16 ! Definition VersionDateT :=
+16 ! Inductive VersionDateT :=
 17 ! Inductive VersionT := Version
 18 ! Definition ParagraphT :=
 19 ! Definition FeatureT :=
@@ -24,6 +24,29 @@
 23 ! Inductive FlatpakRuntimeT := FlatpakRuntime
 24 ! Inductive FlatpakT := Flatpak
 25 ! Definition PackageNameT :=
-26 ! Definition ShortNameT :=
+26 ! Inductive ShortNameT :=
 27 ! Definition HumanNameT :=
 28 ! Inductive NamesT := Names
+29 ! Definition lanarkDottedString :=
+100 ! (** The opaque, abstract type of regular expressions. *)
+101 ! (** For the sake of specification simplicity, we assume that all
+102 ! (** A proposition that states that a given regular expression
+103 ! (** Whether a string matches a regular expression is decidable. *)
+200 ! Definition HashAlgorithmT :=
+201 ! Inductive HashValueT :=
+202 ! Inductive HashT :=
+400 ! Inductive ItemT :=
+401 ! Inductive ModuleT :=
+402 ! Inductive PlatformModuleT :=
+403 ! Inductive ResourceT :=
+404 ! Inductive FileNameT :=
+405 ! (** A function that produces an uppercase version of the given string. *)
+406 ! Definition uppercaseSame (s t : string) :=
+407 ! (** A proposition that states that two file names are the same if their
+408 ! Inductive ResourceRoleT :=
+409 ! Definition CaptionT :=
+500 ! Inductive ArchitectureNameT :=
+501 ! Inductive OperatingSystemNameT :=
+502 ! Inductive PlatformT :=
+600 ! Inductive ManifestT :=
+601 ! Definition manifesItemsFilenamesUnique :=

@@ -22,7 +22,6 @@ import org.immutables.value.Value;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -103,7 +102,7 @@ public non-sealed interface MMetadataType
       .translations()
       .entrySet()
       .stream()
-      .sorted(Comparator.comparing(Map.Entry::getKey))
+      .sorted(Map.Entry.comparingByKey())
       .forEach(e -> {
         results.add(
           MLongDescription.builder()

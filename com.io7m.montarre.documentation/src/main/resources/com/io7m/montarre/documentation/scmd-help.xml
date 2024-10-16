@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<Section id="7c9cb3b4-530c-344e-adf6-f1498d48245a"
+         title="help"
+         xmlns="urn:com.io7m.structural:8:0">
+  <Subsection title="Name">
+    <Paragraph>
+      <Term type="command">help</Term>
+      - Show usage information for a command.
+    </Paragraph>
+  </Subsection>
+  <Subsection title="Description">
+    <Paragraph>
+      The
+      <Term type="command">help</Term>
+      command shows the help for a given command.
+    </Paragraph>
+  </Subsection>
+  <Subsection title="Examples">
+    <FormalItem title="Example"
+                type="example">
+      <Verbatim><![CDATA[
+$ montarre help package check
+montarre: usage: check [named-arguments ...]
+
+  Check a package file.
+
+  Named parameters:
+    --check-hashes
+      Description       : Whether to check file hashes.
+      Type              : Boolean
+      Cardinality       : [1]; Specify exactly once, or use the default.
+      Default value     : true
+      Syntax            : true | false
+  * --file
+      Description       : The input file.
+      Type              : Path
+      Cardinality       : [1]; Specify exactly once.
+      Syntax            : <platform-specific path syntax>
+    --verbose
+      Description       : Set the logging level of the application.
+      Type              : QLogLevel
+      Cardinality       : [1]; Specify exactly once, or use the default.
+      Default value     : info
+      Syntax            : trace|debug|info|warn|error
+
+  The command does not accept any positional arguments.
+
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+</Section>
+

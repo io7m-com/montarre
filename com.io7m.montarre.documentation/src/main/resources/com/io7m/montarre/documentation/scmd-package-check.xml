@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Section xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="8ad6d9f3-b92f-3730-b7a5-e8ebd7f3306b"
+         title="package check"
+         xmlns="urn:com.io7m.structural:8:0">
+  <Subsection title="Name">
+    <Paragraph>
+      <Term type="command">package check</Term>
+      - Check a package file.
+    </Paragraph>
+  </Subsection>
+  <Subsection title="Description">
+    <Paragraph>
+      The
+      <Term type="command">package check</Term>
+      command checks the integrity of the contents of the given package. More precisely, it computes the checksum
+      of every file in the package and compares the resulting checksum with the value recorded in the
+      <Link target="2ca47572-5e33-43ba-94ba-1902b3c6ba2f">manifest</Link>.
+    </Paragraph>
+  </Subsection>
+  <xi:include href="scmd-package-check-parameters.xml"/>
+  <Subsection title="Examples">
+    <FormalItem title="Example"
+                type="example">
+      <Verbatim><![CDATA[
+$ montarre package check --file com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.anethum.api-1.1.1.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.blackthorne.core-2.0.2.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.blackthorne.jxe-2.0.2.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.jaffirm.core-4.0.1.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.jcip-2.0.1.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.jdownload.core-1.0.0.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.jlexing.core-3.2.0.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.jmulticlose.core-1.1.3.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.junreachable.core-4.0.2.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.jxe.core-2.0.0.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.jxtrand.api-2.1.0.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.jxtrand.vanilla-2.1.0.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.lanark.core-1.2.0.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.montarre.api-0.0.1-SNAPSHOT.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.montarre.cmdline-0.0.1-SNAPSHOT.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.montarre.io-0.0.1-SNAPSHOT.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.montarre.nativepack-0.0.1-SNAPSHOT.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.montarre.schema-0.0.1-SNAPSHOT.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.montarre.xml-0.0.1-SNAPSHOT.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.quarrel.core-1.6.1.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.quarrel.ext.logback-1.6.1.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.seltzer.api-1.1.0.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.streamtime.core-1.0.0.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/com.io7m.verona.core-1.0.1.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/commons-codec-1.17.1.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/commons-compress-1.27.1.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/commons-io-2.17.0.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/commons-lang3-3.17.0.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/logback-classic-1.5.8.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/logback-core-1.5.8.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: lib/slf4j-api-2.0.16.jar: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: meta/bom.xml: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: meta/icon.ico: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: meta/icon128.png: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: meta/icon16.png: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: meta/icon24.png: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: meta/icon32.png: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: meta/icon48.png: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: meta/icon64.png: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: meta/license.txt: OK
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: meta/screenshot.png: OK
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+</Section>
+

@@ -43,8 +43,8 @@ module com.io7m.montarre.nativepack
   requires java.net.http;
   requires java.xml;
   requires org.apache.commons.compress;
-  requires org.slf4j;
   requires org.apache.commons.io;
+  requires org.slf4j;
 
   provides MNativePackagerServiceProviderType
     with MNPackagerAppImageProvider,

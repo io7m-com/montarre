@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Section id="7540264d-c0c3-34de-8eea-272ac16b1960"
+         title="version"
+         xmlns="urn:com.io7m.structural:8:0">
+  <Subsection title="Name">
+    <Paragraph>
+      <Term type="command">version</Term>
+      - Show the application version.
+    </Paragraph>
+  </Subsection>
+  <Subsection title="Description">
+    <Paragraph>
+      The
+      <Term type="command">version</Term>
+      command shows the current application version.
+    </Paragraph>
+  </Subsection>
+  <Subsection title="Examples">
+    <FormalItem title="Example"
+                type="example">
+      <Verbatim><![CDATA[
+$ montarre version
+com.io7m.montarre 0.0.1-SNAPSHOT f47e12fd7363837c6358eeec53b3122645b06df5
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+</Section>
+

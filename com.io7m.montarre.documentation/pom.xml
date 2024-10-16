@@ -28,6 +28,11 @@
       <artifactId>com.io7m.montarre.cmdline</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>com.io7m.montarre.schema</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>com.io7m.primogenitor</groupId>
@@ -194,6 +199,36 @@
               <classifier>sources</classifier>
               <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
               <outputDirectory>${project.build.directory}/javadoc-sources</outputDirectory>
+            </configuration>
+          </execution>
+
+          <!-- Unpack schemas -->
+          <execution>
+            <id>unpack-schemas</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includes>**/*.xsd</includes>
+              <includeGroupIds>${project.groupId}</includeGroupIds>
+              <includeArtifactIds>com.io7m.montarre.schema</includeArtifactIds>
+              <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+              <outputDirectory>${project.build.directory}/documentation/</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>unpack-schemas-epub</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <includes>**/*.xsd</includes>
+              <includeGroupIds>${project.groupId}</includeGroupIds>
+              <includeArtifactIds>com.io7m.montarre.schema</includeArtifactIds>
+              <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+              <outputDirectory>${project.build.directory}/epub/</outputDirectory>
             </configuration>
           </execution>
 

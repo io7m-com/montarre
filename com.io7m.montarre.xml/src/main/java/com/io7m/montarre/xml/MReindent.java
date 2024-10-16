@@ -17,8 +17,11 @@
 
 package com.io7m.montarre.xml;
 
+import javax.xml.crypto.OctetStreamData;
+import javax.xml.crypto.dsig.CanonicalizationMethod;
+import javax.xml.crypto.dsig.XMLSignatureFactory;
+import javax.xml.crypto.dsig.spec.C14NMethodParameterSpec;
 import javax.xml.transform.OutputKeys;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -45,58 +48,65 @@ public final class MReindent
    * @param data   The XML
    * @param output The output stream
    *
-   * @throws TransformerException On errors
-   * @throws IOException          On errors
+   * @throws IOException On errors
    */
 
   public static void indent(
     final byte[] data,
     final OutputStream output)
-    throws TransformerException, IOException
+    throws IOException
   {
-    final var transformer =
-      TransformerFactory.newInstance()
-        .newTransformer();
+    try {
+      final var indentOut =
+        new ByteArrayOutputStream();
 
-    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-    transformer.setOutputProperty(
-      "{http://xml.apache.org/xslt}indent-amount",
-      "2");
-    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+      final var transformer =
+        TransformerFactory.newInstance()
+          .newTransformer();
 
-    final var indentedOutput =
-      new ByteArrayOutputStream();
+      transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+      transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+      transformer.transform(
+        new StreamSource(new ByteArrayInputStream(data)),
+        new StreamResult(indentOut)
+      );
 
-    indentedOutput.write(
-      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-        .trim().getBytes(StandardCharsets.UTF_8));
-    indentedOutput.write('\n');
+      final var sigs =
+        XMLSignatureFactory.getInstance("DOM");
 
-    transformer.transform(
-      new StreamSource(new ByteArrayInputStream(data)),
-      new StreamResult(indentedOutput)
-    );
+      final var canon =
+        sigs.newCanonicalizationMethod(
+          CanonicalizationMethod.EXCLUSIVE,
+          (C14NMethodParameterSpec) null
+        );
 
-    output.write(
-      indentedOutput.toString(StandardCharsets.UTF_8)
-        .replace("\r\n", "\n")
-        .getBytes(StandardCharsets.UTF_8)
-    );
+      final var dd =
+        new OctetStreamData(new ByteArrayInputStream(indentOut.toByteArray()));
+
+      final var result =
+        (OctetStreamData) canon.transform(dd, null);
+
+      result.getOctetStream().transferTo(output);
+    } catch (final IOException e) {
+      throw e;
+    } catch (final Exception e) {
+      throw new IOException(e);
+    }
   }
 
   /**
    * Indent the given XML.
    *
-   * @return The indented text
-   * @param data   The XML
+   * @param data The XML
    *
-   * @throws TransformerException On errors
-   * @throws IOException          On errors
+   * @return The indented text
+   *
+   * @throws IOException On errors
    */
 
   public static String indent(
     final byte[] data)
-    throws TransformerException, IOException
+    throws IOException
   {
     try (final var out = new ByteArrayOutputStream()) {
       indent(data, out);

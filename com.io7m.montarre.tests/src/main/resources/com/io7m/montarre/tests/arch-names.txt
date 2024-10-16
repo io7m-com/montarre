@@ -2,7 +2,6 @@ aarch64
 amd64
 arm
 arm32
-e2k
 em64t
 i386
 i486
@@ -10,10 +9,6 @@ i586
 i686
 ia32
 ia32e
-ia64
-ia64n
-ia64w
-itanium64
 loongarch64
 mips
 mips32
@@ -30,8 +25,6 @@ ppcle
 riscv
 riscv32
 riscv64
-s390
-s390x
 sparc
 sparc32
 sparc64

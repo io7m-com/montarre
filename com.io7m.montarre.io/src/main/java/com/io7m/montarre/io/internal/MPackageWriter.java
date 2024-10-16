@@ -63,7 +63,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public final class MPackageWriter implements MPackageWriterType
 {
   private static final Instant SOURCE_EPOCH =
-    Instant.parse("2010-01-01T00:00:00+00:00");
+    Instant.parse("2024-10-14T00:00:00+00:00");
   private static final FileTime SOURCE_EPOCH_FILE_TIME =
     FileTime.from(SOURCE_EPOCH);
 

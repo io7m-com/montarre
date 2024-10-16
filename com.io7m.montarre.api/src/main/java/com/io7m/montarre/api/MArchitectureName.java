@@ -96,14 +96,6 @@ public record MArchitectureName(
   /**
    * @return A standard architecture name
    */
-  public static MArchitectureName e2k()
-  {
-    return new MArchitectureName(MArchitectureNames.e2k());
-  }
-
-  /**
-   * @return A standard architecture name
-   */
   public static MArchitectureName riscv_64()
   {
     return new MArchitectureName(MArchitectureNames.riscv_64());
@@ -115,22 +107,6 @@ public record MArchitectureName(
   public static MArchitectureName riscv_32()
   {
     return new MArchitectureName(MArchitectureNames.riscv_32());
-  }
-
-  /**
-   * @return A standard architecture name
-   */
-  public static MArchitectureName s390_64()
-  {
-    return new MArchitectureName(MArchitectureNames.s390_64());
-  }
-
-  /**
-   * @return A standard architecture name
-   */
-  public static MArchitectureName s390_32()
-  {
-    return new MArchitectureName(MArchitectureNames.s390_32());
   }
 
   /**
@@ -168,17 +144,17 @@ public record MArchitectureName(
   /**
    * @return A standard architecture name
    */
-  public static MArchitectureName mipsel_64()
+  public static MArchitectureName mipsle_64()
   {
-    return new MArchitectureName(MArchitectureNames.mipsel_64());
+    return new MArchitectureName(MArchitectureNames.mipsle_64());
   }
 
   /**
    * @return A standard architecture name
    */
-  public static MArchitectureName mipsel_32()
+  public static MArchitectureName mipsle_32()
   {
-    return new MArchitectureName(MArchitectureNames.mipsel_32());
+    return new MArchitectureName(MArchitectureNames.mipsle_32());
   }
 
   /**
@@ -227,22 +203,6 @@ public record MArchitectureName(
   public static MArchitectureName sparc_32()
   {
     return new MArchitectureName(MArchitectureNames.sparc_32());
-  }
-
-  /**
-   * @return A standard architecture name
-   */
-  public static MArchitectureName itanium_64()
-  {
-    return new MArchitectureName(MArchitectureNames.itanium_64());
-  }
-
-  /**
-   * @return A standard architecture name
-   */
-  public static MArchitectureName itanium_32()
-  {
-    return new MArchitectureName(MArchitectureNames.itanium_32());
   }
 
   /**

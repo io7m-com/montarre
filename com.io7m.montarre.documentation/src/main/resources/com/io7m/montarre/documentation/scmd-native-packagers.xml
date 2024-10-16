@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Section xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="93c0b3e7-83a0-367a-9b43-3b0bc55e38aa"
+         title="native packagers"
+         xmlns="urn:com.io7m.structural:8:0">
+  <Subsection title="Name">
+    <Paragraph>
+      <Term type="command">native packagers</Term>
+      - List native packagers.
+    </Paragraph>
+  </Subsection>
+  <Subsection title="Description">
+    <Paragraph>
+      The
+      <Term type="command">native packagers</Term>
+      command lists all of the available
+      <Link target="ee60e32c-8e30-4081-a32c-53ee7744b9be">native packagers</Link>
+      along with information about why each one is or is not supported on the current platform.
+    </Paragraph>
+  </Subsection>
+  <xi:include href="scmd-native-packagers-parameters.xml"/>
+  <Subsection title="Examples">
+    <FormalItem title="Example"
+                type="example">
+      <Verbatim><![CDATA[
+$ montarre native packagers
+Name: com.io7m.montarre.app_image
+Description: Produces jpackage 'app-images'.
+Supported: yes
+--
+
+Name: com.io7m.montarre.deb
+Description: Produces Debian .deb packages.
+Supported: yes
+--
+
+Name: com.io7m.montarre.flatpak
+Description: Produces Flatpak packages.
+Supported: yes
+--
+
+Name: com.io7m.montarre.msi_wix
+Description: Produces MSI packages.
+Supported: no
+Reason: Cannot run program "wix": error=2, No such file or directory
+Exception:
+com.io7m.montarre.api.MException: Cannot run program "wix": error=2, No such file or directory
+	at com.io7m.montarre.nativepack.MNativeProcesses.executeAndWait(MNativeProcesses.java:109)
+	at com.io7m.montarre.nativepack.internal.msi.MNPackagerMSI.unsupportedReason(MNPackagerMSI.java:93)
+	at com.io7m.montarre.cmdline.internal.MCNativePackagers.onExecute(MCNativePackagers.java:89)
+	at com.io7m.quarrel.core.internal.QCommandContext.execute(QCommandContext.java:207)
+	at com.io7m.quarrel.core.QApplicationType.run(QApplicationType.java:94)
+	at com.io7m.montarre.cmdline.MMain.run(MMain.java:191)
+	at com.io7m.montarre.cmdline.MMain.mainExitless(MMain.java:166)
+	at com.io7m.montarre.cmdline.MMain.main(MMain.java:151)
+Caused by: java.io.IOException: Cannot run program "wix": error=2, No such file or directory
+	at java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1170)
+	at java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1089)
+	at com.io7m.montarre.nativepack.MNativeProcesses.executeAndWait(MNativeProcesses.java:76)
+	... 7 more
+Caused by: java.io.IOException: error=2, No such file or directory
+	at java.base/java.lang.ProcessImpl.forkAndExec(Native Method)
+	at java.base/java.lang.ProcessImpl.<init>(ProcessImpl.java:295)
+	at java.base/java.lang.ProcessImpl.start(ProcessImpl.java:225)
+	at java.base/java.lang.ProcessBuilder.start(ProcessBuilder.java:1126)
+	... 9 more
+--
+
+Name: com.io7m.montarre.shell
+Description: Produces shell packages.
+Supported: yes
+--
+
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+</Section>
+

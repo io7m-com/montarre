@@ -18,7 +18,8 @@
 package com.io7m.montarre.tests;
 
 
-import com.io7m.montarre.cmdline.internal.MCPackageExtractDeclaration;
+import com.io7m.montarre.cmdline.MMain;
+import com.io7m.quarrel.core.QCommandGroupType;
 import com.io7m.quarrel.core.QCommandOrGroupType;
 import com.io7m.quarrel.core.QCommandParserConfiguration;
 import com.io7m.quarrel.core.QCommandParsers;
@@ -31,9 +32,11 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedMap;
-import java.util.TreeMap;
 
 public final class MCommandsDocumentation
 {
@@ -45,6 +48,9 @@ public final class MCommandsDocumentation
   public static void main(
     final String[] args)
   {
+    final var main =
+      new MMain(new String[0]);
+
     final var parsers =
       new QCommandParsers();
     final var xs =
@@ -56,22 +62,14 @@ public final class MCommandsDocumentation
         QCommandParsers.emptyResources()
       );
 
+    final var commandsByName =
+      main.application().commandTree();
+
+    final var nameStack =
+      new LinkedList<String>();
+
     final var commands =
-      List.of(
-        new com.io7m.montarre.cmdline.internal.MCMavenDownload(),
-        new com.io7m.montarre.cmdline.internal.MCNativeCreate(),
-        new com.io7m.montarre.cmdline.internal.MCNativePackagers(),
-        new com.io7m.montarre.cmdline.internal.MCPackageCheck(),
-        new MCPackageExtractDeclaration(),
-        new com.io7m.montarre.cmdline.internal.MCPackageSchema()
-      );
-
-    final SortedMap<String, QCommandOrGroupType> commandsByName =
-      new TreeMap<>();
-
-    for (final var command : commands) {
-      commandsByName.put(command.metadata().name(), command);
-    }
+      collectCommands(nameStack, commandsByName);
 
     for (final var command : commands) {
       writeMain(command, parsers, parserConfig, commandsByName, xs);
@@ -79,16 +77,56 @@ public final class MCommandsDocumentation
     }
   }
 
+  private record CommandWithFullName(
+    List<String> name,
+    QCommandType command)
+  {
+
+  }
+
+  private static List<CommandWithFullName> collectCommands(
+    final LinkedList<String> nameStack,
+    final SortedMap<String, QCommandOrGroupType> commandsByName)
+  {
+    final var results = new ArrayList<CommandWithFullName>();
+    for (final var q : commandsByName.values()) {
+      nameStack.addLast(q.metadata().name());
+      try {
+        results.addAll(collectCommandsOne(nameStack, q));
+      } finally {
+        nameStack.removeLast();
+      }
+    }
+    return List.copyOf(results);
+  }
+
+  private static List<CommandWithFullName> collectCommandsOne(
+    final LinkedList<String> nameStack,
+    final QCommandOrGroupType q)
+  {
+    return switch (q) {
+      case final QCommandGroupType g -> {
+        yield collectCommands(nameStack, g.commandTree());
+      }
+      case final QCommandType c -> {
+        yield List.of(
+          new CommandWithFullName(
+            List.copyOf(nameStack),
+            c
+          )
+        );
+      }
+    };
+  }
+
   private static void writeMain(
-    final QCommandType command,
+    final CommandWithFullName commandFull,
     final QCommandParsers parsers,
     final QCommandParserConfiguration parserConfig,
     final SortedMap<String, QCommandOrGroupType> commandsByName,
     final QCommandXS xs)
   {
     try {
-      final var name =
-        command.metadata().name();
       final var parser =
         parsers.create(parserConfig);
 
@@ -97,18 +135,22 @@ public final class MCommandsDocumentation
       final var writer =
         new PrintWriter(textWriter);
 
+      final var hyphenated =
+        String.join("-", commandFull.name);
+
+      final var arguments = new ArrayList<String>();
+      arguments.add("--type");
+      arguments.add("main");
+      arguments.add("--parameters-include");
+      arguments.add("scmd-%s-parameters.xml".formatted(hyphenated));
+      arguments.addAll(commandFull.name);
+
       final var context =
         parser.execute(
           commandsByName,
           writer,
           xs,
-          List.of(
-            "--type",
-            "main",
-            "--parameters-include",
-            "scmd-%s-parameters.xml",
-            name
-          )
+          arguments
         );
 
       context.execute();
@@ -116,7 +158,7 @@ public final class MCommandsDocumentation
       writer.flush();
 
       final var path =
-        Paths.get("/shared-tmp/scmd-%s.xml".formatted(name));
+        Paths.get("/shared-tmp/scmd-%s.xml".formatted(hyphenated));
 
       Files.writeString(path, textWriter.toString(), StandardCharsets.UTF_8);
     } catch (final Exception e) {
@@ -125,13 +167,15 @@ public final class MCommandsDocumentation
   }
 
   private static void writeParameters(
-    final QCommandType command,
+    final CommandWithFullName commandFull,
     final QCommandParsers parsers,
     final QCommandParserConfiguration parserConfig,
     final SortedMap<String, QCommandOrGroupType> commandsByName,
     final QCommandXS xs)
   {
     try {
+      final var command =
+        commandFull.command;
       final var name =
         command.metadata().name();
       final var parser =
@@ -142,18 +186,22 @@ public final class MCommandsDocumentation
       final var writer =
         new PrintWriter(textWriter);
 
+      final var hyphenated =
+        String.join("-", commandFull.name);
+
+      final var arguments = new ArrayList<String>();
+      arguments.add("--type");
+      arguments.add("parameters");
+      arguments.add("--parameters-include");
+      arguments.add("scmd-%s-parameters.xml".formatted(hyphenated));
+      arguments.addAll(commandFull.name);
+
       final var context =
         parser.execute(
           commandsByName,
           writer,
           xs,
-          List.of(
-            "--type",
-            "parameters",
-            "--parameters-include",
-            "scmd-%s-parameters.xml",
-            name
-          )
+          arguments
         );
 
       context.execute();
@@ -161,7 +209,7 @@ public final class MCommandsDocumentation
       writer.flush();
 
       final var path =
-        Paths.get("/shared-tmp/scmd-%s-parameters.xml".formatted(name));
+        Paths.get("/shared-tmp/scmd-%s-parameters.xml".formatted(hyphenated));
 
       Files.writeString(path, textWriter.toString(), StandardCharsets.UTF_8);
     } catch (final Exception e) {

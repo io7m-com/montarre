@@ -1,0 +1,12 @@
+$ montarre package check --file com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk
+...
+
+$ (cat <<EOF
+package
+check
+--file
+com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk
+EOF
+) > args.txt
+
+$ montarre @args.txt

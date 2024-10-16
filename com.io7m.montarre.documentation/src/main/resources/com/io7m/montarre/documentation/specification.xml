@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Section title="Package Format 1 Specification"
+<Section title="Package Format 1.0 Specification"
          xmlns="urn:com.io7m.structural:8:0"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          id="72b44499-f0cb-4d2a-96dd-ebb02985976c">
@@ -8,19 +8,80 @@
   <Subsection title="Overview">
     <Paragraph>
       This section specifies the format of version
-      <Term type="constant">1</Term>
+      <Term type="constant">1.0</Term>
       <Term type="package">montarre</Term>
       <Term type="term">packages</Term>.
     </Paragraph>
+    <Paragraph>
+      This specification is divided into an abstract model and a
+      separate <Link target="79f206ac-7d1c-41b9-86f9-f8478237e311">serialization</Link>. The purpose of the model is
+      to describe the semantics of <Term type="package">montarre</Term> packages; the actual
+      <Term type="term">meaning</Term>
+      of the data within, and to describe properties and invariants that must be true for all valid
+      <Term type="package">montarre</Term>
+      packages. The serialization section describes the on-disk formats used for distribution.
+    </Paragraph>
+    <Paragraph>
+      The formal specification described here is written in the
+      <LinkExternal target="https://coq.github.io/doc/master/refman/">Gallina specification language of the Coq theorem
+        prover</LinkExternal>. The language is a total, pure-functional, dependently-typed language allowing for
+      describing systems in rigorous detail including machine-checked proofs of various chosen properties.
+    </Paragraph>
+    <Paragraph>
+      The full sources of the entire specification are published
+      <Link target="4ebae52f-9927-4ee2-805f-e3385db283e4">at the end of this section</Link>.
+    </Paragraph>
   </Subsection>
 
-  <Subsection title="Package">
+  <Subsection title="Regular Expressions"
+              id="8c96a881-65bd-4901-823c-dc5727780267">
     <Paragraph>
-      A <Term type="package">montarre</Term> package contains a single
-      <Term type="term">package declaration</Term>
-      which specifies <Link target="6a83334c-e6e4-4c6d-ac6a-869cc1186815">metadata</Link> and a
-      <Link target="2ca47572-5e33-43ba-94ba-1902b3c6ba2f">manifest</Link>.
+      The specification makes use of <Term type="term">regular expressions</Term> to specify the required formats of
+      some string types. The regular expression language used should be assumed to be the
+      <LinkExternal target="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/regex/Pattern.html">
+        Java regular expression language</LinkExternal>.
     </Paragraph>
+    <Paragraph>
+      The specification itself axiomatizes regular expressions using the following definitions:
+    </Paragraph>
+    <FormalItem title="RegularExpressionT">
+      <Verbatim>
+        <xi:include href="100.txt"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
+    <FormalItem title="regex">
+      <Verbatim>
+        <xi:include href="101.txt"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
+    <FormalItem title="matches">
+      <Verbatim>
+        <xi:include href="102.txt"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
+    <FormalItem title="matchesDecidable">
+      <Verbatim>
+        <xi:include href="103.txt"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
+  </Subsection>
+
+  <Subsection title="Dotted Strings"
+              id="6ad2a382-9abc-4dab-aeeb-5c114a5926e5">
+    <Paragraph>
+      A <LinkExternal target="https://www.io7m.com/software/lanark/">Lanark</LinkExternal> dotted string is a string
+      conforming to the regular expression given in the Lanark specification.
+    </Paragraph>
+    <FormalItem title="Dotted String">
+      <Verbatim>
+        <xi:include href="29.txt"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
   </Subsection>
 
   <Subsection title="Language"
@@ -56,6 +117,380 @@
                     parse="text"/>
       </Verbatim>
     </FormalItem>
+  </Subsection>
+
+  <Subsection title="Hash"
+              id="08b3f6f8-36a9-4675-bec9-8b818d206a70">
+    <Subsection title="Overview">
+      <Paragraph>
+        A <Term type="term">hash</Term> is a record consisting of an
+        <Link target="75d8859b-8de2-47b9-82a4-5d52b52ca49a">algorithm</Link>
+        and a
+        <Link target="51109b98-d6c8-44e0-84ed-517f363d14ed">value</Link>.
+      </Paragraph>
+      <FormalItem title="Hash">
+        <Verbatim>
+          <xi:include href="202.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Algorithm"
+                id="75d8859b-8de2-47b9-82a4-5d52b52ca49a">
+      <Paragraph>
+        A <Term type="term">hash algorithm</Term> specifies the name of a cryptographic hash algorithm. The names must
+        be taken from the
+        <LinkExternal target="https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.html#messagedigest-algorithms">
+          Java message digest algorithm name specification</LinkExternal>.
+      </Paragraph>
+      <FormalItem title="Algorithm">
+        <Verbatim>
+          <xi:include href="200.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="Value"
+                id="51109b98-d6c8-44e0-84ed-517f363d14ed">
+      <Paragraph>
+        A <Term type="term">hash value</Term> is an ASCII, lowercase, hexadecimal text serialization of the binary
+        output of a hash algorithm.
+      </Paragraph>
+      <FormalItem title="Value">
+        <Verbatim>
+          <xi:include href="201.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="Architecture Name"
+              id="93e7d41c-b41f-4731-9393-6790cec2e9aa">
+    <Paragraph>
+      An <Term type="term">architecture name</Term> is a unique name for a particular
+      <Term type="term">hardware architecture</Term>. It represents an attempt to provide a consistent naming convention
+      for hardware types <LinkFootnote target="f0348952-f520-492a-af1b-6f7a50ade779"/>.
+    </Paragraph>
+    <Paragraph>
+      An architecture name is a string conforming to the regular expression
+      <Term type="constant">[a-z][a-z0-9_-]{0,32}</Term>.
+    </Paragraph>
+    <FormalItem title="Architecture Name">
+      <Verbatim>
+        <xi:include href="500.txt"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
+    <Paragraph>
+      This specification recognizes the following architecture names:
+    </Paragraph>
+    <FormalItem title="Architecture Names">
+      <Table type="genericTable">
+        <Columns>
+          <Column>Name</Column>
+          <Column>Description</Column>
+        </Columns>
+        <Row>
+          <Cell>
+            <Term type="constant">aarch_64</Term>
+          </Cell>
+          <Cell>
+            64-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/AArch64">ARM</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">arm_32</Term>
+          </Cell>
+          <Cell>
+            32-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/ARM_architecture_family">ARM</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">loongarch_64</Term>
+          </Cell>
+          <Cell>
+            64-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/Loongson">LoongArch</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">mips_32</Term>
+          </Cell>
+          <Cell>
+            32-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/MIPS_architecture">MIPS</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">mips_64</Term>
+          </Cell>
+          <Cell>
+            64-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/MIPS_architecture">MIPS</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">mipsle_32</Term>
+          </Cell>
+          <Cell>
+            32-bit little-endian
+            <LinkExternal target="https://en.wikipedia.org/wiki/MIPS_architecture">MIPS</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">mipsle_64</Term>
+          </Cell>
+          <Cell>
+            64-bit little-endian
+            <LinkExternal target="https://en.wikipedia.org/wiki/MIPS_architecture">MIPS</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">ppc_32</Term>
+          </Cell>
+          <Cell>
+            32-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/PowerPC">PowerPC</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">ppc_64</Term>
+          </Cell>
+          <Cell>
+            64-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/PowerPC">PowerPC</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">ppcle_32</Term>
+          </Cell>
+          <Cell>
+            32-bit little-endian
+            <LinkExternal target="https://en.wikipedia.org/wiki/PowerPC">PowerPC</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">ppcle_64</Term>
+          </Cell>
+          <Cell>
+            64-bit little-endian
+            <LinkExternal target="https://en.wikipedia.org/wiki/PowerPC">PowerPC</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">riscv_32</Term>
+          </Cell>
+          <Cell>
+            32-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/RISC-V">RISC-V</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">riscv_64</Term>
+          </Cell>
+          <Cell>
+            64-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/RISC-V">RISC-V</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">sparc_32</Term>
+          </Cell>
+          <Cell>
+            32-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/SPARC">SPARC</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">sparc_64</Term>
+          </Cell>
+          <Cell>
+            64-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/SPARC">SPARC</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">x86_32</Term>
+          </Cell>
+          <Cell>
+            32-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/X86">x86</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">x86_64</Term>
+          </Cell>
+          <Cell>
+            64-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/X86">x86</LinkExternal>
+          </Cell>
+        </Row>
+      </Table>
+    </FormalItem>
+    <Paragraph>
+      The special name <Term type="constant">unknown</Term> is assigned to unrecognized hardware architectures. The <Term type="constant">
+      unknown
+    </Term> name is not permitted to appear in package declarations.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Operating System Name"
+              id="cff1dbc4-6f3d-4d39-9e64-7e293649bed3">
+    <Paragraph>
+      An <Term type="term">operating system name</Term> is a unique name for a particular
+      <Term type="term">operating system</Term>. It represents an attempt to provide a consistent naming convention for
+      operating systems.
+    </Paragraph>
+    <Paragraph>
+      An operating system name is a string conforming to the regular expression
+      <Term type="constant">[a-z][a-z0-9_-]{0,32}</Term>.
+    </Paragraph>
+    <FormalItem title="Operating System Name">
+      <Verbatim>
+        <xi:include href="501.txt"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
+    <Paragraph>
+      This specification recognizes the following operating system names:
+    </Paragraph>
+    <FormalItem title="Architecture Names">
+      <Table type="genericTable">
+        <Columns>
+          <Column>Name</Column>
+          <Column>Description</Column>
+        </Columns>
+        <Row>
+          <Cell>
+            <Term type="constant">aix</Term>
+          </Cell>
+          <Cell>
+            <LinkExternal target="https://en.wikipedia.org/wiki/IBM_AIX">IBM AIX</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">freebsd</Term>
+          </Cell>
+          <Cell>
+            <LinkExternal target="https://en.wikipedia.org/wiki/FreeBSD">FreeBSD</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">hpux</Term>
+          </Cell>
+          <Cell>
+            <LinkExternal target="https://en.wikipedia.org/wiki/HP-UX">HP-UX</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">linux</Term>
+          </Cell>
+          <Cell>
+            <LinkExternal target="https://en.wikipedia.org/wiki/Linux">Linux</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">netbsd</Term>
+          </Cell>
+          <Cell>
+            <LinkExternal target="https://en.wikipedia.org/wiki/NetBSD">NetBSD</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">openbsd</Term>
+          </Cell>
+          <Cell>
+            <LinkExternal target="https://en.wikipedia.org/wiki/OpenBSD">OpenBSD</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">os400</Term>
+          </Cell>
+          <Cell>
+            <LinkExternal target="https://en.wikipedia.org/wiki/IBM_i">IBM i</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">osx</Term>
+          </Cell>
+          <Cell>
+            <LinkExternal target="https://en.wikipedia.org/wiki/MacOS">MacOS</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">solaris</Term>
+          </Cell>
+          <Cell>
+            <LinkExternal target="https://en.wikipedia.org/wiki/Oracle_Solaris">Oracle Solaris</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+            <Term type="constant">windows</Term>
+          </Cell>
+          <Cell>
+            <LinkExternal target="https://en.wikipedia.org/wiki/Microsoft_Windows">Microsoft Windows</LinkExternal>
+          </Cell>
+        </Row>
+      </Table>
+    </FormalItem>
+    <Paragraph>
+      The special name <Term type="constant">unknown</Term> is assigned to unrecognized operating systems. The <Term type="constant">
+      unknown
+    </Term> name is not permitted to appear in package declarations.
+    </Paragraph>
+  </Subsection>
+
+  <Subsection title="Platform"
+              id="92709b93-ed04-4785-962a-e6ceffa7301d">
+    <Paragraph>
+      A <Term type="term">platform</Term> is a record consisting of an
+      <Link target="93e7d41c-b41f-4731-9393-6790cec2e9aa">architecture name</Link>
+      and
+      <Link target="cff1dbc4-6f3d-4d39-9e64-7e293649bed3">operating system name</Link>.
+    </Paragraph>
+    <FormalItem title="Platform">
+      <Verbatim>
+        <xi:include href="502.txt"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
+  </Subsection>
+
+  <Subsection title="Package">
+    <Paragraph>
+      A <Term type="package">montarre</Term> package contains a single
+      <Term type="term">package declaration</Term>
+      which specifies <Link target="6a83334c-e6e4-4c6d-ac6a-869cc1186815">metadata</Link> and a
+      <Link target="2ca47572-5e33-43ba-94ba-1902b3c6ba2f">manifest</Link>.
+    </Paragraph>
   </Subsection>
 
   <Subsection title="Metadata"
@@ -450,8 +885,7 @@
                   id="9d02d402-92ae-4267-be43-1ebb08e8e1bc">
         <Paragraph>
           The <Term type="term">package name</Term> is a unique identifier for the package, specified as a
-          <LinkExternal target="https://www.io7m.com/software/lanark/">Lanark</LinkExternal>
-          dotted string.
+          <Link target="6ad2a382-9abc-4dab-aeeb-5c114a5926e5">dotted string</Link>.
         </Paragraph>
         <FormalItem title="Package Name">
           <Verbatim>
@@ -483,8 +917,8 @@
       <Subsection title="Short Name"
                   id="60d790cb-85b9-48fc-9211-47241747042b">
         <Paragraph>
-          The <Term type="term">short name</Term> is a name conforming to the regular
-          expression <Term type="constant">[a-z][a-z0-9_-]{0,128}</Term>
+          The <Term type="term">short name</Term> is a name conforming to the regular expression
+          <Term type="constant">[a-z][a-z0-9_-]{0,128}</Term>
           <LinkFootnote target="73ee3320-8877-43cb-8f44-2fc20263ad49"/>.
         </Paragraph>
         <FormalItem title="Short Name">
@@ -535,8 +969,7 @@
                   id="eda0dc2a-9037-4957-8383-63042647cf80">
         <Paragraph>
           The <Term type="term">vendor ID</Term> is a unique identifier for the vendor of the package, specified as a
-          <LinkExternal target="https://www.io7m.com/software/lanark/">Lanark</LinkExternal>
-          dotted string.
+          <Link target="6ad2a382-9abc-4dab-aeeb-5c114a5926e5">dotted string</Link>.
         </Paragraph>
         <FormalItem title="Vendor ID">
           <Verbatim>
@@ -556,7 +989,7 @@
       <Subsection title="Overview">
         <Paragraph>
           The <Term type="term">version</Term> information for a package is a record consisting of a version
-          <Link target="e3f64de8-3f2a-4926-b07e-cd9101c39d83">name</Link>
+          <Link target="e3f64de8-3f2a-4926-b07e-cd9101c39d83">number</Link>
           and a version/release
           <Link target="eda0dc2a-9037-4957-8383-63042647cf80">date</Link>.
         </Paragraph>
@@ -604,25 +1037,345 @@
 
   <Subsection title="Manifest"
               id="2ca47572-5e33-43ba-94ba-1902b3c6ba2f">
+    <Subsection title="Overview"
+                id="cdcd070d-bea9-4881-b061-f675dc295743">
+      <Paragraph>
+        A <Term type="term">manifest</Term> consists of a set of
+        <Term type="term">items</Term>.
+      </Paragraph>
+      <FormalItem title="Manifest">
+        <Verbatim>
+          <xi:include href="600.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+      <Paragraph>
+        An <Term type="term">item</Term> is a
+        <Link target="343e1ca0-5714-415f-a2dc-4d34eafbe7cb">Module</Link>,
+        <Link target="3a3abed4-762e-4416-8bdf-854b62eada11">PlatformModule</Link>, or a
+        <Link target="880bd7bb-8e17-4bad-88e4-7890b4bf6288">Resource</Link>.
+      </Paragraph>
+      <FormalItem title="Item">
+        <Verbatim>
+          <xi:include href="400.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+      <Paragraph>
+        Items within a manifest must have unique <Link target="38e9b475-8259-447f-a6e4-e72146d45fc0">file names</Link>.
+        More formally, for a manifest
+        <Term type="variable">m</Term>, there cannot exist two different items
+        <Term type="variable">i0</Term> and <Term type="variable">i1</Term> in
+        <Term type="variable">m</Term> such that
+        <Term type="variable">i0</Term> and <Term type="variable">i1</Term>
+        have filenames that are
+        <Link target="dd24070c-13f3-424a-bb7c-cd94199660a2">the same</Link>.
+      </Paragraph>
+      <FormalItem title="Manifest File Names">
+        <Verbatim>
+          <xi:include href="601.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+      <Paragraph>
+        Each item carries a <Link target="08b3f6f8-36a9-4675-bec9-8b818d206a70">hash value</Link> denoting the
+        cryptographic hash of the contents of the item within the package.
+      </Paragraph>
+    </Subsection>
+
+    <Subsection title="FileName"
+                id="38e9b475-8259-447f-a6e4-e72146d45fc0">
+      <Paragraph>
+        A <Term type="term">file name</Term> is a unique name assigned to a manifest item. File names are
+        case-insensitive strings that conform to the regular expression
+        <Term type="constant">([\p{L}\p{N}_\-.+]+)(/[\p{L}\p{N}_\-.+]+)*</Term>
+      </Paragraph>
+      <FormalItem title="FileName">
+        <Verbatim>
+          <xi:include href="404.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+      <Paragraph>
+        Intuitively, a filename can be considered to be a non-empty <Term type="constant">/</Term>-separated list of
+        <Term type="term">file name segments</Term>
+        that each conform to the regular expression
+        <Term type="constant">[\p{L}\p{N}_\-.+]+</Term>. Accordingly, filenames cannot start with slashes, cannot end
+        with trailing slashes, and cannot contain sequences of repeating slashes.
+      </Paragraph>
+      <Paragraph>
+        The specification axiomatizes the concept of converting a string to <Term type="term">uppercase</Term>. The <Term type="term">
+        uppercase transform
+      </Term> of a string should be understood to be a string where every character has been converted to its <Term type="term">
+        uppercase equivalent
+      </Term> in a neutral locale.
+      </Paragraph>
+      <FormalItem title="Uppercase Transform">
+        <Verbatim>
+          <xi:include href="405.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+      <Paragraph>
+        A proposition that states that two strings have the same uppercase transform:
+      </Paragraph>
+      <FormalItem title="Uppercase Same">
+        <Verbatim>
+          <xi:include href="406.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+      <Paragraph id="dd24070c-13f3-424a-bb7c-cd94199660a2">
+        Accordingly, as file names are case-insensitive, then two file names are equal if their uppercase transforms are
+        equal:
+      </Paragraph>
+      <FormalItem title="File Names Same">
+        <Verbatim>
+          <xi:include href="407.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+    </Subsection>
+
     <Subsection title="Modules"
                 id="343e1ca0-5714-415f-a2dc-4d34eafbe7cb">
-      <Paragraph>...</Paragraph>
+      <Paragraph>
+        A <Term type="term">module</Term> represents a
+        <Term type="term">platform-neutral</Term>
+        <Term type="file">jar</Term>
+        file that will be placed onto the Java
+        <LinkExternal target="https://openjdk.org/jeps/261">module path</LinkExternal>
+        regardless of the underlying hardware architecture and operating system on which the application is running.
+      </Paragraph>
+      <FormalItem title="Module">
+        <Verbatim>
+          <xi:include href="401.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
     </Subsection>
     <Subsection title="PlatformModules"
                 id="3a3abed4-762e-4416-8bdf-854b62eada11">
-      <Paragraph>...</Paragraph>
+      <Paragraph>
+        A <Term type="term">platform module</Term> represents a
+        <Term type="term">platform-specific</Term>
+        <Term type="file">jar</Term>
+        file that will be placed onto the Java
+        <LinkExternal target="https://openjdk.org/jeps/261">module path</LinkExternal>
+        when the hardware architecture and operating system of the module matches that of the
+        <Link target="92709b93-ed04-4785-962a-e6ceffa7301d">platform</Link>
+        upon which the application is running.
+      </Paragraph>
+      <FormalItem title="PlatformModule">
+        <Verbatim>
+          <xi:include href="402.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
     </Subsection>
     <Subsection title="Resources"
                 id="880bd7bb-8e17-4bad-88e4-7890b4bf6288">
-      <Paragraph>...</Paragraph>
+      <Paragraph>
+        A <Term type="term">resource</Term> is an arbitrary file associated with the package. Resources are typically
+        used to provide icons, BOMs, and screenshots for the package.
+      </Paragraph>
+      <FormalItem title="Resource">
+        <Verbatim>
+          <xi:include href="403.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+      <Paragraph>
+        A resource has an associated <Term type="term">role</Term> that describes the purpose of the resource.
+      </Paragraph>
+      <FormalItem title="Resource Role">
+        <Verbatim>
+          <xi:include href="408.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+      <Paragraph>
+        A role has one of the following values:
+      </Paragraph>
+      <FormalItem title="Resource Role Values">
+        <Table type="genericTable">
+          <Columns>
+            <Column>Value</Column>
+            <Column>Description</Column>
+          </Columns>
+          <Row>
+            <Cell>BOM</Cell>
+            <Cell>A bill-of-materials. Recommended to be in <LinkExternal target="https://cyclonedx.org/">CycloneDX</LinkExternal> format.</Cell>
+          </Row>
+          <Row>
+            <Cell>LICENSE</Cell>
+            <Cell>A plain text license file.</Cell>
+          </Row>
+          <Row>
+            <Cell>ICO_WINDOWS</Cell>
+            <Cell>A Windows application icon (".ico").</Cell>
+          </Row>
+          <Row>
+            <Cell>ICON_16</Cell>
+            <Cell>A 16x16 application icon.</Cell>
+          </Row>
+          <Row>
+            <Cell>ICON_24</Cell>
+            <Cell>A 24x24 application icon.</Cell>
+          </Row>
+          <Row>
+            <Cell>ICON_32</Cell>
+            <Cell>A 32x32 application icon.</Cell>
+          </Row>
+          <Row>
+            <Cell>ICON_48</Cell>
+            <Cell>A 48x48 application icon.</Cell>
+          </Row>
+          <Row>
+            <Cell>ICON_64</Cell>
+            <Cell>A 64x64 application icon.</Cell>
+          </Row>
+          <Row>
+            <Cell>ICON_128</Cell>
+            <Cell>A 128x128 application icon.</Cell>
+          </Row>
+          <Row>
+            <Cell>ICON_256</Cell>
+            <Cell>A 256x256 application icon.</Cell>
+          </Row>
+          <Row>
+            <Cell>ICON_512</Cell>
+            <Cell>A 512x512 application icon.</Cell>
+          </Row>
+          <Row>
+            <Cell>ICON_SVG</Cell>
+            <Cell>An arbitrarily scaled SVG icon.</Cell>
+          </Row>
+          <Row>
+            <Cell>SCREENSHOT</Cell>
+            <Cell>A screenshot.</Cell>
+          </Row>
+        </Table>
+      </FormalItem>
+      <Paragraph>
+        A resource has an associated <Term type="term">caption</Term> that provides a human-readable description
+        of the resource. This is used, for example, to describe the contents of screenshots for use in
+        Flatpak listings.
+      </Paragraph>
+      <FormalItem title="Resource Caption">
+        <Verbatim>
+          <xi:include href="409.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
     </Subsection>
   </Subsection>
 
   <Subsection title="Serialization"
               id="79f206ac-7d1c-41b9-86f9-f8478237e311">
+    <Subsection title="Overview">
+      <Paragraph>
+        <Term type="package">montarre</Term> package declarations are serialized to an XML format with
+        a strict <LinkExternal target="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XSD</LinkExternal>
+        schema. The serialized package declaration, and all the package contents, are collected into
+        a <LinkExternal target="https://en.wikipedia.org/wiki/ZIP_(file_format)">ZIP</LinkExternal> file
+        with some extra restrictions on the entries. Extra restrictions are applied to the ZIP container and
+        the XML data to assist with ensuring that <Term type="package">montarre</Term> packages are
+        <LinkExternal target="https://reproducible-builds.org/">reproducible</LinkExternal>.
+      </Paragraph>
+    </Subsection>
+    <Subsection title="ZIP">
+      <Paragraph>
+        <Term type="package">montarre</Term> packages are ZIP files with the file extension
+        <Term type="constant">.mpk</Term>. The following restrictions are applied to the entries of
+        the ZIP file:
+      </Paragraph>
+      <FormalItem title="ZIP Entry Restrictions">
+        <ListUnordered>
+          <Item>
+            All entry names in the ZIP file must be valid
+            <Link target="38e9b475-8259-447f-a6e4-e72146d45fc0">file names</Link>.
+          </Item>
+          <Item>
+            All entry names in the ZIP file must be transformed to uppercase in a neutral locale.
+          </Item>
+          <Item>
+            All entries must be written with creation, modification, and last access dates
+            of <Term type="constant">2024-10-14T00:00:00Z</Term>.
+          </Item>
+          <Item>
+            All entries, except for the first entry, must be written such that their names appear in ascending
+            alphabetical order.
+          </Item>
+          <Item>
+            The first entry in the file must be
+            <Term type="constant">META-INF/MONTARRE/PACKAGE.XML</Term>.
+          </Item>
+        </ListUnordered>
+      </FormalItem>
+      <Paragraph>
+        The package declaration is serialized to <Link target="e518631a-c925-4623-be95-b0f1aaca2ef9">XML</Link>
+        and stored in the <Term type="constant">META-INF/MONTARRE/PACKAGE.XML</Term> entry in the ZIP file.
+      </Paragraph>
+      <Paragraph>
+        An example valid ZIP listing of a package is as follows:
+      </Paragraph>
+      <FormalItem title="Example ZIP Listing">
+        <Verbatim><xi:include href="package-listing.txt" parse="text"/></Verbatim>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="XML" id="e518631a-c925-4623-be95-b0f1aaca2ef9">
+      <Paragraph>
+        Package declarations must be serialized according to the included
+        <Link target="349a0e9d-7378-44b8-ae4e-6f39c0d90fc2">schema</Link> with the following restrictions:
+      </Paragraph>
+      <FormalItem title="ZIP Entry Restrictions">
+        <ListUnordered>
+          <Item>
+            XML must be serialized indented to four spaces.
+          </Item>
+          <Item>
+            The character content of elements must be serialized using a function equivalent to XSLT's
+            <LinkExternal target="https://docs.w3cub.com/xslt_xpath/xpath/functions/normalize-space.html">
+              normalize-space()
+            </LinkExternal>
+            function.
+          </Item>
+          <Item>
+            After indenting, XML must be <Term type="term">canonicalized</Term> using the
+            <LinkExternal target="http://www.w3.org/2001/10/xml-exc-c14n#">
+              Exclusive XML Canonicalization Version 1.0
+            </LinkExternal>
+            algorithm.
+          </Item>
+        </ListUnordered>
+      </FormalItem>
+    </Subsection>
+    <Subsection title="XML Schema" id="349a0e9d-7378-44b8-ae4e-6f39c0d90fc2">
+      <Paragraph>
+        The package declaration schema is as follows:
+      </Paragraph>
+      <FormalItem title="XML Schema">
+        <Verbatim>
+          <xi:include href="com/io7m/montarre/schema/schema-1.xsd"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+    </Subsection>
+  </Subsection>
+
+  <Subsection title="Model Sources"
+              id="4ebae52f-9927-4ee2-805f-e3385db283e4">
     <Paragraph>
-      ...
+      The full sources of the specification model are provided here.
     </Paragraph>
+    <FormalItem title="Montarre/Package.v"
+                id="d5bd4306-c424-54e4-8f0c-4faebd5bc7c4">
+      <Verbatim>
+        <xi:include href="Montarre/Package.v"
+                    parse="text"/>
+      </Verbatim>
+    </FormalItem>
   </Subsection>
 
   <Footnote id="f98a2394-09cc-41ad-944d-49c6405c7b19">
@@ -633,6 +1386,12 @@
   <Footnote id="73ee3320-8877-43cb-8f44-2fc20263ad49">
     Short names are used in some native packaging systems as executable names and are therefore required to be
     filesystem-safe.
+  </Footnote>
+
+  <Footnote id="f0348952-f520-492a-af1b-6f7a50ade779">
+    Many hardware architectures have different names referring to the same thing. For example, 64-bit x86 hardware is
+    often referred to as <Term type="constant">amd64</Term>, <Term type="constant">x64</Term>,
+    <Term type="constant">x86_64</Term>, etc.
   </Footnote>
 
 </Section>

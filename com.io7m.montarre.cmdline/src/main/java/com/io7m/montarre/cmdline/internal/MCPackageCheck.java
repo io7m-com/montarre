@@ -104,14 +104,14 @@ public final class MCPackageCheck implements QCommandType
 
     var failed = false;
 
-    try (var reader = readers.open(inputFile)) {
+    try (final var reader = readers.open(inputFile)) {
       final var manifest = reader.packageDeclaration().manifest();
-      for (var file : manifest.items()) {
+      for (final var file : manifest.items()) {
         if (checkHashes) {
           try {
             reader.checkHash(file.file());
             LOG.info("{}: OK", file.file());
-          } catch (MException e) {
+          } catch (final MException e) {
             failed = true;
             MCSLogging.logStructuredError(LOG, e);
           }

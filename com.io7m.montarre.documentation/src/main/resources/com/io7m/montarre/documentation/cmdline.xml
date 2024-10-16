@@ -1,9 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Section xmlns="urn:com.io7m.structural:8:0"
-         id="772a158a-4c40-482b-8f03-0d89c7d3312e"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="930ccf7e-49e8-4af1-a960-cd78c9788f37"
          title="Command Line">
-  <Paragraph>
-    Command Line…
-  </Paragraph>
+
+  <Section title="Overview">
+    <Paragraph>
+      The <Term type="package">montarre</Term> package provides a command-line interface for performing tasks such as
+      starting the server, checking configuration files, hashing passwords, and etc. The base
+      <Term type="command">montarre</Term>
+      command is broken into a number of subcommands which are documented over the following sections.
+    </Paragraph>
+    <FormalItem title="Command-Line Overview">
+      <Verbatim>
+        <xi:include parse="text"
+                    href="usage.txt"/>
+      </Verbatim>
+    </FormalItem>
+    <Paragraph>
+      All subcommands accept a <Term type="parameter">--verbose</Term> parameter that may be set to one of
+      <Term type="constant">trace</Term>, <Term type="constant">debug</Term>, <Term type="constant">info</Term>,
+      <Term type="constant">warn</Term>, or <Term type="constant">error</Term>. This parameter sets the lower bound for
+      the severity of messages that will be logged. For example, at <Term type="constant">debug</Term> verbosity, only
+      messages of severity <Term type="constant">debug</Term> and above will be logged. Setting the verbosity to
+      <Term type="constant">trace</Term>
+      level effectively causes everything to be logged, and will produce large volumes of debugging output.
+    </Paragraph>
+    <Paragraph id="d3b852be-05df-40e8-9ca3-9439f5dd27b8">
+      The <Term type="package">montarre</Term> command-line tool uses
+      <LinkExternal target="https://www.io7m.com/software/quarrel/">quarrel</LinkExternal>
+      to parse command-line arguments, and therefore supports placing command-line arguments into a file, one argument
+      per line, and then referencing that file with <Term type="constant">@</Term>. For example:
+    </Paragraph>
+    <FormalItem title="@ Syntax">
+      <Verbatim>
+        <xi:include parse="text"
+                    href="at-syntax.txt"/>
+      </Verbatim>
+    </FormalItem>
+    <Paragraph>
+      All subcommands, unless otherwise specified, yield an exit code of <Term type="constant">0</Term> on success, and
+      a non-zero exit code on failure.
+    </Paragraph>
+  </Section>
+
+  <xi:include href="scmd-help.xml"/>
+  <xi:include href="scmd-maven-central-download.xml"/>
+  <xi:include href="scmd-native-create.xml"/>
+  <xi:include href="scmd-native-packagers.xml"/>
+  <xi:include href="scmd-package-check.xml"/>
+  <xi:include href="scmd-package-extract-declaration.xml"/>
+  <xi:include href="scmd-package-pack.xml"/>
+  <xi:include href="scmd-package-schema.xml"/>
+  <xi:include href="scmd-package-unpack.xml"/>
+  <xi:include href="scmd-package-validate.xml"/>
+  <xi:include href="scmd-version.xml"/>
+  <xi:include href="scmd-wix-xml.xml"/>
+
 </Section>

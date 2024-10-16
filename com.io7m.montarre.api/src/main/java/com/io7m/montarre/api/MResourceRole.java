@@ -84,6 +84,18 @@ public enum MResourceRole
   ICON_256,
 
   /**
+   * A 512x512 application icon.
+   */
+
+  ICON_512,
+
+  /**
+   * An arbitrarily scaled SVG icon.
+   */
+
+  ICON_SVG,
+
+  /**
    * A screenshot.
    */
 
@@ -105,6 +117,8 @@ public enum MResourceRole
       case ICON_64 -> 6;
       case ICON_128 -> 7;
       case ICON_256 -> 8;
+      case ICON_512 -> 9;
+      case ICON_SVG -> 10;
       case SCREENSHOT -> 0;
     };
   }
@@ -124,7 +138,9 @@ public enum MResourceRole
            ICON_48,
            ICON_64,
            ICON_128,
-           ICON_256 -> true;
+           ICON_256,
+           ICON_512,
+           ICON_SVG -> true;
     };
   }
 }

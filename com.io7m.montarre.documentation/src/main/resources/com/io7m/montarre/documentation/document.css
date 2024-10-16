@@ -52,26 +52,26 @@
   font-style: italic;
 }
 
-.genericTable
+.genericTable, .parameterTable
 {
   border:          1px solid #dddddd;
   width:           100%;
   border-collapse: collapse;
 }
-.genericTable th
+.genericTable th, .parameterTable th
 {
   border:     1px solid #dddddd;
   text-align: left;
   font-size:  var(--stFontSize);
   padding:    0.5em;
 }
-.genericTable td
+.genericTable td, .parameterTable td
 {
   border:    1px solid #dddddd;
   font-size: var(--stFontSize);
   padding:   0.5em;
 }
-.genericTable td:nth-child(1)
+.genericTable td:nth-child(1), .parameterTable td:nth-child(1)
 {
   width: 12em;
 }

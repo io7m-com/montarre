@@ -1,0 +1,26 @@
+montarre: usage: montarre [command] [arguments ...]
+
+  The montarre command-line application.
+
+  Use the "help" command to examine specific commands:
+
+    $ montarre help help.
+
+  Command-line arguments can be placed one per line into a file, and
+  the file can be referenced using the @ symbol:
+
+    $ echo help > file.txt
+    $ echo help >> file.txt
+    $ montarre @file.txt
+
+  Commands:
+    help             Show usage information for a command.
+    maven-central    Maven Central commands.
+    native           Native package commands.
+    package          Package commands.
+    version          Show the application version.
+    wix              WiX commands.
+
+  Documentation:
+    https://www.io7m.com/software/montarre/
+

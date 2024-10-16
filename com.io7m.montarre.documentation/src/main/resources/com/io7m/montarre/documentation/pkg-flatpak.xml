@@ -9,4 +9,15 @@
       <LinkExternal target="https://www.flatpak.org">Flatpaks</LinkExternal>.
     </Paragraph>
   </Subsection>
+
+  <Subsection title="Outputs">
+    <Paragraph>
+      Given a <Link target="9d02d402-92ae-4267-be43-1ebb08e8e1bc">package name</Link>, the output of the packager will
+      be <Term type="file">${PACKAGE_NAME}.flatpak</Term>
+      unconditionally.
+    </Paragraph>
+    <Paragraph>
+      An example output of the packager is <Term type="file">com.io7m.montarre.flatpak</Term>.
+    </Paragraph>
+  </Subsection>
 </Section>

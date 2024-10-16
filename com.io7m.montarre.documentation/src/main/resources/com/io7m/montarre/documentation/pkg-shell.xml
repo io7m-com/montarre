@@ -90,7 +90,10 @@
       </Table>
     </FormalItem>
     <Paragraph>
-      Assuming that the current hardware architecture is <Term type="expression">${ARCH}</Term>, the operating system is
+      Assuming that the current <Link target="93e7d41c-b41f-4731-9393-6790cec2e9aa">hardware architecture</Link>
+      is <Term type="expression">${ARCH}</Term>, the
+      <Link target="cff1dbc4-6f3d-4d39-9e64-7e293649bed3">operating system</Link>
+      is
       <Term type="expression">${OS}</Term>, the application's main class is
       <Term type="expression">${MAIN_CLASS}</Term>, and the short name of the application is
       <Term type="expression">${SHORT_NAME}</Term>, then the application can be trivially executed with the following
@@ -310,6 +313,20 @@ c:\example\lib;c:\example\lib\x86_64\windows
 ]]></Verbatim>
       </FormalItem>
     </Subsection>
+  </Subsection>
+
+  <Subsection title="Outputs">
+    <Paragraph>
+      Given a <Link target="9d02d402-92ae-4267-be43-1ebb08e8e1bc">package name</Link>,
+      <Link target="06fa0349-3cc9-4415-b481-4cb3c8b4c255">version number</Link>,
+      <Link target="93e7d41c-b41f-4731-9393-6790cec2e9aa">architecture name</Link>, and
+      <Link target="cff1dbc4-6f3d-4d39-9e64-7e293649bed3">operating system name</Link>, the output of the packager will
+      be <Term type="file">${PACKAGE_NAME}-${PACKAGE_VERSION}-${ARCH_NAME}-${OS_NAME}-any.tgz</Term>
+      unconditionally.
+    </Paragraph>
+    <Paragraph>
+      An example output of the packager is <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-any.tgz</Term>.
+    </Paragraph>
   </Subsection>
 
   <Footnote id="1f53a22f-8574-4dd1-9834-6632e1d91e28">

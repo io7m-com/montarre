@@ -17,7 +17,9 @@
 
 package com.io7m.montarre.api;
 
+import java.util.Locale;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * A file name. File names are not case-sensitive.
@@ -29,6 +31,9 @@ public record MFileName(
   String name)
   implements Comparable<MFileName>
 {
+  private static final Pattern VALID =
+    Pattern.compile("([\\p{L}\\p{N}_\\-.+]+)(/[\\p{L}\\p{N}_\\-.+]+)*", Pattern.UNICODE_CHARACTER_CLASS);
+
   /**
    * A file name. File names are not case-sensitive.
    *
@@ -39,8 +44,10 @@ public record MFileName(
   {
     Objects.requireNonNull(name, "name");
 
-    if (name.contains("\\")) {
-      throw new IllegalArgumentException("File names may not contain '\\'");
+    if (!VALID.matcher(name).matches()) {
+      throw new IllegalArgumentException(
+        "File names must match '%s'".formatted(VALID)
+      );
     }
   }
 
@@ -60,7 +67,7 @@ public record MFileName(
   @Override
   public int hashCode()
   {
-    return Objects.hashCode(this.name.toUpperCase());
+    return Objects.hashCode(this.name.toUpperCase(Locale.ROOT));
   }
 
   @Override

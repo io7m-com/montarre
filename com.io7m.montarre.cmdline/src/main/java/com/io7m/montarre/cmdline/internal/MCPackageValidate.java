@@ -58,7 +58,7 @@ public final class MCPackageValidate implements QCommandType
     new QParameterNamed1<>(
       "--warnings-as-errors",
       List.of(),
-      new QStringType.QConstant("The input file."),
+      new QStringType.QConstant("Whether to treat warnings as errors."),
       Optional.of(Boolean.TRUE),
       Boolean.class
     );

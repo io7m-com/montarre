@@ -52,7 +52,7 @@
       <Term type="package">montarre</Term>
       package as one of the outputs. In general, this will be accomplished with a single invocation of
       the <Link target="f3ab6b7a-7a96-426a-a0d6-fc222ab3c965">Maven Plugin</Link>, but it is also possible to use the
-      <Link target="772a158a-4c40-482b-8f03-0d89c7d3312e">command-line tools</Link>.
+      <Link target="930ccf7e-49e8-4af1-a960-cd78c9788f37">command-line tools</Link>.
     </Paragraph>
   </Subsection>
 
@@ -121,6 +121,70 @@
 com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk
 ]]></Verbatim>
     </FormalItem>
+  </Subsection>
+
+  <Subsection title="Command-Line Native Packages" id="5b286674-bf9b-4176-ae51-c70adfaae758">
+    <Paragraph>
+      Assuming that you have an existing <Term type="package">montarre</Term> package (we'll pretend that it's
+      called <Term type="file">montarre.mpk</Term>), it's possible to produce every type of native package supported
+      by the current system with a single command. Assuming that the current system is Linux, and we're running on
+      the <Term type="constant">x86_64</Term> hardware architecture, we need to tell the command-line where to get
+      a suitable Java runtime that can be used as the basis for a native package. At the time of writing, there seems
+      to be little reason to use anything other than
+      <LinkExternal target="https://adoptium.net/">Eclipse Adoptium</LinkExternal> as they produce TCK certified
+      runtimes for the widest range of platforms. We call the
+      <Link target="63ea3d1a-5fc8-302e-8983-66910a4868fc">native create</Link> subcommand of the command-line
+      <Term type="package">montarre</Term> tool, passing it a couple of temporary directories that will be used
+      for temporary files and the outputs of packaging, and a link to a suitable
+      Temurin JRE:
+    </Paragraph>
+    <FormalItem title="Native Creation">
+      <Verbatim><![CDATA[$ montarre native create \
+  --package montarre.mpk \
+  --work-directory /tmp/work0 \
+  --output-directory /tmp/work0-output \
+  --java-runtime-download-uri https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.4%2B7/OpenJDK21U-jdk_x64_linux_hotspot_21.0.4_7.tar.gz \
+  --java-runtime-sha256 51fb4d03a4429c39d397d3a03a779077159317616550e4e71624c9843083e7b9 \
+  --java-runtime-format TAR_GZ
+]]></Verbatim>
+    </FormalItem>
+    <Paragraph>
+      The output of the command is a set of packages in various formats:
+    </Paragraph>
+    <FormalItem title="Native Creation Outputs">
+      <Verbatim><![CDATA[$ ls -alF /tmp/work0-output
+total 187632
+drwxr-xr-x  2 montarre   montarre        120 Oct 15 12:13 ./
+drwxrwxrwt 30 root       root            880 Oct 16 17:37 ../
+-rw-r--r--  1 montarre   montarre    4138851 Oct 15 12:13 com.io7m.montarre-0.0.1-SNAPSHOT-any.tgz
+-rw-r--r--  1 montarre   montarre   81923503 Oct 15 12:11 com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.tgz
+-rw-r--r--  1 montarre   montarre   52665048 Oct 15 12:13 com.io7m.montarre.flatpak
+-rw-r--r--  1 montarre   montarre   53400220 Oct 15 12:11 montarre-0.0.1-SNAPSHOT-x86_64-linux.deb
+]]></Verbatim>
+    </FormalItem>
+    <Paragraph>
+      We can see that the process produced a
+      <Link target="093a873f-4488-495b-b154-f822934edb98">Debian package</Link>
+      named
+      <Term type="file">montarre-0.0.1-SNAPSHOT-x86_64-linux.deb</Term>,
+      an
+      <Link target="284bfca8-7cee-4bc0-a654-af8582e1906d">app-image</Link>
+      named
+      <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.tgz</Term>,
+      a
+      <Link target="a69aad53-8567-4ded-8b3c-cfe4a50712c4">shell distribution</Link>
+      named
+      <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-any.tgz</Term>,
+      and a
+      <Link target="ded1ac99-9556-4ef9-b01f-3f689a164733">Flatpak</Link>
+      named
+      <Term type="file">com.io7m.montarre.flatpak</Term>.
+    </Paragraph>
+    <Paragraph>
+      Had this command been run on Windows, the output would likely have included an
+      <Link target="c45b5bb5-e7a7-4b7d-90f0-7b08869c6de3">MSI</Link>
+      installer.
+    </Paragraph>
   </Subsection>
 
   <Footnote id="51aa5cfb-84ff-4229-a097-e734ee649bb4">

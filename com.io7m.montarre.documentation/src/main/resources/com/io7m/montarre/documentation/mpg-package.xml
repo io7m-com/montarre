@@ -226,6 +226,29 @@
         visible to users when published to services such as
         <LinkExternal target="https://flathub.org/">FlatHub</LinkExternal>.
       </Paragraph>
+      <Paragraph>
+        The contents of the long description files must be XML
+        <Link target="fe91e28e-d080-47b3-9349-0e87c7e52768">long description</Link>
+        elements.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<longDescriptions>
+  <longDescription>src/main/meta/description-en.xml</longDescription>
+</longDescriptions>
+]]></Verbatim>
+      </FormalItem>
+      <FormalItem title="Example Description">
+        <Verbatim><![CDATA[$ cat src/main/meta/description-en.xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<LongDescription xmlns="urn:com.io7m.montarre.package:1" Language="en">
+  <Paragraph>
+    The Montarre package provides a set of tools for producing native platform artifacts from platform-independent Java
+    packages.
+  </Paragraph>
+...
+]]></Verbatim>
+      </FormalItem>
     </Subsection>
 
     <Subsection title="mainModule">

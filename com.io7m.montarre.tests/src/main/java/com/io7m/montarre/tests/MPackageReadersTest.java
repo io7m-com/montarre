@@ -93,11 +93,11 @@ public final class MPackageReadersTest
     final var outFile =
       this.directory.resolve("out.mpk");
 
-    try (var out = new ZipArchiveOutputStream(outFile)) {
+    try (final var out = new ZipArchiveOutputStream(outFile)) {
       out.finish();
     }
 
-    var ex =
+    final var ex =
       assertThrows(MException.class, () -> {
         this.readers.open(outFile);
       });
@@ -115,7 +115,7 @@ public final class MPackageReadersTest
     final var outFile =
       this.directory.resolve("out.mpk");
 
-    try (var out = new ZipArchiveOutputStream(outFile)) {
+    try (final var out = new ZipArchiveOutputStream(outFile)) {
       final var entry =
         new ZipArchiveEntry(MReservedNames.montarrePackage().name());
       out.putArchiveEntry(entry);
@@ -124,7 +124,7 @@ public final class MPackageReadersTest
       out.finish();
     }
 
-    var ex =
+    final var ex =
       assertThrows(MException.class, () -> {
         this.readers.open(outFile);
       });
@@ -144,7 +144,7 @@ public final class MPackageReadersTest
 
     Files.writeString(outFile, "THIS IS NOT A ZIP FILE");
 
-    var ex =
+    final var ex =
       assertThrows(MException.class, () -> {
         this.readers.open(outFile);
       });
@@ -164,12 +164,12 @@ public final class MPackageReadersTest
     final var outFileTmp =
       this.directory.resolve("out.mpk.tmp");
 
-    try (var writer =
+    try (final var writer =
            this.writers.create(outFile, outFileTmp, MExamplePackages.EMPTY_PACKAGE)) {
 
     }
 
-    try (var reader = this.readers.open(outFile)) {
+    try (final var reader = this.readers.open(outFile)) {
       assertEquals(MExamplePackages.EMPTY_PACKAGE, reader.packageDeclaration());
     }
   }
@@ -206,12 +206,12 @@ public final class MPackageReadersTest
 
     Files.createFile(empty);
 
-    try (var writer =
+    try (final var writer =
            this.writers.create(outFile, outFileTmp, p)) {
       writer.addFile(new MFileName("meta/bom.xml"), empty);
     }
 
-    try (var reader = this.readers.open(outFile)) {
+    try (final var reader = this.readers.open(outFile)) {
       assertEquals(p, reader.packageDeclaration());
     }
   }
@@ -242,7 +242,7 @@ public final class MPackageReadersTest
           .build()
       );
 
-    try (var zipFile = new ZipArchiveOutputStream(outFile)) {
+    try (final var zipFile = new ZipArchiveOutputStream(outFile)) {
       zipFile.putArchiveEntry(
         new ZipArchiveEntry(MReservedNames.montarrePackage().name()));
       this.serializers.serialize(URI.create("out"), zipFile, p);
@@ -251,7 +251,7 @@ public final class MPackageReadersTest
 
     final var ex =
       assertThrows(MException.class, () -> {
-        try (var reader = this.readers.open(outFile)) {
+        try (final var reader = this.readers.open(outFile)) {
           assertEquals(p, reader.packageDeclaration());
         }
       });

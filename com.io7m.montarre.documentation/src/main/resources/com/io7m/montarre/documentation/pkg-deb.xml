@@ -9,4 +9,19 @@
       <LinkExternal target="https://www.debian.org">Debian</LinkExternal> packages.
     </Paragraph>
   </Subsection>
+
+  <Subsection title="Outputs">
+    <Paragraph>
+      Given a <Link target="60d790cb-85b9-48fc-9211-47241747042b">short name</Link>,
+      <Link target="06fa0349-3cc9-4415-b481-4cb3c8b4c255">version number</Link>,
+      <Link target="93e7d41c-b41f-4731-9393-6790cec2e9aa">architecture name</Link>, and
+      <Link target="cff1dbc4-6f3d-4d39-9e64-7e293649bed3">operating system name</Link>, the output of the packager will
+      be <Term type="file">${SHORT_NAME}-${PACKAGE_VERSION}-${ARCH_NAME}-${OS_NAME}.deb</Term>
+      unconditionally.
+    </Paragraph>
+    <Paragraph>
+      An example output of the packager is <Term type="file">montarre-0.0.1-SNAPSHOT-x86_64-linux.deb</Term>.
+    </Paragraph>
+  </Subsection>
+
 </Section>

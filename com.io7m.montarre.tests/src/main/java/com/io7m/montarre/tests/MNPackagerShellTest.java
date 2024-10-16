@@ -176,8 +176,8 @@ public final class MNPackagerShellTest
       )
     );
     assertTrue(
-      name.endsWith("-binaries.tgz"),
-      "%s must end with -binaries.tgz".formatted(
+      name.endsWith("-any.tgz"),
+      "%s must end with -any.tgz".formatted(
         name
       )
     );

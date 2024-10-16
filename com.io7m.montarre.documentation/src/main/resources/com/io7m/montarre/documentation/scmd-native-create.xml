@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<Section xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="63ea3d1a-5fc8-302e-8983-66910a4868fc"
+         title="native create"
+         xmlns="urn:com.io7m.structural:8:0">
+  <Subsection title="Name">
+    <Paragraph>
+      <Term type="command">native create</Term>
+      - Create native packages.
+    </Paragraph>
+  </Subsection>
+  <Subsection title="Description">
+    <Paragraph>
+      The
+      <Term type="command">native create</Term>
+      command creates native packages using every supported
+      <Link target="ee60e32c-8e30-4081-a32c-53ee7744b9be">native packager</Link>
+      on the current system.
+    </Paragraph>
+    <Paragraph>
+      The command will download a Java runtime described by the various
+      <Term type="expression">--java-runtime-*</Term>
+      options. This runtime will be used for the various packagers that require embedding a Java runtime.
+    </Paragraph>
+    <Paragraph>
+      The command will run every supported native packager unless the
+      <Term type="expression">--include-packagers</Term>
+      option is used to limit execution to only the named packagers.
+    </Paragraph>
+  </Subsection>
+  <xi:include href="scmd-native-create-parameters.xml"/>
+  <Subsection title="Examples">
+    <FormalItem title="Example"
+                type="example">
+      <Verbatim><![CDATA[
+$ montarre native create \
+  --verbose info \
+  --package com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk \
+  --work-directory /tmp/work0 \
+  --output-directory /tmp/work0-output \
+  --java-runtime-download-uri https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.4%2B7/OpenJDK21U-jdk_x64_linux_hotspot_21.0.4_7.tar.gz \
+  --java-runtime-sha256 51fb4d03a4429c39d397d3a03a779077159317616550e4e71624c9843083e7b9 \
+  --java-runtime-format TAR_GZ
+INFO com.io7m.montarre.cmdline.internal.MCNativeCreate: Opening package com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk.
+INFO com.io7m.montarre.cmdline.internal.MCNativeCreate: Creating output directory /tmp/work0-output
+INFO com.io7m.montarre.cmdline.internal.MCNativeCreate: Creating workspace /tmp/work0.
+INFO com.io7m.montarre.cmdline.internal.MCNativeCreate: Workspace architecture: x86_64
+INFO com.io7m.montarre.cmdline.internal.MCNativeCreate: Workspace OS: linux
+...
+
+$ ls -alF /tmp/work0-output/
+total 187632
+drwxr-xr-x  2 montarre   montarre        120 Oct 13 12:13 ./
+drwxrwxrwt 29 root       root            840 Oct 13 12:12 ../
+-rw-r--r--  1 montarre   montarre    4138851 Oct 13 12:13 com.io7m.montarre-0.0.1-SNAPSHOT-any.tgz
+-rw-r--r--  1 montarre   montarre   81923503 Oct 13 12:11 com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.tgz
+-rw-r--r--  1 montarre   montarre   52665048 Oct 13 12:13 com.io7m.montarre.flatpak
+-rw-r--r--  1 montarre   montarre   53400220 Oct 13 12:11 montarre-0.0.1-SNAPSHOT-x86_64-linux.deb
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+</Section>
+

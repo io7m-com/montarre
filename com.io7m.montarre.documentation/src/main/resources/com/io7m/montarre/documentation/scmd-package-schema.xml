@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Section xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="f9474213-2e77-3785-8cc8-07107c0d5c37"
+         title="package schema"
+         xmlns="urn:com.io7m.structural:8:0">
+  <Subsection title="Name">
+    <Paragraph>
+      <Term type="command">package schema</Term>
+      - Show the package schema.
+    </Paragraph>
+  </Subsection>
+  <Subsection title="Description">
+    <Paragraph>
+      The
+      <Term type="command">package schema</Term>
+      command prints the
+      <Link target="349a0e9d-7378-44b8-ae4e-6f39c0d90fc2">currently-supported package schema</Link>.
+    </Paragraph>
+  </Subsection>
+  <xi:include href="scmd-package-schema-parameters.xml"/>
+  <Subsection title="Examples">
+    <FormalItem title="Example"
+                type="example">
+      <Verbatim><![CDATA[
+$ montarre package schema
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="urn:com.io7m.montarre.package:1"
+            xmlns:mp="urn:com.io7m.montarre.package:1">
+
+  <xsd:simpleType name="ApplicationKindType">
+    <xsd:annotation>
+...
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+</Section>
+

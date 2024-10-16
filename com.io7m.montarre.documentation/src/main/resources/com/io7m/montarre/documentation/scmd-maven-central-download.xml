@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Section xmlns:xi="http://www.w3.org/2001/XInclude"
+         id="325f8e8c-7303-38b5-aa21-692a8e8515a8"
+         title="maven-central download"
+         xmlns="urn:com.io7m.structural:8:0">
+  <Subsection title="Name">
+    <Paragraph>
+      <Term type="command">maven-central download</Term>
+      - Download a package from Maven Central
+    </Paragraph>
+  </Subsection>
+  <Subsection title="Description">
+    <Paragraph>
+      The
+      <Term type="command">maven-central download</Term>
+      command downloads an artifact from
+      <LinkExternal target="https://search.maven.org">Maven Central</LinkExternal>.
+    </Paragraph>
+  </Subsection>
+  <xi:include href="scmd-maven-central-download-parameters.xml"/>
+  <Subsection title="Examples">
+    <FormalItem title="Example"
+                type="example">
+      <Verbatim><![CDATA[
+$ montarre maven-central download \
+--artifact com.io7m.junreachable.core \
+--version 4.0.0 \
+--group com.io7m.junreachable \
+--output-file junreachable.jar
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: Downloading: https://repo1.maven.org/maven2/com/io7m/junreachable/com.io7m.junreachable.core/4.0.0/com.io7m.junreachable.core-4.0.0.jar
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: Checksum: https://repo1.maven.org/maven2/com/io7m/junreachable/com.io7m.junreachable.core/4.0.0/com.io7m.junreachable.core-4.0.0.jar.sha1
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: Download: 0 bytes/4 KB (0 bytes/s) ~PT0S remaining
+INFO com.io7m.montarre.cmdline.internal.MCPackageCheck: Download: 0 bytes/40 bytes (0 bytes/s) ~PT0S remaining
+]]></Verbatim>
+    </FormalItem>
+  </Subsection>
+</Section>
+

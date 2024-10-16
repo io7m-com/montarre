@@ -77,14 +77,6 @@ final class MArchitectureNames
       case "X86_64": {
         return x86_64();
       }
-      case "IA64N": {
-        return itanium_32();
-      }
-      case "IA64":
-      case "IA64W":
-      case "ITANIUM64": {
-        return itanium_64();
-      }
       case "SPARC":
       case "SPARC32": {
         return sparc_32();
@@ -109,10 +101,10 @@ final class MArchitectureNames
       }
       case "MIPSEL":
       case "MIPS32EL": {
-        return mipsel_32();
+        return mipsle_32();
       }
       case "MIPS64EL": {
-        return mipsel_64();
+        return mipsle_64();
       }
       case "PPC":
       case "PPC32": {
@@ -128,21 +120,12 @@ final class MArchitectureNames
       case "PPC64LE": {
         return ppcle_64();
       }
-      case "S390": {
-        return s390_32();
-      }
-      case "S390X": {
-        return s390_64();
-      }
       case "RISCV":
       case "RISCV32": {
         return riscv_32();
       }
       case "RISCV64": {
         return riscv_64();
-      }
-      case "E2K": {
-        return e2k();
       }
       case "LOONGARCH64": {
         return loongarch_64();
@@ -164,14 +147,6 @@ final class MArchitectureNames
   /**
    * @return A standard architecture name
    */
-  static String e2k()
-  {
-    return "e2k";
-  }
-
-  /**
-   * @return A standard architecture name
-   */
   static String riscv_64()
   {
     return "riscv_64";
@@ -183,22 +158,6 @@ final class MArchitectureNames
   static String riscv_32()
   {
     return "riscv_32";
-  }
-
-  /**
-   * @return A standard architecture name
-   */
-  static String s390_64()
-  {
-    return "s390_64";
-  }
-
-  /**
-   * @return A standard architecture name
-   */
-  static String s390_32()
-  {
-    return "s390_32";
   }
 
   /**
@@ -236,17 +195,17 @@ final class MArchitectureNames
   /**
    * @return A standard architecture name
    */
-  static String mipsel_64()
+  static String mipsle_64()
   {
-    return "mipsel_64";
+    return "mipsle_64";
   }
 
   /**
    * @return A standard architecture name
    */
-  static String mipsel_32()
+  static String mipsle_32()
   {
-    return "mipsel_32";
+    return "mipsle_32";
   }
 
   /**
@@ -295,22 +254,6 @@ final class MArchitectureNames
   static String sparc_32()
   {
     return "sparc_32";
-  }
-
-  /**
-   * @return A standard architecture name
-   */
-  static String itanium_64()
-  {
-    return "itanium_64";
-  }
-
-  /**
-   * @return A standard architecture name
-   */
-  static String itanium_32()
-  {
-    return "itanium_32";
   }
 
   /**

@@ -17,12 +17,18 @@
 
 package com.io7m.montarre.tests;
 
+import com.io7m.montarre.api.MArchitectureName;
 import com.io7m.montarre.api.MFileName;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class MFileNameTest
 {
@@ -45,5 +51,50 @@ public final class MFileNameTest
       0,
       new MFileName("file.jar").compareTo(new MFileName("FILE.jar"))
     );
+  }
+
+  @TestFactory
+  public Stream<DynamicTest> testInvalid()
+  {
+    return Stream.of(
+      "",
+      "/",
+      "a//b",
+      "/a/b",
+      "a/b/",
+      "@",
+      "a@/b"
+    ).map(MFileNameTest::invalidOf);
+  }
+
+  @TestFactory
+  public Stream<DynamicTest> testValid()
+  {
+    return Stream.of(
+      "x",
+      "a/b"
+    ).map(MFileNameTest::validOf);
+  }
+
+  private static DynamicTest invalidOf(
+    final String text)
+  {
+    return DynamicTest.dynamicTest(
+      "testInvalid_%s".formatted(text),
+      () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
+          new MFileName(text);
+        });
+      });
+  }
+
+  private static DynamicTest validOf(
+    final String text)
+  {
+    return DynamicTest.dynamicTest(
+      "testValid_%s".formatted(text),
+      () -> {
+        assertEquals(text, new MFileName(text).name());
+      });
   }
 }

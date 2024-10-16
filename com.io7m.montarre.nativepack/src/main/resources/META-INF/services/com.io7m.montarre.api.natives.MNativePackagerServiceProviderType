@@ -1,4 +1,5 @@
 com.io7m.montarre.nativepack.internal.app_image.MNPackagerAppImageProvider
 com.io7m.montarre.nativepack.internal.deb.MNPackagerDebProvider
-com.io7m.montarre.nativepack.internal.msi.MNPackagerMSIProvider
 com.io7m.montarre.nativepack.internal.flatpak.MNPackagerFlatpakProvider
+com.io7m.montarre.nativepack.internal.msi.MNPackagerMSIProvider
+com.io7m.montarre.nativepack.internal.shell.MNPackagerShellProvider

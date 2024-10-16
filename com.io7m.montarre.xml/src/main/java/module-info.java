@@ -30,8 +30,10 @@ module com.io7m.montarre.xml
   requires com.io7m.blackthorne.core;
   requires com.io7m.blackthorne.jxe;
   requires com.io7m.jxe.core;
-  requires com.io7m.verona.core;
   requires com.io7m.lanark.core;
+  requires com.io7m.verona.core;
+  requires java.xml.crypto;
+  requires org.apache.commons.lang3;
 
   exports com.io7m.montarre.xml;
 }

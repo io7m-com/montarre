@@ -41,6 +41,7 @@ import com.io7m.montarre.api.MVersion;
 import com.io7m.montarre.api.parsers.MPackageDeclarationSerializerType;
 import com.io7m.montarre.schema.MSchemas;
 import com.io7m.montarre.xml.MReindent;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -237,7 +238,7 @@ public final class MPackageDeclarationSerializer implements
     for (final var entry : sortedEntries) {
       this.output.writeStartElement(NS, "Text");
       this.output.writeAttribute("Language", entry.getKey().name());
-      this.output.writeCharacters(entry.getValue());
+      this.output.writeCData(StringUtils.normalizeSpace(entry.getValue()));
       this.output.writeEndElement();
     }
   }
@@ -332,13 +333,13 @@ public final class MPackageDeclarationSerializer implements
 
     for (final var p : value.descriptions()) {
       this.output.writeStartElement(NS, "Paragraph");
-      this.output.writeCharacters(p.text().trim());
+      this.output.writeCData(StringUtils.normalizeSpace(p.text().trim()));
       this.output.writeEndElement();
     }
 
     for (final var f : value.features()) {
       this.output.writeStartElement(NS, "Feature");
-      this.output.writeCharacters(f.text().trim());
+      this.output.writeCData(StringUtils.normalizeSpace(f.text().trim()));
       this.output.writeEndElement();
     }
 

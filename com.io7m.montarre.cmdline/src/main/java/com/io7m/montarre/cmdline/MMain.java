@@ -168,6 +168,15 @@ public final class MMain implements Runnable
   }
 
   /**
+   * @return The quarrel application
+   */
+
+  public QApplicationType application()
+  {
+    return this.application;
+  }
+
+  /**
    * @return The program exit code
    */
 
