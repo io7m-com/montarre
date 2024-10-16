@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<div xmlns="http://www.w3.org/1999/xhtml">
+  <ul>
+    <li>
+      A rich, strictly-defined, and well-specified packaging format that remains platform-independent whilst allowing
+      straightforward zero-configuration transformations to a wide range of platform-specific package formats.
+    </li>
+    <li>
+      Extensive, type-driven, ahead-of-time checking; if your package validates, you should get working native
+      packages on all platforms.
+    </li>
+    <li>Reproducible builds by default.</li>
+    <li>Support for producing simple jpackage "app-image" executables on any platform.</li>
+    <li>Support for producing Debian .deb packages.</li>
+    <li>Support for producing Windows MSI installers.</li>
+    <li>Support for producing Flatpaks.</li>
+    <li>A carefully-engineered Java API for creating, manipulating, and transforming packages.</li>
+    <li>A full command-line interface built on top of the Java API.</li>
+    <li>A Maven plugin for producing packages from any Maven module.</li>
+    <li>
+      <a href="https://www.osgi.org/">OSGi</a>-ready
+    </li>
+    <li>
+      <a href="https://en.wikipedia.org/wiki/Java_Platform_Module_System">JPMS</a>-ready
+    </li>
+    <li>ISC license</li>
+  </ul>
+</div>
