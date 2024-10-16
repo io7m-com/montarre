@@ -252,10 +252,10 @@ public final class MNWorkspace implements MNativeWorkspaceType
 
       final var result = request.execute();
       return switch (result) {
-        case JDownloadErrorType error -> {
+        case final JDownloadErrorType error -> {
           throw this.downloadError(error);
         }
-        case JDownloadSucceeded ignored -> {
+        case final JDownloadSucceeded ignored -> {
           yield this.unpackJDK();
         }
       };
@@ -279,7 +279,7 @@ public final class MNWorkspace implements MNativeWorkspaceType
         }
       }
       return this.jdkDir;
-    } catch (IOException e) {
+    } catch (final IOException e) {
       throw new MException(
         "I/O error.",
         e,
@@ -296,7 +296,7 @@ public final class MNWorkspace implements MNativeWorkspaceType
     final JDownloadErrorType error)
   {
     return switch (error) {
-      case JDownloadErrorChecksumMismatch mismatch -> {
+      case final JDownloadErrorChecksumMismatch mismatch -> {
         yield new MException(
           "Hash mismatch.",
           "error-hash-mismatch",
@@ -309,7 +309,7 @@ public final class MNWorkspace implements MNativeWorkspaceType
           )
         );
       }
-      case JDownloadErrorHTTP http -> {
+      case final JDownloadErrorHTTP http -> {
         yield new MException(
           "HTTP error.",
           "error-http",
@@ -320,7 +320,7 @@ public final class MNWorkspace implements MNativeWorkspaceType
           )
         );
       }
-      case JDownloadErrorIO io -> {
+      case final JDownloadErrorIO io -> {
         yield new MException(
           "HTTP I/O error.",
           io.exception(),
@@ -381,7 +381,16 @@ public final class MNWorkspace implements MNativeWorkspaceType
       if (entry == null) {
         break;
       }
+
       LOG.info("Unpack: %s".formatted(entry.getName()));
+      if (entry.getName().contains("..")) {
+        LOG.warn(
+          "Refusing to unpack an entry with '..' in the name ({})",
+          entry.getName()
+        );
+        continue;
+      }
+
       final var outFile = outputDirectory.resolve(entry.getName());
       if (entry.isDirectory()) {
         Files.createDirectories(outFile);
@@ -392,7 +401,7 @@ public final class MNWorkspace implements MNativeWorkspaceType
       Files.createDirectories(outFile.getParent());
       setFakeTime(outFile.getParent());
 
-      try (var outStream =
+      try (final var outStream =
              Files.newOutputStream(outFile, OPEN_OPTIONS)) {
         zipStream.transferTo(outStream);
         outStream.flush();
@@ -436,6 +445,14 @@ public final class MNWorkspace implements MNativeWorkspaceType
 
       LOG.info("Unpack: %s".formatted(entry.getName()));
 
+      if (entry.getName().contains("..")) {
+        LOG.warn(
+          "Refusing to unpack an entry with '..' in the name ({})",
+          entry.getName()
+        );
+        continue;
+      }
+
       final String usedName;
       if (stripRoot) {
         usedName =
@@ -461,7 +478,7 @@ public final class MNWorkspace implements MNativeWorkspaceType
       }
 
       Files.createDirectories(outFile.getParent());
-      try (var outStream =
+      try (final var outStream =
              Files.newOutputStream(outFile, OPEN_OPTIONS)) {
         tar.transferTo(outStream);
         outStream.flush();
