@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Subsection title="Parameters"
             xmlns="urn:com.io7m.structural:8:0">
+  <FormalItem id="20f84cce-fa8f-325d-acc4-85733405ee66"
+              title="--adoptium-temurin-version">
+    <Table type="parameterTable">
+      <Columns>
+        <Column>Attribute</Column>
+        <Column>Value</Column>
+      </Columns>
+      <Row>
+        <Cell>Name</Cell>
+        <Cell>
+          <Term type="parameter">--adoptium-temurin-version</Term>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell>Type</Cell>
+        <Cell>
+          <Term type="class">java.lang.Runtime.Version</Term>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell>Default Value</Cell>
+        <Cell>
+          <Term type="constant"/>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell>Cardinality</Cell>
+        <Cell>
+          <Term type="expression">[0, 1]</Term>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell>Description</Cell>
+        <Cell>The version of the Adoptium Temurin runtime to use.</Cell>
+      </Row>
+    </Table>
+  </FormalItem>
   <FormalItem id="32ce2098-0deb-3a15-9b11-99a4ba912c5f"
               title="--include-packagers">
     <Table type="parameterTable">
@@ -66,7 +103,7 @@
       <Row>
         <Cell>Cardinality</Cell>
         <Cell>
-          <Term type="expression">[1, 1]</Term>
+          <Term type="expression">[0, 1]</Term>
         </Cell>
       </Row>
       <Row>
@@ -103,7 +140,7 @@
       <Row>
         <Cell>Cardinality</Cell>
         <Cell>
-          <Term type="expression">[1, 1]</Term>
+          <Term type="expression">[0, 1]</Term>
         </Cell>
       </Row>
       <Row>
@@ -140,7 +177,7 @@
       <Row>
         <Cell>Cardinality</Cell>
         <Cell>
-          <Term type="expression">[1, 1]</Term>
+          <Term type="expression">[0, 1]</Term>
         </Cell>
       </Row>
       <Row>

@@ -36,22 +36,23 @@ open module com.io7m.montarre.tests
   requires com.io7m.montarre.nativepack;
   requires com.io7m.montarre.xml;
   requires com.io7m.montarre.launchstub;
+  requires com.io7m.montarre.adoptium;
 
+  requires com.h2database.mvstore;
   requires com.io7m.anethum.api;
+  requires com.io7m.jaffirm.core;
+  requires com.io7m.jmulticlose.core;
   requires com.io7m.lanark.core;
   requires com.io7m.quarrel.core;
   requires com.io7m.quarrel.ext.xstructural;
-  requires com.io7m.verona.core;
-  requires org.apache.commons.compress;
   requires com.io7m.quixote.core;
   requires com.io7m.streamtime.core;
-  requires com.io7m.jmulticlose.core;
-  requires org.apache.commons.lang3;
-  requires java.net.http;
-  requires com.h2database.mvstore;
+  requires com.io7m.verona.core;
   requires io.helidon.webserver;
-  requires com.io7m.jaffirm.core;
+  requires java.net.http;
   requires java.xml;
+  requires org.apache.commons.compress;
+  requires org.apache.commons.lang3;
 
   exports com.io7m.montarre.tests;
 }

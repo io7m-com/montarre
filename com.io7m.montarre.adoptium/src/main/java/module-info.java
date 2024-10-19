@@ -14,39 +14,26 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-import com.io7m.montarre.api.natives.MNativePackagerServiceProviderType;
-
 /**
- * Application packaging tools (Command-line tools).
+ * Application packaging tools (Adoptium support).
  */
 
-module com.io7m.montarre.cmdline
+module com.io7m.montarre.adoptium
 {
   requires static org.osgi.annotation.bundle;
   requires static org.osgi.annotation.versioning;
+  requires static com.io7m.immutables.style;
+  requires static org.immutables.value;
 
-  requires com.io7m.montarre.adoptium;
+  requires com.fasterxml.jackson.databind;
+  requires com.fasterxml.jackson.annotation;
+
   requires com.io7m.montarre.api;
-  requires com.io7m.montarre.io;
-  requires com.io7m.montarre.nativepack;
-  requires com.io7m.montarre.schema;
-  requires com.io7m.montarre.xml;
-
-  requires com.io7m.jdownload.core;
-  requires com.io7m.jxe.core;
-  requires com.io7m.lanark.core;
-  requires com.io7m.quarrel.core;
-  requires com.io7m.quarrel.ext.logback;
-  requires com.io7m.streamtime.core;
   requires java.net.http;
-  requires org.apache.commons.compress;
-  requires org.apache.commons.io;
+  requires org.slf4j;
 
-  uses MNativePackagerServiceProviderType;
+  opens com.io7m.montarre.adoptium.internal
+    to com.fasterxml.jackson.databind;
 
-  exports com.io7m.montarre.cmdline.internal
-    to com.io7m.montarre.tests;
-
-  exports com.io7m.montarre.cmdline;
-  exports com.io7m.montarre.cmdline.converters;
+  exports com.io7m.montarre.adoptium;
 }

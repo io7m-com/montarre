@@ -310,6 +310,15 @@
         </Row>
         <Row>
           <Cell>
+            <Term type="constant">s390_64</Term>
+          </Cell>
+          <Cell>
+            64-bit
+            <LinkExternal target="https://en.wikipedia.org/wiki/IBM_Z">IBM z/Architecture</LinkExternal>
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
             <Term type="constant">sparc_32</Term>
           </Cell>
           <Cell>

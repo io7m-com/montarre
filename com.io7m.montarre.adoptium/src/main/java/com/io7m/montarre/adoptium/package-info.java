@@ -15,12 +15,12 @@
  */
 
 /**
- * Application packaging tools (Command-line tools).
+ * Application packaging tools (Adoptium support).
  */
 
 @Export
-@Version("1.0.1")
-package com.io7m.montarre.cmdline;
+@Version("1.0.0")
+package com.io7m.montarre.adoptium;
 
 import org.osgi.annotation.bundle.Export;
 import org.osgi.annotation.versioning.Version;

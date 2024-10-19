@@ -15,12 +15,10 @@
  */
 
 /**
- * Application packaging tools (Command-line tools).
+ * Application packaging tools (Eclipse Temurin support).
  */
 
-@Export
-@Version("1.0.1")
-package com.io7m.montarre.cmdline;
+@Version("1.0.0")
+package com.io7m.montarre.adoptium.internal;
 
-import org.osgi.annotation.bundle.Export;
 import org.osgi.annotation.versioning.Version;

@@ -14,13 +14,35 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/**
- * Application packaging tools (Command-line tools).
- */
 
-@Export
-@Version("1.0.1")
-package com.io7m.montarre.cmdline;
+package com.io7m.montarre.adoptium.internal;
 
-import org.osgi.annotation.bundle.Export;
-import org.osgi.annotation.versioning.Version;
+// CHECKSTYLE:OFF
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import java.util.Objects;
+
+@JsonDeserialize
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSerialize
+public record MEPackage(
+  @JsonProperty("name")
+  String name,
+  @JsonProperty("link")
+  String link,
+  @JsonProperty("size")
+  long size,
+  @JsonProperty("checksum")
+  String checksum)
+{
+  public MEPackage
+  {
+    Objects.requireNonNull(name, "name");
+    Objects.requireNonNull(link, "link");
+    Objects.requireNonNull(checksum, "checksum");
+  }
+}

@@ -221,6 +221,14 @@ public record MArchitectureName(
     return new MArchitectureName(MArchitectureNames.x86_32());
   }
 
+  /**
+   * @return A standard architecture name
+   */
+  public static MArchitectureName s390_64()
+  {
+    return new MArchitectureName(MArchitectureNames.s390_64());
+  }
+
   @Override
   public String toString()
   {

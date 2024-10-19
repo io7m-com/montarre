@@ -14,13 +14,29 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
+package com.io7m.montarre.adoptium;
+
+import com.io7m.immutables.styles.ImmutablesStyleType;
+import org.immutables.value.Value;
+
+import java.net.URI;
+
 /**
- * Application packaging tools (Command-line tools).
+ * The Adoptium configuration.
  */
 
-@Export
-@Version("1.0.1")
-package com.io7m.montarre.cmdline;
+@Value.Immutable
+@ImmutablesStyleType
+public interface MEAdoptiumConfigurationType
+{
+  /**
+   * @return The base URI
+   */
 
-import org.osgi.annotation.bundle.Export;
-import org.osgi.annotation.versioning.Version;
+  @Value.Default
+  default URI baseURI()
+  {
+    return URI.create("https://api.adoptium.net/v3");
+  }
+}

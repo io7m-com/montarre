@@ -14,13 +14,42 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
+package com.io7m.montarre.adoptium;
+
+import java.util.Objects;
+
 /**
- * Application packaging tools (Command-line tools).
+ * Image type names in the Adoptium API.
  */
 
-@Export
-@Version("1.0.1")
-package com.io7m.montarre.cmdline;
+public enum METImageKind
+{
+  /**
+   * jdk
+   */
+  JDK("jdk"),
 
-import org.osgi.annotation.bundle.Export;
-import org.osgi.annotation.versioning.Version;
+  /**
+   * jre
+   */
+  JRE("jre");
+
+
+  private String adoptiumName;
+
+  /**
+   * @return The Adoptium type name
+   */
+
+  public String adoptiumName()
+  {
+    return this.adoptiumName;
+  }
+
+  METImageKind(
+    final String name)
+  {
+    this.adoptiumName = Objects.requireNonNull(name, "name");
+  }
+}

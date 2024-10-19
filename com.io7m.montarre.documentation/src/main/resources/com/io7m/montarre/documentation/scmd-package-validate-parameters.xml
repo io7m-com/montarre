@@ -108,7 +108,7 @@
       </Row>
       <Row>
         <Cell>Description</Cell>
-        <Cell>The input file.</Cell>
+        <Cell>Whether to treat warnings as errors.</Cell>
       </Row>
     </Table>
   </FormalItem>

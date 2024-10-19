@@ -15,33 +15,40 @@
  */
 
 
-package com.io7m.montarre.cmdline.converters;
+package com.io7m.montarre.adoptium;
 
-import com.io7m.quarrel.core.QValueConverterDirectory;
-import com.io7m.quarrel.core.QValueConverterDirectoryType;
+import com.io7m.montarre.adoptium.internal.MEAdoptium;
+
+import java.net.http.HttpClient;
+import java.util.Objects;
+import java.util.concurrent.Executors;
 
 /**
- * The value converters.
+ * The Adoptium client factory.
  */
 
-public final class MConverters
+public final class MEAdoptiumFactory implements MEAdoptiumFactoryType
 {
-  private static final QValueConverterDirectoryType CONVERTERS =
-    QValueConverterDirectory.core()
-      .with(new MArchitectureNameConverter())
-      .with(new MOperatingSystemNameConverter());
-
   /**
-   * @return The value converters
+   * The Adoptium client factory.
    */
 
-  public static QValueConverterDirectoryType get()
+  public MEAdoptiumFactory()
   {
-    return CONVERTERS;
+
   }
 
-  private MConverters()
+  @Override
+  public MEAdoptiumType createAdoptium(
+    final MEAdoptiumConfiguration configuration)
   {
-
+    Objects.requireNonNull(configuration, "configuration");
+    return new MEAdoptium(
+      configuration,
+      HttpClient.newBuilder()
+        .followRedirects(HttpClient.Redirect.NORMAL)
+        .executor(Executors.newVirtualThreadPerTaskExecutor())
+        .build()
+    );
   }
 }
