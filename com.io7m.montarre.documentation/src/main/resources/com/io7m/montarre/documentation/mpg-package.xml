@@ -332,14 +332,19 @@
         <Link target="b1a07fc1-1462-4b78-aced-4f809530d16d">libraries</Link>
         element except that its purpose is to categorize matching artifacts as being <Term type="term">
         platform-dependent</Term>. For example, an application might include native library jar files for a number of
-        different platforms, and only the native library for the current platform should actually be placed on the
+        different
+        <Link target="92709b93-ed04-4785-962a-e6ceffa7301d">platforms</Link>,
+        and only the native library for the current platform should actually be placed on the
         module path when the application is run. The <Term type="element">platformLibraries</Term> element allows for
         specifying rules that will mark each matching artifact with their hardware architecture and operating system.
       </Paragraph>
       <Paragraph>
         The <Term type="element">platformLibraries</Term> element contains zero or more
         <Term type="element">platformLibrary</Term>
-        elements that each specify a hardware architecture, operating system, and inclusion and exclusion patterns. It
+        elements that each specify a
+        <Link target="93e7d41c-b41f-4731-9393-6790cec2e9aa">hardware architecture</Link>,
+        <Link target="cff1dbc4-6f3d-4d39-9e64-7e293649bed3">operating system</Link>,
+        and inclusion and exclusion patterns. It
         operates in the same manner as the <Link target="b1a07fc1-1462-4b78-aced-4f809530d16d">libraries</Link> element
         except that, if an artifact is included by a pattern, that artifact is marked as having the hardware
         architecture and operating system of the
