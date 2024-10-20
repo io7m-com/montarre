@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <c:changelog project="com.io7m.montarre" xmlns:c="urn:com.io7m.changelog:4.0">
   <c:releases>
-    <c:release date="2024-10-19T14:34:37+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.1">
+    <c:release date="2024-10-19T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.1">
+      <c:changes/>
+    </c:release>
+    <c:release date="2024-10-20T11:39:53+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.2">
       <c:changes/>
     </c:release>
   </c:releases>
