@@ -130,6 +130,9 @@ final class MArchitectureNames
       case "LOONGARCH64": {
         return loongarch_64();
       }
+      case "S390X": {
+        return s390_64();
+      }
       default: {
         return unknown();
       }
@@ -270,6 +273,14 @@ final class MArchitectureNames
   static String x86_32()
   {
     return "x86_32";
+  }
+
+  /**
+   * @return A standard architecture name
+   */
+  static String s390_64()
+  {
+    return "s390_64";
   }
 }
 

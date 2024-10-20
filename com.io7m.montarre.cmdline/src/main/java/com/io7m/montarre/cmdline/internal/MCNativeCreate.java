@@ -17,8 +17,17 @@
 
 package com.io7m.montarre.cmdline.internal;
 
+import com.io7m.montarre.adoptium.MEARuntimeSearch;
+import com.io7m.montarre.adoptium.MEAdoptiumConfiguration;
+import com.io7m.montarre.adoptium.MEAdoptiumFactory;
+import com.io7m.montarre.adoptium.METImageKind;
+import com.io7m.montarre.api.MArchitectureName;
 import com.io7m.montarre.api.MArchiveFormat;
 import com.io7m.montarre.api.MException;
+import com.io7m.montarre.api.MHash;
+import com.io7m.montarre.api.MHashAlgorithm;
+import com.io7m.montarre.api.MHashValue;
+import com.io7m.montarre.api.MOperatingSystemName;
 import com.io7m.montarre.api.http.MHTTPClients;
 import com.io7m.montarre.api.natives.MNativePackagerDirectoryType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceType;
@@ -30,6 +39,8 @@ import com.io7m.quarrel.core.QCommandContextType;
 import com.io7m.quarrel.core.QCommandMetadata;
 import com.io7m.quarrel.core.QCommandStatus;
 import com.io7m.quarrel.core.QCommandType;
+import com.io7m.quarrel.core.QException;
+import com.io7m.quarrel.core.QParameterNamed01;
 import com.io7m.quarrel.core.QParameterNamed0N;
 import com.io7m.quarrel.core.QParameterNamed1;
 import com.io7m.quarrel.core.QParameterNamedType;
@@ -47,6 +58,8 @@ import java.nio.file.StandardCopyOption;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -98,8 +111,8 @@ public final class MCNativeCreate implements QCommandType
       Path.class
     );
 
-  private static final QParameterNamed1<URI> JAVA_DOWNLOAD_URI =
-    new QParameterNamed1<>(
+  private static final QParameterNamed01<URI> JAVA_DOWNLOAD_URI =
+    new QParameterNamed01<>(
       "--java-runtime-download-uri",
       List.of(),
       new QStringType.QConstant("The location for a Java runtime."),
@@ -107,8 +120,8 @@ public final class MCNativeCreate implements QCommandType
       URI.class
     );
 
-  private static final QParameterNamed1<String> JAVA_DOWNLOAD_SHA256 =
-    new QParameterNamed1<>(
+  private static final QParameterNamed01<String> JAVA_DOWNLOAD_SHA256 =
+    new QParameterNamed01<>(
       "--java-runtime-sha256",
       List.of(),
       new QStringType.QConstant("The SHA-256 of the Java runtime."),
@@ -116,13 +129,23 @@ public final class MCNativeCreate implements QCommandType
       String.class
     );
 
-  private static final QParameterNamed1<MArchiveFormat> JAVA_DOWNLOAD_FORMAT =
-    new QParameterNamed1<>(
+  private static final QParameterNamed01<MArchiveFormat> JAVA_DOWNLOAD_FORMAT =
+    new QParameterNamed01<>(
       "--java-runtime-format",
       List.of(),
       new QStringType.QConstant("The format of the Java runtime archive."),
       Optional.empty(),
       MArchiveFormat.class
+    );
+
+  private static final QParameterNamed01<Runtime.Version> ADOPTIUM_TEMURIN_VERSION =
+    new QParameterNamed01<>(
+      "--adoptium-temurin-version",
+      List.of(),
+      new QStringType.QConstant(
+        "The version of the Adoptium Temurin runtime to use."),
+      Optional.empty(),
+      Runtime.Version.class
     );
 
   /**
@@ -143,6 +166,7 @@ public final class MCNativeCreate implements QCommandType
   {
     return Stream.concat(
       Stream.of(
+        ADOPTIUM_TEMURIN_VERSION,
         INCLUDE_PACKAGERS,
         INPUT_PACKAGE,
         JAVA_DOWNLOAD_FORMAT,
@@ -155,11 +179,28 @@ public final class MCNativeCreate implements QCommandType
     ).toList();
   }
 
+  private record RuntimeParameters(
+    URI runtimeURI,
+    MHash runtimeHash,
+    MArchiveFormat format)
+  {
+
+  }
+
   @Override
   public QCommandStatus onExecute(
     final QCommandContextType newContext)
+    throws QException
   {
     QLogback.configure(newContext);
+
+    final RuntimeParameters runtimeParameters;
+    try {
+      runtimeParameters = this.handleRuntimeParameters(newContext);
+    } catch (final MException e) {
+      MCSLogging.logStructuredError(LOG, e);
+      return QCommandStatus.FAILURE;
+    }
 
     final var httpClients =
       new MHTTPClients();
@@ -180,20 +221,20 @@ public final class MCNativeCreate implements QCommandType
         .setBaseDirectory(
           newContext.parameterValue(WORK_DIRECTORY))
         .setJavaRuntimeDownloadURI(
-          newContext.parameterValue(JAVA_DOWNLOAD_URI))
+          runtimeParameters.runtimeURI)
         .setJavaRuntimeDownloadSHA256(
-          newContext.parameterValue(JAVA_DOWNLOAD_SHA256))
+          runtimeParameters.runtimeHash.value().value())
         .setJavaRuntimeDownloadFormat(
-          newContext.parameterValue(JAVA_DOWNLOAD_FORMAT))
+          runtimeParameters.format)
         .build();
 
     LOG.info("Opening package {}.", packageFile);
-    try (var packageReader = readers.open(packageFile)) {
+    try (final var packageReader = readers.open(packageFile)) {
       LOG.info("Creating output directory {}", outputDirectory);
       Files.createDirectories(outputDirectory);
 
       LOG.info("Creating workspace {}.", workspaceConfig.baseDirectory());
-      try (var workspace = workspaces.open(
+      try (final var workspace = workspaces.open(
         workspaceConfig,
         httpClients,
         packageReader)) {
@@ -211,7 +252,7 @@ public final class MCNativeCreate implements QCommandType
         LOG.info("Executing {} packagers.", packagerList.size());
 
         final var packageDecl = packageReader.packageDeclaration();
-        for (var packager : packagerList) {
+        for (final var packager : packagerList) {
           final var unsupportedOpt =
             packager.unsupportedReason(Optional.of(packageDecl));
           if (unsupportedOpt.isPresent()) {
@@ -239,7 +280,7 @@ public final class MCNativeCreate implements QCommandType
       MCSLogging.logStructuredError(LOG, e);
       return QCommandStatus.FAILURE;
     } catch (final Exception e) {
-      if (e.getCause() instanceof MException ee) {
+      if (e.getCause() instanceof final MException ee) {
         MCSLogging.logStructuredError(LOG, ee);
         return QCommandStatus.FAILURE;
       }
@@ -248,6 +289,98 @@ public final class MCNativeCreate implements QCommandType
     }
 
     return QCommandStatus.SUCCESS;
+  }
+
+  private RuntimeParameters handleRuntimeParameters(
+    final QCommandContextType newContext)
+    throws QException, MException
+  {
+    final var uriOpt =
+      newContext.parameterValue(JAVA_DOWNLOAD_URI);
+    final var temurinOpt =
+      newContext.parameterValue(ADOPTIUM_TEMURIN_VERSION);
+
+    if (uriOpt.isEmpty() && temurinOpt.isEmpty()) {
+      LOG.error(
+        "At least one of {} or {} must be specified.",
+        JAVA_DOWNLOAD_URI.name(),
+        ADOPTIUM_TEMURIN_VERSION.name()
+      );
+      throw new QException(
+        "Missing parameter value.",
+        "parameter-missing-value",
+        Map.ofEntries(),
+        Optional.empty(),
+        List.of()
+      );
+    }
+
+    if (uriOpt.isPresent()) {
+      return new RuntimeParameters(
+        uriOpt.get(),
+        new MHash(
+          new MHashAlgorithm("SHA-256"),
+          new MHashValue(
+            newContext.parameterValueRequireNow(JAVA_DOWNLOAD_SHA256)
+          )
+        ),
+        newContext.parameterValueRequireNow(JAVA_DOWNLOAD_FORMAT)
+      );
+    }
+
+    return this.handleAdoptium(
+      newContext.parameterValueRequireNow(ADOPTIUM_TEMURIN_VERSION)
+    );
+  }
+
+  private RuntimeParameters handleAdoptium(
+    final Runtime.Version requiredVersion)
+    throws MException
+  {
+    final var adoptiums = new MEAdoptiumFactory();
+    try (final var adoptium =
+           adoptiums.createAdoptium(
+             MEAdoptiumConfiguration.builder()
+               .build())) {
+
+      final var runtimes =
+        adoptium.runtimes(
+          MEARuntimeSearch.builder()
+            .setImageKind(METImageKind.JRE)
+            .setOperatingSystem(os())
+            .setArchitecture(arch())
+            .setFeatureVersion(requiredVersion.feature())
+            .build()
+        );
+
+      for (final var runtime : runtimes) {
+        if (Objects.equals(runtime.version(), requiredVersion)) {
+          return new RuntimeParameters(
+            runtime.downloadLink(),
+            runtime.hash(),
+            runtime.format()
+          );
+        }
+      }
+
+      throw new MException(
+        "No Adoptium Temurin runtime is available for the given version.",
+        "error-adoptium-temurin-unavailable",
+        Map.ofEntries(
+          Map.entry("Version", requiredVersion.toString())
+        )
+      );
+    }
+  }
+
+  private static MArchitectureName arch()
+  {
+    return MArchitectureName.infer(System.getProperty("os.arch"));
+  }
+
+  private static MOperatingSystemName os()
+  {
+    return MOperatingSystemName.infer(System.getProperty("os.name"));
   }
 
   private Collection<MNativePackagerServiceType> getPackagers(

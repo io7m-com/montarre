@@ -14,13 +14,47 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
+package com.io7m.montarre.adoptium;
+
+import com.io7m.immutables.styles.ImmutablesStyleType;
+import com.io7m.montarre.api.MArchitectureName;
+import com.io7m.montarre.api.MOperatingSystemName;
+import org.immutables.value.Value;
+
 /**
- * Application packaging tools (Command-line tools).
+ * Runtime search parameters.
  */
 
-@Export
-@Version("1.0.1")
-package com.io7m.montarre.cmdline;
+@ImmutablesStyleType
+@Value.Immutable
+public interface MEARuntimeSearchType
+{
+  /**
+   * @return The Java feature version (such as "21")
+   */
 
-import org.osgi.annotation.bundle.Export;
-import org.osgi.annotation.versioning.Version;
+  int featureVersion();
+
+  /**
+   * @return The architecture name
+   */
+
+  MArchitectureName architecture();
+
+  /**
+   * @return The operating system name
+   */
+
+  MOperatingSystemName operatingSystem();
+
+  /**
+   * @return The image kind
+   */
+
+  @Value.Default
+  default METImageKind imageKind()
+  {
+    return METImageKind.JRE;
+  }
+}

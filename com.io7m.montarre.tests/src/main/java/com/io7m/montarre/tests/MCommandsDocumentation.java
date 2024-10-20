@@ -18,6 +18,7 @@
 package com.io7m.montarre.tests;
 
 
+import com.io7m.montarre.cmdline.MConverters;
 import com.io7m.montarre.cmdline.MMain;
 import com.io7m.quarrel.core.QCommandGroupType;
 import com.io7m.quarrel.core.QCommandOrGroupType;
@@ -58,7 +59,7 @@ public final class MCommandsDocumentation
 
     final var parserConfig =
       new QCommandParserConfiguration(
-        QValueConverterDirectory.core(),
+        MConverters.get(),
         QCommandParsers.emptyResources()
       );
 

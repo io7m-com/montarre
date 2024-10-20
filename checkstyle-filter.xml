@@ -10,6 +10,8 @@
             checks="NPathComplexity"/>
   <suppress files="MArchitectureNames.java"
             checks="CyclomaticComplexity"/>
+  <suppress files="METArchitectureName.java"
+            checks="NPathComplexity"/>
 
   <suppress files=".*\.java"
             checks="RedundantModifier"/>

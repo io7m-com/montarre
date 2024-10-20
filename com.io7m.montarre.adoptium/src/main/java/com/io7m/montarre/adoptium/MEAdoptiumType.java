@@ -14,13 +14,34 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
+package com.io7m.montarre.adoptium;
+
+import com.io7m.montarre.api.MException;
+
+import java.util.List;
+
 /**
- * Application packaging tools (Command-line tools).
+ * An Adoptium client.
  */
 
-@Export
-@Version("1.0.1")
-package com.io7m.montarre.cmdline;
+public interface MEAdoptiumType extends AutoCloseable
+{
+  /**
+   * Search for runtimes.
+   *
+   * @param search The search parameters
+   *
+   * @return The runtimes
+   *
+   * @throws MException On errors
+   */
 
-import org.osgi.annotation.bundle.Export;
-import org.osgi.annotation.versioning.Version;
+  List<MEARuntime> runtimes(
+    MEARuntimeSearch search)
+    throws MException;
+
+  @Override
+  void close()
+    throws MException;
+}

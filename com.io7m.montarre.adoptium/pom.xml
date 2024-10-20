@@ -12,10 +12,10 @@
     <version>0.0.2</version>
   </parent>
 
-  <artifactId>com.io7m.montarre.xml</artifactId>
+  <artifactId>com.io7m.montarre.adoptium</artifactId>
 
-  <name>com.io7m.montarre.xml</name>
-  <description>Application packaging tools (XML).</description>
+  <name>com.io7m.montarre.adoptium</name>
+  <description>Application packaging tools (Adoptium support).</description>
   <url>https://www.io7m.com/software/montarre</url>
 
   <dependencies>
@@ -24,45 +24,34 @@
       <artifactId>com.io7m.montarre.api</artifactId>
       <version>${project.version}</version>
     </dependency>
+
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>com.io7m.montarre.schema</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>com.io7m.blackthorne</groupId>
-      <artifactId>com.io7m.blackthorne.core</artifactId>
+      <groupId>org.immutables</groupId>
+      <artifactId>value</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.io7m.blackthorne</groupId>
-      <artifactId>com.io7m.blackthorne.jxe</artifactId>
+      <groupId>com.io7m.immutables-style</groupId>
+      <artifactId>com.io7m.immutables-style</artifactId>
+      <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>com.io7m.verona</groupId>
-      <artifactId>com.io7m.verona.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.lanark</groupId>
-      <artifactId>com.io7m.lanark.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.jxe</groupId>
-      <artifactId>com.io7m.jxe.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.anethum</groupId>
-      <artifactId>com.io7m.anethum.api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.io7m.jlexing</groupId>
-      <artifactId>com.io7m.jlexing.core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-lang3</artifactId>
-    </dependency>
-
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.annotation.bundle</artifactId>

@@ -2,5 +2,15 @@
 
 <div xmlns="http://www.w3.org/1999/xhtml">
   <h3>User Documentation</h3>
-  <p>See <a href="https://www.io7m.com/software/montarre/">montarre</a> for documentation.</p>
+  <ul>
+    <li>
+      <a href="documentation/index-m.xhtml">XHTML - one page per section</a>
+    </li>
+    <li>
+      <a href="documentation/index.xhtml">XHTML - single page</a>
+    </li>
+    <li>
+      <a href="documentation/documentation.epub">EPUB 3</a>
+    </li>
+  </ul>
 </div>

@@ -14,13 +14,28 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+
+package com.io7m.montarre.adoptium;
+
+import com.io7m.montarre.api.MException;
+
 /**
- * Application packaging tools (Command-line tools).
+ * The type of Adoptium client factories.
  */
 
-@Export
-@Version("1.0.1")
-package com.io7m.montarre.cmdline;
+public interface MEAdoptiumFactoryType
+{
+  /**
+   * Create an Adoptium client.
+   *
+   * @param configuration The client configuration
+   *
+   * @return The client
+   *
+   * @throws MException On errors
+   */
 
-import org.osgi.annotation.bundle.Export;
-import org.osgi.annotation.versioning.Version;
+  MEAdoptiumType createAdoptium(
+    MEAdoptiumConfiguration configuration)
+    throws MException;
+}

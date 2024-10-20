@@ -19,9 +19,35 @@
       on the current system.
     </Paragraph>
     <Paragraph>
-      The command will download a Java runtime described by the various
-      <Term type="expression">--java-runtime-*</Term>
-      options. This runtime will be used for the various packagers that require embedding a Java runtime.
+      Most native packagers require embedding a Java runtime. It is necessary to specify a runtime that will downloaded
+      as part of producing native packages. There are currently two mutually exclusive options for this:
+    </Paragraph>
+    <FormalItem title="Runtimes">
+      <ListUnordered>
+        <Item>
+          Use the <Term type="expression">--java-runtime-download-uri</Term> parameters to specify the address of a
+          runtime. If this parameter is specified, then it is also necessary to specify the
+          <Term type="expression">--java-runtime-format</Term>
+          and
+          <Term type="expression">--java-runtime-sha256</Term>
+          parameters.
+        </Item>
+        <Item>
+          Use the <Term type="expression">--adoptium-temurin-version</Term> parameter to specify an
+          <LinkExternal target="https://adoptium.net">Eclipse Adoptium</LinkExternal>
+          release. This will cause a runtime with a matching version to be downloaded using the Adoptium API.
+        </Item>
+      </ListUnordered>
+    </FormalItem>
+    <Paragraph>
+      As Java runtime packaging formats differ between platforms (Windows uses
+      <Term type="expression">.zip</Term>
+      archives, POSIX platforms use
+      <Term type="expression">.tar.gz</Term>), and because hash values will be different for every runtime on every
+      platform, it is generally preferable to use the Adoptium API. The API provides checksum values for integrity
+      checking, and published artifacts are immutable, so reproducibility is not affected. The downside to using the
+      Adoptium API is that the API does not keep runtime versions visible indefinitely, so older version numbers might
+      disappear from the API as new runtimes are released.
     </Paragraph>
     <Paragraph>
       The command will run every supported native packager unless the
