@@ -4,9 +4,6 @@
     <c:release date="2024-10-19T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.1">
       <c:changes/>
     </c:release>
-    <c:release date="2024-10-20T11:39:53+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.2">
-      <c:changes/>
-    </c:release>
   </c:releases>
   <c:ticket-systems>
     <c:ticket-system default="false" id="com.github.io7m.montarre" url="https://github.com/io7m-com/montarre/issues/"/>
