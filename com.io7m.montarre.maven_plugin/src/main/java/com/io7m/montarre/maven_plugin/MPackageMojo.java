@@ -156,7 +156,7 @@ public final class MPackageMojo extends AbstractMojo
    */
 
   @Parameter(required = false)
-  private Version packageVersion;
+  private Version version;
 
   /**
    * The main module.
@@ -633,17 +633,17 @@ public final class MPackageMojo extends AbstractMojo
     final MMetadata.Builder metaBuilder)
     throws VersionException
   {
-    if (this.packageVersion == null) {
+    if (this.version == null) {
       LOG.warn("No package version was set: Defaulting date to 2024-01-01.");
-      this.packageVersion = new Version();
-      this.packageVersion.setDate("2024-01-01");
-      this.packageVersion.setNumber(this.project.getVersion());
+      this.version = new Version();
+      this.version.setDate("2024-01-01");
+      this.version.setNumber(this.project.getVersion());
     }
 
     metaBuilder.setVersion(
       new MVersion(
-        VersionParser.parse(this.packageVersion.getNumber()),
-        LocalDate.parse(this.packageVersion.getDate())
+        VersionParser.parse(this.version.getNumber()),
+        LocalDate.parse(this.version.getDate())
       )
     );
   }
