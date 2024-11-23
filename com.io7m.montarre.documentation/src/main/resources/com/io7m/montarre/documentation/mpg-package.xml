@@ -299,16 +299,16 @@
       </FormalItem>
     </Subsection>
 
-    <Subsection title="packageVersion">
+    <Subsection title="version">
       <Paragraph>
-        The <Term type="element">packageVersion</Term> element specifies version information. It must have a <Term type="element">
+        The <Term type="element">version</Term> element specifies version information. It must have a <Term type="element">
         number
       </Term> child element whose text content is the full semantic version of the application, and a <Term type="element">
         date
       </Term> child element that indicates when the version number was set.
       </Paragraph>
       <Paragraph>
-        If no <Term type="element">packageVersion</Term> element is specified, the
+        If no <Term type="element">version</Term> element is specified, the
         <Term type="element">number</Term>
         child element is set to the value of the Maven POM's
         <Term type="element">version</Term>
