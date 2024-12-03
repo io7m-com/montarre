@@ -25,8 +25,6 @@ import com.io7m.quarrel.core.QCommandType;
 import com.io7m.quarrel.core.QParameterNamedType;
 import com.io7m.quarrel.core.QStringType;
 import com.io7m.quarrel.ext.logback.QLogback;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
