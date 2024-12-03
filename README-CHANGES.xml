@@ -13,7 +13,10 @@
     <c:release date="2024-12-03T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.4">
       <c:changes/>
     </c:release>
-    <c:release date="2024-12-03T19:26:46+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.5">
+    <c:release date="2024-12-03T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.5">
+      <c:changes/>
+    </c:release>
+    <c:release date="2024-12-03T20:25:58+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.6">
       <c:changes/>
     </c:release>
   </c:releases>

@@ -49,6 +49,5 @@ public record MEVersion(
   {
     Objects.requireNonNull(openjdkVersion, "openjdk_version");
     Objects.requireNonNull(semver, "semver");
-    Objects.requireNonNull(optional, "optional");
   }
 }
