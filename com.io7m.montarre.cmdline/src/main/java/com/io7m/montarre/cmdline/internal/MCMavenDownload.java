@@ -24,6 +24,7 @@ import com.io7m.jdownload.core.JDownloadErrorType;
 import com.io7m.jdownload.core.JDownloadRequests;
 import com.io7m.jdownload.core.JDownloadSucceeded;
 import com.io7m.montarre.api.MException;
+import com.io7m.montarre.xml.MMavenMetadata;
 import com.io7m.quarrel.core.QCommandContextType;
 import com.io7m.quarrel.core.QCommandMetadata;
 import com.io7m.quarrel.core.QCommandStatus;
@@ -38,8 +39,11 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
@@ -75,7 +79,7 @@ public final class MCMavenDownload implements QCommandType
       new QStringType.QConstant(
         "The base repository URI for -SNAPSHOT versions."),
       Optional.of(
-        URI.create("https://s01.oss.sonatype.org/content/repositories/snapshots")
+        URI.create("https://s01.oss.sonatype.org/content/groups/public")
       ),
       URI.class
     );
@@ -189,24 +193,135 @@ public final class MCMavenDownload implements QCommandType
     final var checksumFile =
       Paths.get(outputFile + ".sha1");
 
-    final var baseURIReleases =
-      newContext.parameterValue(BASE_URI_RELEASES);
-    final var baseURISnapshots =
-      newContext.parameterValue(BASE_URI_SNAPSHOTS);
+    try (final var httpClient = HttpClient.newBuilder()
+      .followRedirects(HttpClient.Redirect.NORMAL)
+      .build()) {
 
-    final URI baseURI;
-    if (version.endsWith("-SNAPSHOT")) {
-      baseURI = baseURISnapshots;
-    } else {
-      baseURI = baseURIReleases;
+      final var baseURIReleases =
+        newContext.parameterValue(BASE_URI_RELEASES);
+      final var baseURISnapshots =
+        newContext.parameterValue(BASE_URI_SNAPSHOTS);
+
+      final var targetURI =
+        constructTargetURI(
+          httpClient,
+          baseURISnapshots,
+          baseURIReleases,
+          group,
+          artifact,
+          version,
+          classifier,
+          type
+        );
+
+      final var checksumURI = URI.create(targetURI + ".sha1");
+      LOG.info("Downloading: {}", targetURI);
+      LOG.info("Checksum: {}", checksumURI);
+
+      final var request =
+        JDownloadRequests.builder(httpClient, targetURI, outputFile)
+          .setChecksumFromURL(
+            checksumURI,
+            "SHA-1",
+            checksumFile,
+            this::onDownloadProgress
+          )
+          .setTransferStatisticsReceiver(this::onDownloadProgress)
+          .build();
+
+      switch (request.execute()) {
+        case final JDownloadErrorType error -> {
+          throw this.downloadError(error);
+        }
+        case final JDownloadSucceeded ignored -> {
+          // Nothing
+        }
+      }
+    } catch (final MException e) {
+      MCSLogging.logStructuredError(LOG, e);
+      return QCommandStatus.FAILURE;
     }
+
+    return QCommandStatus.SUCCESS;
+  }
+
+  private static URI constructTargetURI(
+    final HttpClient httpClient,
+    final URI baseURISnapshots,
+    final URI baseURIReleases,
+    final String group,
+    final String artifact,
+    final String version,
+    final Optional<String> classifier,
+    final String type)
+    throws InterruptedException, MException
+  {
+    if (version.endsWith("-SNAPSHOT")) {
+      LOG.info(
+        "Version {} is a snapshot version. Using snapshots repository.",
+        version
+      );
+
+      final MMavenMetadata.SnapshotVersion snapshotVersion =
+        fetchSnapshotVersion(
+          httpClient,
+          baseURISnapshots,
+          group,
+          artifact,
+          version
+        );
+
+      LOG.info("Maven metadata: Base      {}", snapshotVersion.baseVersion());
+      LOG.info("Maven metadata: Timestamp {}", snapshotVersion.timestamp());
+      LOG.info("Maven metadata: Build     {}", snapshotVersion.buildNumber());
+
+      final var snapshotVersionText = new StringBuilder();
+      snapshotVersionText.append(
+        snapshotVersion.baseVersion().replace("-SNAPSHOT", ""));
+      snapshotVersionText.append('-');
+      snapshotVersionText.append(snapshotVersion.timestamp());
+      snapshotVersionText.append('-');
+      snapshotVersionText.append(snapshotVersion.buildNumber());
+
+      final var groupParts =
+        group.replace('.', '/');
+
+      final var builder = new StringBuilder();
+      builder.append(baseURISnapshots);
+      if (!baseURISnapshots.toString().endsWith("/")) {
+        builder.append('/');
+      }
+      builder.append(groupParts);
+      builder.append('/');
+      builder.append(artifact);
+      builder.append('/');
+      builder.append(version);
+      builder.append('/');
+      builder.append(artifact);
+      builder.append('-');
+      builder.append(snapshotVersionText);
+
+      if (classifier.isPresent()) {
+        builder.append('-');
+        builder.append(classifier.get());
+      }
+
+      builder.append('.');
+      builder.append(type);
+      return URI.create(builder.toString());
+    }
+
+    LOG.info(
+      "Version {} is not a snapshot version. Using releases repository.",
+      version
+    );
 
     final var groupParts =
       group.replace('.', '/');
 
     final var builder = new StringBuilder();
-    builder.append(baseURI);
-    if (!baseURI.toString().endsWith("/")) {
+    builder.append(baseURIReleases);
+    if (!baseURIReleases.toString().endsWith("/")) {
       builder.append('/');
     }
     builder.append(groupParts);
@@ -226,50 +341,74 @@ public final class MCMavenDownload implements QCommandType
 
     builder.append('.');
     builder.append(type);
+    return URI.create(builder.toString());
+  }
 
-    final var targetURI = URI.create(builder.toString());
-    builder.append(".sha1");
-    final var checksumURI = URI.create(builder.toString());
+  private static MMavenMetadata.SnapshotVersion fetchSnapshotVersion(
+    final HttpClient httpClient,
+    final URI baseURISnapshots,
+    final String group,
+    final String artifact,
+    final String version)
+    throws InterruptedException, MException
+  {
+    final var groupParts =
+      group.replace('.', '/');
 
-    LOG.info("Downloading: {}", targetURI);
-    LOG.info("Checksum: {}", checksumURI);
+    final var builder = new StringBuilder();
+    builder.append(baseURISnapshots);
+    if (!baseURISnapshots.toString().endsWith("/")) {
+      builder.append('/');
+    }
+    builder.append(groupParts);
+    builder.append('/');
+    builder.append(artifact);
+    builder.append('/');
+    builder.append(version);
+    builder.append("/maven-metadata.xml");
+    final var text = builder.toString();
 
-    try (var httpClient = HttpClient.newBuilder()
-      .followRedirects(HttpClient.Redirect.NORMAL)
-      .build()) {
+    LOG.info("Fetching Maven metadata from {}", text);
 
+    try {
       final var request =
-        JDownloadRequests.builder(httpClient, targetURI, outputFile)
-          .setChecksumFromURL(
-            checksumURI,
-            "SHA-1",
-            checksumFile,
-            this::onDownloadProgress
-          )
-          .setTransferStatisticsReceiver(this::onDownloadProgress)
+        HttpRequest.newBuilder(URI.create(text))
           .build();
 
-      switch (request.execute()) {
-        case JDownloadErrorType error -> {
-          throw this.downloadError(error);
-        }
-        case JDownloadSucceeded ignored -> {
-          // Nothing
-        }
-      }
-    } catch (final MException e) {
-      MCSLogging.logStructuredError(LOG, e);
-      return QCommandStatus.FAILURE;
-    }
+      final var response =
+        httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
 
-    return QCommandStatus.SUCCESS;
+      if (response.statusCode() >= 300) {
+        throw new MException(
+          "HTTP error.",
+          "error-http",
+          Map.ofEntries(
+            Map.entry("HTTP Status", Integer.toUnsignedString(response.statusCode())),
+            Map.entry("URI", response.uri().toString())
+          )
+        );
+      }
+
+      try (final var input = response.body()) {
+        return MMavenMetadata.extractSnapshotVersion(input);
+      }
+    } catch (final IOException e) {
+      throw new MException(
+        e,
+        "error-io",
+        Map.ofEntries(
+          Map.entry("URI", text)
+        ),
+        Optional.empty()
+      );
+    }
   }
 
   private MException downloadError(
     final JDownloadErrorType error)
   {
     return switch (error) {
-      case JDownloadErrorChecksumMismatch mismatch -> {
+      case final JDownloadErrorChecksumMismatch mismatch -> {
         yield new MException(
           "Hash mismatch.",
           "error-hash-mismatch",
@@ -282,7 +421,7 @@ public final class MCMavenDownload implements QCommandType
           )
         );
       }
-      case JDownloadErrorHTTP http -> {
+      case final JDownloadErrorHTTP http -> {
         yield new MException(
           "HTTP error.",
           "error-http",
@@ -293,7 +432,7 @@ public final class MCMavenDownload implements QCommandType
           )
         );
       }
-      case JDownloadErrorIO io -> {
+      case final JDownloadErrorIO io -> {
         yield new MException(
           "HTTP I/O error.",
           io.exception(),
