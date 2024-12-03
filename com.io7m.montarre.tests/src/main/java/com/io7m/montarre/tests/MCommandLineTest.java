@@ -359,4 +359,33 @@ public final class MCommandLineTest
       Files.write(output, stream.readAllBytes());
     }
   }
+
+  @Test
+  public void testPackageNativeTemurin(
+    final @TempDir Path output,
+    final @TempDir Path work,
+    final @TempDir Path directory)
+    throws Exception
+  {
+    final var inputFile =
+      directory.resolve("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk");
+
+    this.resource("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk", inputFile);
+
+    final var r0 = MMain.mainExitless(
+      new String[]{
+        "native",
+        "create",
+        "--adoptium-temurin-version",
+        "22.0.2+9",
+        "--package",
+        inputFile.toAbsolutePath().toString(),
+        "--output-directory",
+        output.toAbsolutePath().toString(),
+        "--work-directory",
+        work.toAbsolutePath().toString()
+      }
+    );
+    assertEquals(0, r0);
+  }
 }
