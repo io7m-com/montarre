@@ -57,13 +57,25 @@ public final class MCMavenDownload implements QCommandType
   private static final Logger LOG =
     LoggerFactory.getLogger(MCPackageCheck.class);
 
-  private static final QParameterNamed1<URI> BASE_URI =
+  private static final QParameterNamed1<URI> BASE_URI_RELEASES =
     new QParameterNamed1<>(
-      "--base-uri",
+      "--base-uri-releases",
       List.of(),
-      new QStringType.QConstant("The base repository URI."),
+      new QStringType.QConstant("The base repository URI for release versions."),
       Optional.of(
         URI.create("https://repo1.maven.org/maven2")
+      ),
+      URI.class
+    );
+
+  private static final QParameterNamed1<URI> BASE_URI_SNAPSHOTS =
+    new QParameterNamed1<>(
+      "--base-uri-snapshots",
+      List.of(),
+      new QStringType.QConstant(
+        "The base repository URI for -SNAPSHOT versions."),
+      Optional.of(
+        URI.create("https://s01.oss.sonatype.org/content/repositories/snapshots")
       ),
       URI.class
     );
@@ -143,7 +155,8 @@ public final class MCMavenDownload implements QCommandType
     return Stream.concat(
       Stream.of(
         ARTIFACT_NAME,
-        BASE_URI,
+        BASE_URI_RELEASES,
+        BASE_URI_SNAPSHOTS,
         CLASSIFIER,
         GROUP_NAME,
         OUTPUT_FILE,
@@ -161,8 +174,6 @@ public final class MCMavenDownload implements QCommandType
   {
     QLogback.configure(newContext);
 
-    final var baseURI =
-      newContext.parameterValue(BASE_URI);
     final var group =
       newContext.parameterValue(GROUP_NAME);
     final var artifact =
@@ -177,6 +188,18 @@ public final class MCMavenDownload implements QCommandType
       newContext.parameterValue(OUTPUT_FILE);
     final var checksumFile =
       Paths.get(outputFile + ".sha1");
+
+    final var baseURIReleases =
+      newContext.parameterValue(BASE_URI_RELEASES);
+    final var baseURISnapshots =
+      newContext.parameterValue(BASE_URI_SNAPSHOTS);
+
+    final URI baseURI;
+    if (version.endsWith("-SNAPSHOT")) {
+      baseURI = baseURISnapshots;
+    } else {
+      baseURI = baseURIReleases;
+    }
 
     final var groupParts =
       group.replace('.', '/');

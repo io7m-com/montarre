@@ -7,7 +7,10 @@
     <c:release date="2024-10-20T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.2">
       <c:changes/>
     </c:release>
-    <c:release date="2024-11-23T15:03:32+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.3">
+    <c:release date="2024-11-23T00:00:00+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.3">
+      <c:changes/>
+    </c:release>
+    <c:release date="2024-12-03T15:50:36+00:00" is-open="false" ticket-system="com.github.io7m.montarre" version="0.0.4">
       <c:changes/>
     </c:release>
   </c:releases>

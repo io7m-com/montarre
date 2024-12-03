@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Subsection title="Parameters"
-            xmlns="urn:com.io7m.structural:8:0">
-  <FormalItem id="20f84cce-fa8f-325d-acc4-85733405ee66"
-              title="--adoptium-temurin-version">
+<Subsection title="Parameters" xmlns="urn:com.io7m.structural:8:0">
+  <FormalItem id="20f84cce-fa8f-325d-acc4-85733405ee66" title="--adoptium-temurin-version">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -38,8 +36,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="32ce2098-0deb-3a15-9b11-99a4ba912c5f"
-              title="--include-packagers">
+  <FormalItem id="32ce2098-0deb-3a15-9b11-99a4ba912c5f" title="--include-packagers">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -75,8 +72,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="9686021e-8e60-3f26-bd58-6cba57ae324b"
-              title="--java-runtime-download-uri">
+  <FormalItem id="9686021e-8e60-3f26-bd58-6cba57ae324b" title="--java-runtime-download-uri">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -112,8 +108,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="f33683b6-7e4b-3b0d-ab49-28602e19aa2c"
-              title="--java-runtime-format">
+  <FormalItem id="f33683b6-7e4b-3b0d-ab49-28602e19aa2c" title="--java-runtime-format">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -149,8 +144,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="71948674-a667-375b-ab2a-ba3d54d33e76"
-              title="--java-runtime-sha256">
+  <FormalItem id="71948674-a667-375b-ab2a-ba3d54d33e76" title="--java-runtime-sha256">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -186,8 +180,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="1bad6eb0-f08a-322d-bfd9-791283192aee"
-              title="--output-directory">
+  <FormalItem id="1bad6eb0-f08a-322d-bfd9-791283192aee" title="--output-directory">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -223,8 +216,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="24b9bc84-2a4d-3b6a-8ad1-a3941e25f942"
-              title="--package">
+  <FormalItem id="24b9bc84-2a4d-3b6a-8ad1-a3941e25f942" title="--package">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -260,8 +252,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="b5eb2f39-27c3-3fb2-be69-3c904813a68b"
-              title="--verbose">
+  <FormalItem id="b5eb2f39-27c3-3fb2-be69-3c904813a68b" title="--verbose">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -297,8 +288,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="666b1dcb-11bd-3dce-9b6d-e025244e65fe"
-              title="--work-directory">
+  <FormalItem id="666b1dcb-11bd-3dce-9b6d-e025244e65fe" title="--work-directory">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>

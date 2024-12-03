@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Subsection title="Parameters"
-            xmlns="urn:com.io7m.structural:8:0">
-  <FormalItem id="0428c82d-13c6-3127-88f3-f0ebe227c33b"
-              title="--artifact">
+<Subsection title="Parameters" xmlns="urn:com.io7m.structural:8:0">
+  <FormalItem id="0428c82d-13c6-3127-88f3-f0ebe227c33b" title="--artifact">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -38,8 +36,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="df39b26d-cf05-3269-9cb5-9cc1defd1de2"
-              title="--base-uri">
+  <FormalItem id="ec4be7f2-78cd-39d9-a220-b8f592a7c076" title="--base-uri-releases">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -48,7 +45,7 @@
       <Row>
         <Cell>Name</Cell>
         <Cell>
-          <Term type="parameter">--base-uri</Term>
+          <Term type="parameter">--base-uri-releases</Term>
         </Cell>
       </Row>
       <Row>
@@ -71,12 +68,47 @@
       </Row>
       <Row>
         <Cell>Description</Cell>
-        <Cell>The base repository URI.</Cell>
+        <Cell>The base repository URI for release versions.</Cell>
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="b8664c3f-90ca-3e8d-a743-5f7c565e0f86"
-              title="--classifier">
+  <FormalItem id="c73a291c-6f1c-3ed1-adef-7b2c4495cfa8" title="--base-uri-snapshots">
+    <Table type="parameterTable">
+      <Columns>
+        <Column>Attribute</Column>
+        <Column>Value</Column>
+      </Columns>
+      <Row>
+        <Cell>Name</Cell>
+        <Cell>
+          <Term type="parameter">--base-uri-snapshots</Term>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell>Type</Cell>
+        <Cell>
+          <Term type="class">java.net.URI</Term>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell>Default Value</Cell>
+        <Cell>
+          <Term type="constant">https://s01.oss.sonatype.org/content/repositories/snapshots</Term>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell>Cardinality</Cell>
+        <Cell>
+          <Term type="expression">[1, 1]</Term>
+        </Cell>
+      </Row>
+      <Row>
+        <Cell>Description</Cell>
+        <Cell>The base repository URI for -SNAPSHOT versions.</Cell>
+      </Row>
+    </Table>
+  </FormalItem>
+  <FormalItem id="b8664c3f-90ca-3e8d-a743-5f7c565e0f86" title="--classifier">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -112,8 +144,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="ecf9c289-ee67-3913-b2ca-5ba84f223119"
-              title="--group">
+  <FormalItem id="ecf9c289-ee67-3913-b2ca-5ba84f223119" title="--group">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -149,8 +180,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="f141a474-3e69-3dc5-9f5a-da4eefa2dce3"
-              title="--output-file">
+  <FormalItem id="f141a474-3e69-3dc5-9f5a-da4eefa2dce3" title="--output-file">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -186,8 +216,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="a69df665-e154-3be5-bc7b-d0a5418d3019"
-              title="--type">
+  <FormalItem id="a69df665-e154-3be5-bc7b-d0a5418d3019" title="--type">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -223,8 +252,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="a6c59fef-f4ec-3111-affc-3131c8ad40cf"
-              title="--verbose">
+  <FormalItem id="a6c59fef-f4ec-3111-affc-3131c8ad40cf" title="--verbose">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -260,8 +288,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="64202537-3d21-3d5c-b5f3-ff8fd7496372"
-              title="--version">
+  <FormalItem id="64202537-3d21-3d5c-b5f3-ff8fd7496372" title="--version">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>

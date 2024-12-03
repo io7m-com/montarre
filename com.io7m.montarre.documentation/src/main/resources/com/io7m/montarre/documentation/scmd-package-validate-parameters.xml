@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Subsection title="Parameters"
-            xmlns="urn:com.io7m.structural:8:0">
-  <FormalItem id="13ac0e24-3112-3d32-960e-9fa4685a7ea9"
-              title="--file">
+<Subsection title="Parameters" xmlns="urn:com.io7m.structural:8:0">
+  <FormalItem id="13ac0e24-3112-3d32-960e-9fa4685a7ea9" title="--file">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -38,8 +36,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="2a093378-e3c4-3822-9ce3-ded65b5e888a"
-              title="--verbose">
+  <FormalItem id="2a093378-e3c4-3822-9ce3-ded65b5e888a" title="--verbose">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -75,8 +72,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="62a5a530-555f-3d7d-9952-235072724bba"
-              title="--warnings-as-errors">
+  <FormalItem id="62a5a530-555f-3d7d-9952-235072724bba" title="--warnings-as-errors">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
