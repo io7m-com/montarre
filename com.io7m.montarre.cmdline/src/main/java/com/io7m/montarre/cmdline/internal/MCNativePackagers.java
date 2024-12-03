@@ -38,9 +38,6 @@ import java.util.stream.Stream;
 
 public final class MCNativePackagers implements QCommandType
 {
-  private static final Logger LOG =
-    LoggerFactory.getLogger(MCPackageCheck.class);
-
   private final QCommandMetadata metadata;
 
   /**

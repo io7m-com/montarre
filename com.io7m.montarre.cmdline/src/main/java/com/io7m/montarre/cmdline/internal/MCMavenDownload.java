@@ -55,7 +55,7 @@ import java.util.stream.Stream;
 public final class MCMavenDownload implements QCommandType
 {
   private static final Logger LOG =
-    LoggerFactory.getLogger(MCPackageCheck.class);
+    LoggerFactory.getLogger(MCMavenDownload.class);
 
   private static final QParameterNamed1<URI> BASE_URI_RELEASES =
     new QParameterNamed1<>(
