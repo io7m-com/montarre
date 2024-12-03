@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Subsection title="Parameters"
-            xmlns="urn:com.io7m.structural:8:0">
-  <FormalItem id="b00a1400-f91d-3e9d-90b2-6a85b2503365"
-              title="--verbose">
+<Subsection title="Parameters" xmlns="urn:com.io7m.structural:8:0">
+  <FormalItem id="b00a1400-f91d-3e9d-90b2-6a85b2503365" title="--verbose">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>

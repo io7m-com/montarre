@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Subsection title="Parameters"
-            xmlns="urn:com.io7m.structural:8:0">
-  <FormalItem id="0820d2a8-e936-3f15-9436-c9ac9183ce31"
-              title="--check-hashes">
+<Subsection title="Parameters" xmlns="urn:com.io7m.structural:8:0">
+  <FormalItem id="0820d2a8-e936-3f15-9436-c9ac9183ce31" title="--check-hashes">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -38,8 +36,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="41c4018d-dc34-3b6b-975d-800d8a7cada6"
-              title="--file">
+  <FormalItem id="41c4018d-dc34-3b6b-975d-800d8a7cada6" title="--file">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -75,8 +72,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="fd4fbdca-eeeb-3c1d-ab67-eceabefec2c5"
-              title="--verbose">
+  <FormalItem id="fd4fbdca-eeeb-3c1d-ab67-eceabefec2c5" title="--verbose">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>

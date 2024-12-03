@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Subsection title="Parameters"
-            xmlns="urn:com.io7m.structural:8:0">
-  <FormalItem id="faae669e-56de-371b-bebb-4d67fc109000"
-              title="--input-directory">
+<Subsection title="Parameters" xmlns="urn:com.io7m.structural:8:0">
+  <FormalItem id="faae669e-56de-371b-bebb-4d67fc109000" title="--input-directory">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -38,8 +36,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="566bef20-3adc-3345-a9cf-2ad38a9f5d2e"
-              title="--package">
+  <FormalItem id="566bef20-3adc-3345-a9cf-2ad38a9f5d2e" title="--package">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>
@@ -75,8 +72,7 @@
       </Row>
     </Table>
   </FormalItem>
-  <FormalItem id="9a93762f-c31a-3cc0-817e-513abb4c52be"
-              title="--verbose">
+  <FormalItem id="9a93762f-c31a-3cc0-817e-513abb4c52be" title="--verbose">
     <Table type="parameterTable">
       <Columns>
         <Column>Attribute</Column>

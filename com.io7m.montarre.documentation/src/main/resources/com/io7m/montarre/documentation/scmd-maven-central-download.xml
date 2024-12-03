@@ -14,7 +14,23 @@
       The
       <Term type="command">maven-central download</Term>
       command downloads an artifact from
-      <LinkExternal target="https://search.maven.org">Maven Central</LinkExternal>.
+      <LinkExternal target="https://search.maven.org">Maven Central</LinkExternal>, or an appropriate remote Maven
+      repository.
+    </Paragraph>
+    <Paragraph>
+      The command takes
+      <Term type="parameter">--base-uri-snapshots</Term>
+      and
+      <Term type="parameter">--base-uri-releases</Term>
+      parameters that are, by default, configured to point to the
+      <LinkExternal target="https://s01.oss.sonatype.org/">Sonatype Snapshots</LinkExternal>
+      repository and the
+      <LinkExternal target="https://repo1.maven.org/maven2/">Maven Central</LinkExternal>
+      releases repository. If the version number given by the
+      <Term type="parameter">--version</Term>
+      parameter ends with the string <Term type="constant">-SNAPSHOT</Term>, the repository named by
+      <Term type="parameter">--base-uri-snapshots</Term> is used for downloads. Otherwise, the repository named by
+      <Term type="parameter">--base-uri-releases</Term> is used.
     </Paragraph>
   </Subsection>
   <xi:include href="scmd-maven-central-download-parameters.xml"/>
