@@ -53,6 +53,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -68,8 +69,6 @@ public final class MPackageReader implements MPackageReaderType
     Instant.parse("2024-10-14T00:00:00+00:00");
   private static final FileTime SOURCE_EPOCH_FILETIME =
     FileTime.from(SOURCE_EPOCH);
-  private static final HexFormat HEX =
-    HexFormat.of();
 
   private static final OpenOption[] OPEN_OPTIONS = {
     StandardOpenOption.WRITE,
@@ -278,20 +277,22 @@ public final class MPackageReader implements MPackageReaderType
 
   @Override
   public void unpackInto(
-    final Path output)
+    final Path output,
+    final Function<MPlatformDependentModule, PlatformDependentModulePolicy> filterPlatform)
     throws MException
   {
     Objects.requireNonNull(output, "output");
 
     try {
-      this.unpackZip(output);
+      this.unpackZip(output, filterPlatform);
     } catch (final IOException e) {
       throw this.errorIO(e);
     }
   }
 
   private void unpackZip(
-    final Path outputDirectory)
+    final Path outputDirectory,
+    final Function<MPlatformDependentModule, PlatformDependentModulePolicy> filterPlatform)
     throws IOException
   {
     LOG.debug("Unpacking…");
@@ -336,19 +337,30 @@ public final class MPackageReader implements MPackageReaderType
         }
 
         case final MPlatformDependentModule platformModule -> {
-          final var entryPath =
-            Paths.get(item.file().name());
-          final var archDir =
-            libDir.resolve(platformModule.architecture().name());
-          final var osDir =
-            archDir.resolve(platformModule.operatingSystem().name());
+          switch (filterPlatform.apply(platformModule)) {
+            case IGNORE -> {
+              // Do nothing.
+            }
+            case MERGE -> {
+              final var entryPath = Paths.get(item.file().name());
+              this.copyEntry(entry, libDir.resolve(entryPath.getFileName()));
+            }
+            case INCLUDE -> {
+              final var entryPath =
+                Paths.get(item.file().name());
+              final var archDir =
+                libDir.resolve(platformModule.architecture().name());
+              final var osDir =
+                archDir.resolve(platformModule.operatingSystem().name());
 
-          Files.createDirectories(archDir);
-          setFakeTime(archDir);
-          Files.createDirectories(osDir);
-          setFakeTime(osDir);
+              Files.createDirectories(archDir);
+              setFakeTime(archDir);
+              Files.createDirectories(osDir);
+              setFakeTime(osDir);
 
-          this.copyEntry(entry, osDir.resolve(entryPath.getFileName()));
+              this.copyEntry(entry, osDir.resolve(entryPath.getFileName()));
+            }
+          }
         }
       }
     }

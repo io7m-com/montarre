@@ -20,9 +20,11 @@ package com.io7m.montarre.api.natives;
 import com.io7m.montarre.api.MArchitectureName;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MOperatingSystemName;
+import com.io7m.montarre.api.MPlatformDependentModule;
 import com.io7m.streamtime.core.STTransferStatistics;
 
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Flow;
 
@@ -36,7 +38,6 @@ public interface MNativeWorkspaceType
   @Override
   void close()
     throws MException;
-
 
 
   /**
@@ -71,4 +72,24 @@ public interface MNativeWorkspaceType
 
   Path createWorkDirectory()
     throws MException;
+
+  /**
+   * Check if the operating system and architecture of the given module matches
+   * this workspace.
+   *
+   * @param module The module
+   *
+   * @return {@code true} if the module matches
+   */
+
+  default boolean matchesModule(
+    final MPlatformDependentModule module)
+  {
+    final var osMatches =
+      Objects.equals(module.operatingSystem(), this.operatingSystem());
+    final var archMatches =
+      Objects.equals(module.architecture(), this.architecture());
+
+    return (osMatches && archMatches);
+  }
 }

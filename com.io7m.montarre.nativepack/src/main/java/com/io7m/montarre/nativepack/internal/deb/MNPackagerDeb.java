@@ -46,6 +46,9 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.spi.ToolProvider;
 
+import static com.io7m.montarre.api.io.MPackageReaderType.PlatformDependentModulePolicy.IGNORE;
+import static com.io7m.montarre.api.io.MPackageReaderType.PlatformDependentModulePolicy.MERGE;
+
 /**
  * A native packager that produces Debian packages.
  */
@@ -161,7 +164,15 @@ public final class MNPackagerDeb
           .get();
 
       LOG.info("Unpacking application to {}.", appDirectory);
-      packageV.unpackInto(appDirectory);
+      packageV.unpackInto(
+        appDirectory,
+        module -> {
+          if (workspace.matchesModule(module)) {
+            return MERGE;
+          } else {
+            return IGNORE;
+          }
+        });
 
       final var iconFile =
         this.unpackIcon(workspace, packageV, directory);
