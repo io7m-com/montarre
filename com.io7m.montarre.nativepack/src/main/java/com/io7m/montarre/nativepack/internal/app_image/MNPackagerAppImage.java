@@ -88,7 +88,10 @@ public final class MNPackagerAppImage
 
     /*
      * We make the assumption that the world is closed and that all included
-     * modules _MUST_ be loaded.
+     * modules _MUST_ be loaded. This is useful for applications that use,
+     * for example, LWJGL. LWJGL includes jar files containing native modules
+     * that no module depends on directly but nevertheless must be placed
+     * into the module graph for native library unpacking to work.
      */
 
     arguments.add("--java-options");
