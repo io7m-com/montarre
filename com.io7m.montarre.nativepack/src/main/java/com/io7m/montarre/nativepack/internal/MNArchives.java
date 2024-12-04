@@ -21,6 +21,7 @@ import com.io7m.jmulticlose.core.CloseableCollection;
 import com.io7m.jmulticlose.core.ClosingResourceFailedException;
 import com.io7m.montarre.api.MShortName;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,11 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileTime;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
-import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -92,6 +93,7 @@ public final class MNArchives
     LOG.info("Creating tar {}", outputFile);
     LOG.debug("Input directory: {}", inputDirectory);
 
+    final var timeThen = Instant.now();
     try (final var streams = CloseableCollection.create()) {
       final var fileStream =
         streams.add(Files.walk(inputDirectory));
@@ -103,10 +105,26 @@ public final class MNArchives
         streams.add(Files.newOutputStream(outputFile, OPEN_OPTIONS));
       final var bufOut =
         streams.add(new BufferedOutputStream(fileOut, 65536));
-      final var gzipOut =
-        streams.add(new GZIPOutputStream(bufOut));
+
+      /*
+       * This XZ preset was chosen from a small survey taken when
+       * compressing an average Java application consisting of a Temurin
+       * runtime and a set of jar files. These were the results:
+       *
+       * gzip(9): 16 seconds, 84mb
+       * bzip(9): 23 seconds, 74mb
+       * xz(2): 15 seconds, 68mb
+       * xz(3): 24 seconds, 67mb
+       * xz(5): 78 seconds, 63mb
+       *
+       * Using xz(2) allows builds to run as fast as using gzip, but with
+       * a much smaller resulting file size.
+       */
+
+      final var compressOut =
+        streams.add(new XZCompressorOutputStream(bufOut, 2));
       final var tarOut =
-        streams.add(new TarArchiveOutputStream(gzipOut));
+        streams.add(new TarArchiveOutputStream(compressOut));
 
       createTarEntries(
         inputDirectory,
@@ -117,6 +135,8 @@ public final class MNArchives
       );
     }
 
+    final var timeNow = Instant.now();
+    LOG.info("Created archive in {}", Duration.between(timeThen, timeNow));
     return outputFile;
   }
 
@@ -187,6 +207,7 @@ public final class MNArchives
     LOG.info("Creating zip {}", outputFile);
     LOG.debug("Input directory: {}", inputDirectory);
 
+    final var timeThen = Instant.now();
     try (final var streams = CloseableCollection.create()) {
       final var fileStream =
         streams.add(Files.walk(inputDirectory));
@@ -203,6 +224,8 @@ public final class MNArchives
       createZipEntries(inputDirectory, shortName.name(), zipOut, fileList);
     }
 
+    final var timeNow = Instant.now();
+    LOG.info("Created archive in {}", Duration.between(timeThen, timeNow));
     return outputFile;
   }
 

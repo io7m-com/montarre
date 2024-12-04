@@ -44,13 +44,13 @@
           on Windows-like platforms.
         </Item>
         <Item>
-          <Term type="file">${PACKAGE_NAME}-${PACKAGE_VERSION}-${ARCH_NAME}-${OS_NAME}.tgz</Term>
+          <Term type="file">${PACKAGE_NAME}-${PACKAGE_VERSION}-${ARCH_NAME}-${OS_NAME}.txz</Term>
           on POSIX-like platforms.
         </Item>
       </ListUnordered>
     </FormalItem>
     <Paragraph>
-      An example output of the packager is <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.tgz</Term>.
+      An example output of the packager is <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.txz</Term>.
     </Paragraph>
   </Subsection>
 </Section>

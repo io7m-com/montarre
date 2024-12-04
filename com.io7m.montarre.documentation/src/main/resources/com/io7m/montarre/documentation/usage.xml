@@ -156,8 +156,8 @@ com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-0.0.1-SNAPS
 total 187632
 drwxr-xr-x  2 montarre   montarre        120 Oct 15 12:13 ./
 drwxrwxrwt 30 root       root            880 Oct 16 17:37 ../
--rw-r--r--  1 montarre   montarre    4138851 Oct 15 12:13 com.io7m.montarre-0.0.1-SNAPSHOT-any.tgz
--rw-r--r--  1 montarre   montarre   81923503 Oct 15 12:11 com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.tgz
+-rw-r--r--  1 montarre   montarre    4138851 Oct 15 12:13 com.io7m.montarre-0.0.1-SNAPSHOT-any.txz
+-rw-r--r--  1 montarre   montarre   81923503 Oct 15 12:11 com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.txz
 -rw-r--r--  1 montarre   montarre   52665048 Oct 15 12:13 com.io7m.montarre.flatpak
 -rw-r--r--  1 montarre   montarre   53400220 Oct 15 12:11 montarre-0.0.1-SNAPSHOT-x86_64-linux.deb
 ]]></Verbatim>
@@ -170,11 +170,11 @@ drwxrwxrwt 30 root       root            880 Oct 16 17:37 ../
       an
       <Link target="284bfca8-7cee-4bc0-a654-af8582e1906d">app-image</Link>
       named
-      <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.tgz</Term>,
+      <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.txz</Term>,
       a
       <Link target="a69aad53-8567-4ded-8b3c-cfe4a50712c4">shell distribution</Link>
       named
-      <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-any.tgz</Term>,
+      <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-any.txz</Term>,
       and a
       <Link target="ded1ac99-9556-4ef9-b01f-3f689a164733">Flatpak</Link>
       named

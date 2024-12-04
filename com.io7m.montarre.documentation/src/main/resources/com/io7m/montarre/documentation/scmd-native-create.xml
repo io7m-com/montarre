@@ -79,8 +79,8 @@ $ ls -alF /tmp/work0-output/
 total 187632
 drwxr-xr-x  2 montarre   montarre        120 Oct 13 12:13 ./
 drwxrwxrwt 29 root       root            840 Oct 13 12:12 ../
--rw-r--r--  1 montarre   montarre    4138851 Oct 13 12:13 com.io7m.montarre-0.0.1-SNAPSHOT-any.tgz
--rw-r--r--  1 montarre   montarre   81923503 Oct 13 12:11 com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.tgz
+-rw-r--r--  1 montarre   montarre    4138851 Oct 13 12:13 com.io7m.montarre-0.0.1-SNAPSHOT-any.txz
+-rw-r--r--  1 montarre   montarre   81923503 Oct 13 12:11 com.io7m.montarre-0.0.1-SNAPSHOT-x86_64-linux.txz
 -rw-r--r--  1 montarre   montarre   52665048 Oct 13 12:13 com.io7m.montarre.flatpak
 -rw-r--r--  1 montarre   montarre   53400220 Oct 13 12:11 montarre-0.0.1-SNAPSHOT-x86_64-linux.deb
 ]]></Verbatim>

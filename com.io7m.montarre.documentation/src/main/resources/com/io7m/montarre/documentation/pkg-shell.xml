@@ -321,11 +321,11 @@ c:\example\lib;c:\example\lib\x86_64\windows
       <Link target="06fa0349-3cc9-4415-b481-4cb3c8b4c255">version number</Link>,
       <Link target="93e7d41c-b41f-4731-9393-6790cec2e9aa">architecture name</Link>, and
       <Link target="cff1dbc4-6f3d-4d39-9e64-7e293649bed3">operating system name</Link>, the output of the packager will
-      be <Term type="file">${PACKAGE_NAME}-${PACKAGE_VERSION}-${ARCH_NAME}-${OS_NAME}-any.tgz</Term>
+      be <Term type="file">${PACKAGE_NAME}-${PACKAGE_VERSION}-${ARCH_NAME}-${OS_NAME}-any.txz</Term>
       unconditionally.
     </Paragraph>
     <Paragraph>
-      An example output of the packager is <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-any.tgz</Term>.
+      An example output of the packager is <Term type="file">com.io7m.montarre-0.0.1-SNAPSHOT-any.txz</Term>.
     </Paragraph>
   </Subsection>
 

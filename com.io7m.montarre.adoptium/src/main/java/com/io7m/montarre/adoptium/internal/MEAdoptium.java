@@ -217,6 +217,9 @@ public final class MEAdoptium
     if (link.endsWith(".tgz")) {
       return MArchiveFormat.TAR_GZ;
     }
+    if (link.endsWith(".txz")) {
+      return MArchiveFormat.TAR_XZ;
+    }
     return MArchiveFormat.ZIP;
   }
 

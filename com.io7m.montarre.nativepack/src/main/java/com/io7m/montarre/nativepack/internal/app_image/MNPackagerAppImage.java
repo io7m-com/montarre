@@ -273,7 +273,7 @@ public final class MNPackagerAppImage
 
     return MNArchives.packTar(
       this.appImageRoot,
-      outDirectory.resolve(baseName + ".tgz"),
+      outDirectory.resolve(baseName + ".txz"),
       entry -> entry.startsWith("bin/"),
       shortName
     );
