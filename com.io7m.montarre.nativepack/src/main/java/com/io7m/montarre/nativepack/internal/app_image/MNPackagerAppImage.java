@@ -85,6 +85,15 @@ public final class MNPackagerAppImage
     arguments.add("--verbose");
     arguments.add("--type");
     arguments.add("app-image");
+
+    /*
+     * We make the assumption that the world is closed and that all included
+     * modules _MUST_ be loaded.
+     */
+
+    arguments.add("--java-options");
+    arguments.add("--add-modules=ALL-MODULE-PATH");
+
     arguments.add("--runtime-image");
     arguments.add(jdkPath.toString());
     arguments.add("--name");
