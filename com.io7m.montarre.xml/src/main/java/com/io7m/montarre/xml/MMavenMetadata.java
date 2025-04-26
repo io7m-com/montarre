@@ -61,6 +61,10 @@ public final class MMavenMetadata
   {
     /**
      * Information about a snapshot version.
+     *
+     * @param baseVersion The base version
+     * @param timestamp   The timestamp
+     * @param buildNumber The build number
      */
 
     public SnapshotVersion
