@@ -1,0 +1,6 @@
+
+## montarre
+
+The `montarre` package provides a set of tools for producing native platform artifacts from
+platform-independent Java packages.
+
