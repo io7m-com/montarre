@@ -32,7 +32,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>com.io7m.montarre.xml</artifactId>
+      <artifactId>com.io7m.montarre.xml_format</artifactId>
       <version>${project.version}</version>
     </dependency>
 

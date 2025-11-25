@@ -33,7 +33,7 @@
     <module>com.io7m.montarre.nativepack</module>
     <module>com.io7m.montarre.schema</module>
     <module>com.io7m.montarre.tests</module>
-    <module>com.io7m.montarre.xml</module>
+    <module>com.io7m.montarre.xml_format</module>
   </modules>
 
   <properties>
