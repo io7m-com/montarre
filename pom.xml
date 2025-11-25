@@ -9,7 +9,7 @@
   <parent>
     <groupId>com.io7m.primogenitor</groupId>
     <artifactId>com.io7m.primogenitor.full</artifactId>
-    <version>9.0.0</version>
+    <version>9.1.0</version>
   </parent>
 
   <groupId>com.io7m.montarre</groupId>
@@ -179,7 +179,7 @@
       <dependency>
         <groupId>org.tukaani</groupId>
         <artifactId>xz</artifactId>
-        <version>1.10</version>
+        <version>1.11</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -284,7 +284,7 @@
       <dependency>
         <groupId>nl.jqno.equalsverifier</groupId>
         <artifactId>equalsverifier</artifactId>
-        <version>3.16.2</version>
+        <version>4.2.4</version>
       </dependency>
 
       <dependency>
