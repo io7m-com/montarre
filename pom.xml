@@ -63,7 +63,7 @@
     <io.helidon.version>4.3.3</io.helidon.version>
     <io7m.maven-api.version>3.9.11</io7m.maven-api.version>
     <net.jqwik.version>1.9.3</net.jqwik.version>
-    <org.immutables.value.version>2.12.0</org.immutables.value.version>
+    <org.immutables.value.version>2.12.1</org.immutables.value.version>
     <org.junit.version>5.14.2</org.junit.version>
     <com.fasterxml.jackson.version>2.17.2</com.fasterxml.jackson.version>
   </properties>
