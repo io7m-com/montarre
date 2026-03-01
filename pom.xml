@@ -60,7 +60,7 @@
     <com.io7m.xstructural.version>1.9.0</com.io7m.xstructural.version>
 
     <!-- Third-party dependencies. -->
-    <io.helidon.version>4.3.3</io.helidon.version>
+    <io.helidon.version>4.3.4</io.helidon.version>
     <io7m.maven-api.version>3.9.12</io7m.maven-api.version>
     <net.jqwik.version>1.9.3</net.jqwik.version>
     <org.immutables.value.version>2.12.1</org.immutables.value.version>
