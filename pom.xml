@@ -65,7 +65,7 @@
     <net.jqwik.version>1.9.3</net.jqwik.version>
     <org.immutables.value.version>2.12.1</org.immutables.value.version>
     <org.junit.version>5.14.2</org.junit.version>
-    <com.fasterxml.jackson.version>2.17.2</com.fasterxml.jackson.version>
+    <com.fasterxml.jackson.version>2.21.0</com.fasterxml.jackson.version>
   </properties>
 
   <licenses>
