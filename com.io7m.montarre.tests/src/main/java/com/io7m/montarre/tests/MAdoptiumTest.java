@@ -28,8 +28,11 @@ import com.io7m.montarre.api.MOperatingSystemName;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -60,6 +63,7 @@ public final class MAdoptiumTest
     this.adoptium.close();
   }
 
+  @Timeout(value = 10L, unit = TimeUnit.SECONDS)
   @Test
   public void testReleases_JDK_Linux_X86_64_21()
     throws Exception
@@ -81,6 +85,7 @@ public final class MAdoptiumTest
     );
   }
 
+  @Timeout(value = 10L, unit = TimeUnit.SECONDS)
   @Test
   public void testReleases_JRE_Linux_X86_64_21()
     throws Exception
@@ -102,6 +107,7 @@ public final class MAdoptiumTest
     );
   }
 
+  @Timeout(value = 10L, unit = TimeUnit.SECONDS)
   @Test
   public void testReleases_JDK_Windows_X86_64_21()
     throws Exception
@@ -123,6 +129,7 @@ public final class MAdoptiumTest
     );
   }
 
+  @Timeout(value = 10L, unit = TimeUnit.SECONDS)
   @Test
   public void testReleases_JRE_Windows_X86_64_21()
     throws Exception

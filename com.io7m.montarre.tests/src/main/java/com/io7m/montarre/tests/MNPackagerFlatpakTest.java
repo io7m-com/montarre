@@ -38,6 +38,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +50,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -77,7 +79,7 @@ public final class MNPackagerFlatpakTest
     this.inputMpk =
       directory.resolve("input.mpk");
     this.resource(
-      "com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk",
+      "com.io7m.montarre.distribution-0.0.7-SNAPSHOT.mpk",
       this.inputMpk
     );
 
@@ -139,6 +141,7 @@ public final class MNPackagerFlatpakTest
   }
 
   @Test
+  @Timeout(value = 2L, unit = TimeUnit.MINUTES)
   public void testExecute()
     throws Exception
   {
