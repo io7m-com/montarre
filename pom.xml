@@ -181,7 +181,7 @@
       <dependency>
         <groupId>org.tukaani</groupId>
         <artifactId>xz</artifactId>
-        <version>1.11</version>
+        <version>1.12</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
@@ -278,7 +278,7 @@
       <dependency>
         <groupId>nl.jqno.equalsverifier</groupId>
         <artifactId>equalsverifier</artifactId>
-        <version>4.3.1</version>
+        <version>4.4.1</version>
       </dependency>
 
       <dependency>
@@ -308,7 +308,7 @@
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.5.22</version>
+        <version>1.5.32</version>
       </dependency>
 
       <!-- Maven plugin. -->
