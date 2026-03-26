@@ -25,7 +25,7 @@ module com.io7m.montarre.adoptium
   requires static com.io7m.immutables.style;
   requires static org.immutables.value;
 
-  requires com.fasterxml.jackson.databind;
+  requires tools.jackson.databind;
   requires com.fasterxml.jackson.annotation;
 
   requires com.io7m.montarre.api;
@@ -33,7 +33,7 @@ module com.io7m.montarre.adoptium
   requires org.slf4j;
 
   opens com.io7m.montarre.adoptium.internal
-    to com.fasterxml.jackson.databind;
+    to tools.jackson.databind;
 
   exports com.io7m.montarre.adoptium;
 }

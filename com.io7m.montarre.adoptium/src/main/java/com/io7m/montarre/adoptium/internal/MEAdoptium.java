@@ -17,8 +17,8 @@
 
 package com.io7m.montarre.adoptium.internal;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 import com.io7m.montarre.adoptium.MEARuntime;
 import com.io7m.montarre.adoptium.MEARuntimeSearch;
 import com.io7m.montarre.adoptium.MEAdoptiumConfiguration;
