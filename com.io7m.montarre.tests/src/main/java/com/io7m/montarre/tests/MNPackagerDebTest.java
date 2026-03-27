@@ -162,9 +162,9 @@ public final class MNPackagerDebTest
       )
     );
     assertTrue(
-      name.contains("0.0.1-SNAPSHOT"),
+      name.contains("0.0.7-SNAPSHOT"),
       "%s must contain %s".formatted(
-        name, "0.0.1-SNAPSHOT"
+        name, "0.0.7-SNAPSHOT"
       )
     );
     assertTrue(
