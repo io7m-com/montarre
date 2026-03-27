@@ -238,6 +238,20 @@ public final class MNPackagerDeb
     arguments.add("--linux-package-name");
     arguments.add(metadata.names().shortName().name());
 
+    for (final var extraOption : metadata.javaInfo().extraOptions()) {
+      arguments.add("--java-options");
+      arguments.add(extraOption);
+    }
+
+    final var nativeAccessModules = metadata.javaInfo().nativeAccessModules();
+    if (!nativeAccessModules.isEmpty()) {
+      arguments.add("--java-options");
+      arguments.add(
+        "--enable-native-access=%s".formatted(
+          String.join(",", nativeAccessModules))
+      );
+    }
+
     arguments.add("--about-url");
     arguments.add(
       metadata.links()
@@ -279,7 +293,7 @@ public final class MNPackagerDeb
     final Path buildDirectory)
     throws IOException
   {
-    try (var stream = Files.list(buildDirectory)) {
+    try (final var stream = Files.list(buildDirectory)) {
       final var fileList =
         stream.filter(n -> n.getFileName().toString().endsWith(".deb"))
           .toList();

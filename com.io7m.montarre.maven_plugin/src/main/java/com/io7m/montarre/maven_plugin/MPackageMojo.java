@@ -51,6 +51,7 @@ import com.io7m.montarre.api.MPlatform;
 import com.io7m.montarre.api.MPlatformDependentModule;
 import com.io7m.montarre.api.MPlatformFileFilter;
 import com.io7m.montarre.api.MResource;
+import com.io7m.montarre.api.MRuntimeImageKind;
 import com.io7m.montarre.api.MShortName;
 import com.io7m.montarre.api.MTranslatedText;
 import com.io7m.montarre.api.MVendor;
@@ -262,6 +263,27 @@ public final class MPackageMojo extends AbstractMojo
 
   @Parameter(required = false)
   private List<String> categories = new ArrayList<>();
+
+  /**
+   * The modules permitted to use the FFI.
+   */
+
+  @Parameter(required = false)
+  private List<String> enableNativeAccesses = new ArrayList<>();
+
+  /**
+   * The extra JVM options.
+   */
+
+  @Parameter(required = false)
+  private List<String> extraOptions = new ArrayList<>();
+
+  /**
+   * The required runtime type.
+   */
+
+  @Parameter(required = false)
+  private MRuntimeImageKind runtimeImageKind = MRuntimeImageKind.JRE;
 
   /**
    * The flatpak configuration.
@@ -625,6 +647,9 @@ public final class MPackageMojo extends AbstractMojo
       MJavaInfo.builder()
         .setMainModule(this.mainModule)
         .setRequiredJDKVersion(this.requiredJDKVersion)
+        .setRuntimeImageKind(this.runtimeImageKind)
+        .setExtraOptions(this.extraOptions)
+        .setNativeAccessModules(this.enableNativeAccesses)
         .build()
     );
   }

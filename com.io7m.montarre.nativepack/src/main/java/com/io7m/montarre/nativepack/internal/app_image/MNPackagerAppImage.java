@@ -97,6 +97,20 @@ public final class MNPackagerAppImage
     arguments.add("--java-options");
     arguments.add("--add-modules=ALL-MODULE-PATH");
 
+    for (final var extraOption : metadata.javaInfo().extraOptions()) {
+      arguments.add("--java-options");
+      arguments.add(extraOption);
+    }
+
+    final var nativeAccessModules = metadata.javaInfo().nativeAccessModules();
+    if (!nativeAccessModules.isEmpty()) {
+      arguments.add("--java-options");
+      arguments.add(
+        "--enable-native-access=%s".formatted(
+          String.join(",", nativeAccessModules))
+      );
+    }
+
     arguments.add("--runtime-image");
     arguments.add(jdkPath.toString());
     arguments.add("--name");

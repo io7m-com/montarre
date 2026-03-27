@@ -14,7 +14,10 @@ $ unzip -p com.io7m.montarre.distribution/target/com.io7m.montarre.distribution-
             <FlatpakRuntime Name="org.freedesktop.Sdk" Role="SDK" Version="24.08"></FlatpakRuntime>
             <FlatpakRuntime Name="org.freedesktop.Platform" Role="PLATFORM" Version="24.08"></FlatpakRuntime>
         </Flatpak>
-        <JavaInfo MainModule="com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain" RequiredJDKVersion="21"></JavaInfo>
+        <JavaInfo MainModule="com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain" RequiredJDKVersion="21">
+          <EnableNativeAccess Module="com.io7m.example"/>
+          <ExtraOption Value="-XX:+UseG1GC"/>
+        </JavaInfo>
         <Link Role="SCM" Target="https://www.github.com/io7m-com/montarre"></Link>
         <Link Role="ISSUES" Target="https://www.github.com/io7m-com/montarre/issues"></Link>
         <Link Role="HOME_PAGE" Target="https://www.io7m.com/software/montarre"></Link>

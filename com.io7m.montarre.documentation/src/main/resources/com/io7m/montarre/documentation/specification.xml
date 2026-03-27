@@ -722,10 +722,14 @@
                 id="f55a177d-e226-49d8-a78d-41dae66e1710">
       <Subsection title="Overview">
         <Paragraph>
-          The <Term type="term">java info</Term> information for a package is a record consisting of a
-          <Link target="8b2d6ace-8cda-45bc-9cf4-59e6d47b7f94">required JDK version</Link>
-          and a
-          <Link target="0c2456eb-bc8f-4a7c-9148-bcb4c5369824">main module</Link>.
+          The <Term type="term">java info</Term> information for a package is a record consisting of metadata describing
+          the application's
+          <Link target="8b2d6ace-8cda-45bc-9cf4-59e6d47b7f94">required JDK version</Link>,
+          <Link target="0c2456eb-bc8f-4a7c-9148-bcb4c5369824">main module</Link>,
+          <Link target="8d86a704-0ec3-4b14-8bba-48cdd926e483">JDK runtime image type</Link>,
+          and any
+          <Link target="443dd584-d704-4d61-8d55-def2ce154dbb">native access</Link> and
+          <Link target="5c581695-8080-47d6-9ebc-51118797659a">extra options</Link>.
         </Paragraph>
         <FormalItem title="Java Info">
           <Verbatim>
@@ -750,6 +754,39 @@
         <Paragraph>
           An example <Term type="term">main module</Term> value is:
           <Term type="constant">"com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain"</Term>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="JDK Runtime Image Type" id="8d86a704-0ec3-4b14-8bba-48cdd926e483">
+        <Paragraph>
+          The <Term type="term">JDK runtime image type</Term> specifies the type of runtime image the application
+          needs in order to run.
+        </Paragraph>
+        <FormalItem title="JavaImageT">
+          <Verbatim>
+            <xi:include href="700.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
+        <Paragraph>
+          A value of <Term type="constant">JDK</Term> indicates the application requires the full set of
+          <Term type="package">jdk.*</Term> modules to be present.
+        </Paragraph>
+        <Paragraph>
+          A value of <Term type="constant">JRE</Term> indicates the application can work without the
+          <Term type="package">jdk.*</Term> modules.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Native Access" id="443dd584-d704-4d61-8d55-def2ce154dbb">
+        <Paragraph>
+          The <Term type="term">enableNativeAccess</Term> list specifies a list of modules that are permitted to use
+          the <LinkExternal
+          target="https://docs.oracle.com/en/java/javase/25/core/restricted-methods.html">Java FFI</LinkExternal>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Extra Options" id="5c581695-8080-47d6-9ebc-51118797659a">
+        <Paragraph>
+          The <Term type="term">extraOptions</Term> list specifies a list of extra options that will be passed to the
+          Java runtime on application startup.
         </Paragraph>
       </Subsection>
     </Subsection>

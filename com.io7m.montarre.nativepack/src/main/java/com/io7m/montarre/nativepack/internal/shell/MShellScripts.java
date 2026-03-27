@@ -101,9 +101,19 @@ public final class MShellScripts
     out.add("# Run the application.");
     out.add("#");
     out.add("");
-    out.add("exec /usr/bin/env java \\");
+    out.add("/usr/bin/env java \\");
     out.add("  -p \"${%s}\" \\".formatted(pathName));
     out.add("  -m %s \\".formatted(javaInfo.mainModule()));
+
+    for (final var extraOption : javaInfo.extraOptions()) {
+      out.add("  " + extraOption + " \\");
+    }
+
+    final var nativeAccessModules = javaInfo.nativeAccessModules();
+    if (!nativeAccessModules.isEmpty()) {
+      out.add("  --enable-native-access=" + String.join(",", nativeAccessModules) + " \\");
+    }
+
     out.add("  \"$@\"");
     out.add("");
 

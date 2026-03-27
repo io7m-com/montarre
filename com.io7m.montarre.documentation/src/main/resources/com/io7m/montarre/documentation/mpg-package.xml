@@ -83,6 +83,35 @@
       </FormalItem>
     </Subsection>
 
+    <Subsection title="enableNativeAccess">
+      <Paragraph>
+        The <Term type="element">enableNativeAccesses</Term> element specifies the modules that are permitted to use
+        the Java FFI.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<enableNativeAccesses>
+  <enableNativeAccess>com.example.native0</enableNativeAccess>
+  <enableNativeAccess>com.example.native1</enableNativeAccess>
+</enableNativeAccesses>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="extraOptions">
+      <Paragraph>
+        The <Term type="element">extraOptions</Term> element specifies the extra options that will be passed to the
+        Java runtime at application startup.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<extraOptions>
+  <extraOption>-XX:+UseG1GC</extraOption>
+</extraOptions>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
     <Subsection title="flatpak">
       <Paragraph>
         The <Term type="element">flatpak</Term> element specifies a Flatpak parameters. The element accepts
@@ -399,6 +428,22 @@
       <FormalItem title="Example">
         <Verbatim><![CDATA[
 <requiredJDKVersion>21</requiredJDKVersion>
+]]></Verbatim>
+      </FormalItem>
+    </Subsection>
+
+    <Subsection title="runtimeImageKind">
+      <Paragraph>
+        The <Term type="element">runtimeImageKind</Term> element specifies the required time of Java runtime.
+      </Paragraph>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<runtimeImageKind>JRE</runtimeImageKind>
+]]></Verbatim>
+      </FormalItem>
+      <FormalItem title="Example">
+        <Verbatim><![CDATA[
+<runtimeImageKind>JDK</runtimeImageKind>
 ]]></Verbatim>
       </FormalItem>
     </Subsection>

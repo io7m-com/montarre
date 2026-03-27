@@ -50,3 +50,4 @@
 502 ! Inductive PlatformT :=
 600 ! Inductive ManifestT :=
 601 ! Definition manifesItemsFilenamesUnique :=
+700 ! Inductive JavaImageT :=

@@ -296,6 +296,19 @@ public final class MPackageDeclarationSerializer implements
       "RuntimeImageKind",
       info.runtimeImageKind().name()
     );
+
+    for (final var extraOption : info.extraOptions()) {
+      this.output.writeStartElement(NS, "ExtraOption");
+      this.output.writeAttribute("Value", extraOption);
+      this.output.writeEndElement();
+    }
+
+    for (final var nativeAccess : info.nativeAccessModules()) {
+      this.output.writeStartElement(NS, "EnableNativeAccess");
+      this.output.writeAttribute("Module", nativeAccess);
+      this.output.writeEndElement();
+    }
+
     this.output.writeEndElement();
   }
 

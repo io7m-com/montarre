@@ -17,11 +17,17 @@
 
 package com.io7m.montarre.xml.internal.v1;
 
+import com.io7m.blackthorne.core.BTElementHandlerConstructorType;
 import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
+import com.io7m.blackthorne.core.BTQualifiedName;
 import com.io7m.montarre.api.MJavaInfo;
 import com.io7m.montarre.api.MRuntimeImageKind;
 import org.xml.sax.Attributes;
+
+import java.util.Map;
+
+import static com.io7m.montarre.xml.internal.v1.Mx1.element;
 
 /**
  * A parser.
@@ -30,7 +36,7 @@ import org.xml.sax.Attributes;
 public final class Mx1JavaInfo
   implements BTElementHandlerType<Object, MJavaInfo>
 {
-  private MJavaInfo info;
+  private MJavaInfo.Builder info;
 
   /**
    * A parser.
@@ -41,7 +47,39 @@ public final class Mx1JavaInfo
   public Mx1JavaInfo(
     final BTElementParsingContextType context)
   {
+    this.info = MJavaInfo.builder();
+  }
 
+  @Override
+  public Map<BTQualifiedName, BTElementHandlerConstructorType<?, ?>>
+  onChildHandlersRequested(
+    final BTElementParsingContextType context)
+  {
+    return Map.ofEntries(
+      Map.entry(element("ExtraOption"), Mx1ExtraOption::new),
+      Map.entry(element("EnableNativeAccess"), Mx1EnableNativeAccess::new)
+    );
+  }
+
+  @Override
+  public void onChildValueProduced(
+    final BTElementParsingContextType context,
+    final Object result)
+    throws Exception
+  {
+    switch (result) {
+      case final Mx1ExtraOption.ExtraOption o -> {
+        this.info.addExtraOptions(o.value());
+      }
+      case final Mx1EnableNativeAccess.EnableNativeAccess a -> {
+        this.info.addNativeAccessModules(a.value());
+      }
+      default -> {
+        throw new IllegalStateException(
+          "Unrecognized child element: %s".formatted(result)
+        );
+      }
+    }
   }
 
   @Override
@@ -49,23 +87,21 @@ public final class Mx1JavaInfo
     final BTElementParsingContextType context,
     final Attributes attributes)
   {
-    final var builder = MJavaInfo.builder();
-    builder.setMainModule(
+    this.info.setMainModule(
       attributes.getValue("MainModule")
     );
-    builder.setRequiredJDKVersion(
+    this.info.setRequiredJDKVersion(
       Long.parseUnsignedLong(attributes.getValue("RequiredJDKVersion"))
     );
-    builder.setRuntimeImageKind(
+    this.info.setRuntimeImageKind(
       MRuntimeImageKind.valueOf(attributes.getValue("RuntimeImageKind"))
     );
-    this.info = builder.build();
   }
 
   @Override
   public MJavaInfo onElementFinished(
     final BTElementParsingContextType context)
   {
-    return this.info;
+    return this.info.build();
   }
 }

@@ -94,9 +94,16 @@ Inductive TranslatedTextT := TranslatedText {
 Definition DescriptionT :=
   TranslatedTextT.
 
+Inductive JavaImageT :=
+    JDK
+  | JRE.
+
 Inductive JavaInfoT := JavaInfo {
   requiredJDKVersion : nat;
-  mainModule         : string
+  mainModule         : string;
+  extraOptions       : list string;
+  enableNativeAccess : list string;
+  imageType          : JavaImageT
 }.
 
 Inductive LinkRoleT :=
