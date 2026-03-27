@@ -20,6 +20,7 @@ package com.io7m.montarre.api.io;
 import com.io7m.montarre.api.MException;
 
 import java.nio.file.Path;
+import java.time.Instant;
 
 /**
  * A provider of readers for packages.
@@ -27,6 +28,13 @@ import java.nio.file.Path;
 
 public interface MPackageReaderFactoryType
 {
+  /**
+   * The specification-mandated created/modified/accessed time in package entries.
+   */
+
+  Instant SOURCE_EPOCH =
+    Instant.parse("2024-10-14T00:00:00+00:00");
+
   /**
    * Open a package for reading.
    *

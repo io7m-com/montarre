@@ -57,11 +57,13 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import static com.io7m.montarre.api.io.MPackageReaderFactoryType.SOURCE_EPOCH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -118,6 +120,9 @@ public final class MPackageReadersTest
     try (final var out = new ZipArchiveOutputStream(outFile)) {
       final var entry =
         new ZipArchiveEntry(MReservedNames.montarrePackage().name());
+      entry.setLastAccessTime(FileTime.from(SOURCE_EPOCH));
+      entry.setLastModifiedTime(FileTime.from(SOURCE_EPOCH));
+      entry.setCreationTime(FileTime.from(SOURCE_EPOCH));
       out.putArchiveEntry(entry);
       out.write("<x>Not a package!".getBytes(StandardCharsets.UTF_8));
       out.closeArchiveEntry();
@@ -243,8 +248,12 @@ public final class MPackageReadersTest
       );
 
     try (final var zipFile = new ZipArchiveOutputStream(outFile)) {
-      zipFile.putArchiveEntry(
-        new ZipArchiveEntry(MReservedNames.montarrePackage().name()));
+      final ZipArchiveEntry entry =
+        new ZipArchiveEntry(MReservedNames.montarrePackage().name());
+      entry.setLastAccessTime(FileTime.from(SOURCE_EPOCH));
+      entry.setLastModifiedTime(FileTime.from(SOURCE_EPOCH));
+      entry.setCreationTime(FileTime.from(SOURCE_EPOCH));
+      zipFile.putArchiveEntry(entry);
       this.serializers.serialize(URI.create("out"), zipFile, p);
       zipFile.closeArchiveEntry();
     }

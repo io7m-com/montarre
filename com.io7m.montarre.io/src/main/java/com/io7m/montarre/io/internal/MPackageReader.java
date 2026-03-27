@@ -56,6 +56,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.io7m.montarre.api.io.MPackageReaderFactoryType.SOURCE_EPOCH;
+
 /**
  * A package reader.
  */
@@ -65,8 +67,6 @@ public final class MPackageReader implements MPackageReaderType
   private static final Logger LOG =
     LoggerFactory.getLogger(MPackageReader.class);
 
-  private static final Instant SOURCE_EPOCH =
-    Instant.parse("2024-10-14T00:00:00+00:00");
   private static final FileTime SOURCE_EPOCH_FILETIME =
     FileTime.from(SOURCE_EPOCH);
 
@@ -121,6 +121,8 @@ public final class MPackageReader implements MPackageReaderType
       throw this.errorNoPackage();
     }
 
+    this.checkEntryInvariants(packageEntry);
+
     try (final var stream = this.zipFile.getInputStream(packageEntry)) {
       this.packageV =
         this.parsers.parse(
@@ -147,8 +149,59 @@ public final class MPackageReader implements MPackageReaderType
         throw this.errorMissingPackageEntry();
       }
 
+      this.checkEntryInvariants(entry);
       this.entries.put(itemFile, entry);
     }
+  }
+
+  private void checkEntryInvariants(
+    final ZipArchiveEntry entry)
+    throws MException
+  {
+    final var created =
+      Optional.ofNullable(entry.getCreationTime())
+        .map(FileTime::toInstant);
+    final var modified =
+      Optional.ofNullable(entry.getLastModifiedTime())
+        .map(FileTime::toInstant);
+    final var accessed =
+      Optional.ofNullable(entry.getLastAccessTime())
+        .map(FileTime::toInstant);
+
+    if (created.isPresent()) {
+      final var time = created.get();
+      if (!Objects.equals(time, SOURCE_EPOCH)) {
+        throw this.errorEntryTimeIncorrect(time, "Created");
+      }
+    }
+
+    if (modified.isPresent()) {
+      final var time = modified.get();
+      if (!Objects.equals(time, SOURCE_EPOCH)) {
+        throw this.errorEntryTimeIncorrect(time, "Modified");
+      }
+    }
+
+    if (accessed.isPresent()) {
+      final var time = accessed.get();
+      if (!Objects.equals(time, SOURCE_EPOCH)) {
+        throw this.errorEntryTimeIncorrect(time, "Accessed");
+      }
+    }
+  }
+
+  private MException errorEntryTimeIncorrect(
+    final Instant time,
+    final String timeName)
+  {
+    this.attributes.put("Time (%s)".formatted(timeName), time);
+    this.attributes.put("Time (Expected)", SOURCE_EPOCH);
+
+    return new MException(
+      "A package entry contains an incorrect timestamp.",
+      "error-file-entry-timestamp",
+      this.copyAttributes()
+    );
   }
 
   private MException errorMissingPackageEntry()

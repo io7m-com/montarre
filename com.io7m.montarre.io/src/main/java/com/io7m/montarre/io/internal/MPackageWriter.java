@@ -54,6 +54,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static com.io7m.montarre.api.io.MPackageReaderFactoryType.SOURCE_EPOCH;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
@@ -62,9 +63,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public final class MPackageWriter implements MPackageWriterType
 {
-  private static final Instant SOURCE_EPOCH =
-    Instant.parse("2024-10-14T00:00:00+00:00");
-  private static final FileTime SOURCE_EPOCH_FILE_TIME =
+  private static final FileTime SOURCE_EPOCH_FILETIME =
     FileTime.from(SOURCE_EPOCH);
 
   private final MPackageDeclarationSerializerFactoryType serializers;
@@ -148,9 +147,9 @@ public final class MPackageWriter implements MPackageWriterType
       new ZipEntry(
         MReservedNames.montarrePackage().name().toUpperCase(Locale.ROOT)
       );
-    entry.setCreationTime(SOURCE_EPOCH_FILE_TIME);
-    entry.setLastAccessTime(SOURCE_EPOCH_FILE_TIME);
-    entry.setLastModifiedTime(SOURCE_EPOCH_FILE_TIME);
+    entry.setCreationTime(SOURCE_EPOCH_FILETIME);
+    entry.setLastAccessTime(SOURCE_EPOCH_FILETIME);
+    entry.setLastModifiedTime(SOURCE_EPOCH_FILETIME);
     entry.setSize(packageData.length);
 
     try {
@@ -203,9 +202,9 @@ public final class MPackageWriter implements MPackageWriterType
 
     try {
       final var entry = new ZipEntry(name.name().toUpperCase(Locale.ROOT));
-      entry.setCreationTime(SOURCE_EPOCH_FILE_TIME);
-      entry.setLastAccessTime(SOURCE_EPOCH_FILE_TIME);
-      entry.setLastModifiedTime(SOURCE_EPOCH_FILE_TIME);
+      entry.setCreationTime(SOURCE_EPOCH_FILETIME);
+      entry.setLastAccessTime(SOURCE_EPOCH_FILETIME);
+      entry.setLastModifiedTime(SOURCE_EPOCH_FILETIME);
       entry.setSize(Files.size(file));
       this.zip.putNextEntry(entry);
 
