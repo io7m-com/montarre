@@ -227,10 +227,14 @@ public final class MCommandLineTest
     );
     assertEquals(0, r1);
 
-    assertEquals(
-      -1L,
-      Files.mismatch(inputFile, outputFile)
-    );
+    final var expectedHex =
+      MHexDump.dump(inputFile);
+    final var receivedHex =
+      MHexDump.dump(outputFile);
+
+    for (int index = 0; index < expectedHex.size(); ++index) {
+      assertEquals(expectedHex.get(index), receivedHex.get(index));
+    }
   }
 
   @Test

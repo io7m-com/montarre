@@ -54,6 +54,7 @@ open module com.io7m.montarre.tests
   requires org.apache.commons.compress;
   requires org.apache.commons.lang3;
   requires org.tukaani.xz;
+  requires org.apache.commons.io;
 
   exports com.io7m.montarre.tests;
 }
