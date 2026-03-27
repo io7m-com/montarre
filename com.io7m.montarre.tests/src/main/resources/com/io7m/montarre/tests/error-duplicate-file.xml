@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Package xmlns="urn:com.io7m.montarre.package:1">
-  <Metadata Version="1.0.0"
+  <Metadata ApplicationKind="CONSOLE"
+            Version="1.0.0"
             Name="com.io7m.example"
             RequiredJDKVersion="21"
             Description="An example package."

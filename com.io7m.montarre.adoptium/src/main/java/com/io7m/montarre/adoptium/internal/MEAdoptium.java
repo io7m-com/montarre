@@ -17,8 +17,6 @@
 
 package com.io7m.montarre.adoptium.internal;
 
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 import com.io7m.montarre.adoptium.MEARuntime;
 import com.io7m.montarre.adoptium.MEARuntimeSearch;
 import com.io7m.montarre.adoptium.MEAdoptiumConfiguration;
@@ -34,6 +32,8 @@ import com.io7m.montarre.api.MHashValue;
 import com.io7m.montarre.api.MOperatingSystemName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.http.HttpClient;

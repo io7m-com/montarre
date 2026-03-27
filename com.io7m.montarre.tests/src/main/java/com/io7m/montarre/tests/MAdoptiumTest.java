@@ -21,10 +21,10 @@ import com.io7m.montarre.adoptium.MEARuntimeSearch;
 import com.io7m.montarre.adoptium.MEAdoptiumConfiguration;
 import com.io7m.montarre.adoptium.MEAdoptiumFactory;
 import com.io7m.montarre.adoptium.MEAdoptiumType;
-import com.io7m.montarre.adoptium.METImageKind;
 import com.io7m.montarre.api.MArchitectureName;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MOperatingSystemName;
+import com.io7m.montarre.api.MRuntimeImageKind;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,7 +73,7 @@ public final class MAdoptiumTest
         MEARuntimeSearch.builder()
           .setArchitecture(MArchitectureName.x86_64())
           .setFeatureVersion(21)
-          .setImageKind(METImageKind.JDK)
+          .setImageKind(MRuntimeImageKind.JDK)
           .setOperatingSystem(MOperatingSystemName.linux())
           .build()
       );
@@ -95,7 +95,7 @@ public final class MAdoptiumTest
         MEARuntimeSearch.builder()
           .setArchitecture(MArchitectureName.x86_64())
           .setFeatureVersion(21)
-          .setImageKind(METImageKind.JRE)
+          .setImageKind(MRuntimeImageKind.JRE)
           .setOperatingSystem(MOperatingSystemName.linux())
           .build()
       );
@@ -117,7 +117,7 @@ public final class MAdoptiumTest
         MEARuntimeSearch.builder()
           .setArchitecture(MArchitectureName.x86_64())
           .setFeatureVersion(21)
-          .setImageKind(METImageKind.JDK)
+          .setImageKind(MRuntimeImageKind.JDK)
           .setOperatingSystem(MOperatingSystemName.windows())
           .build()
       );
@@ -139,7 +139,7 @@ public final class MAdoptiumTest
         MEARuntimeSearch.builder()
           .setArchitecture(MArchitectureName.x86_64())
           .setFeatureVersion(21)
-          .setImageKind(METImageKind.JRE)
+          .setImageKind(MRuntimeImageKind.JRE)
           .setOperatingSystem(MOperatingSystemName.windows())
           .build()
       );

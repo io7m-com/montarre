@@ -20,6 +20,7 @@ package com.io7m.montarre.xml.internal.v1;
 import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
 import com.io7m.montarre.api.MJavaInfo;
+import com.io7m.montarre.api.MRuntimeImageKind;
 import org.xml.sax.Attributes;
 
 /**
@@ -48,13 +49,17 @@ public final class Mx1JavaInfo
     final BTElementParsingContextType context,
     final Attributes attributes)
   {
-    this.info =
-      MJavaInfo.builder()
-        .setMainModule(
-          attributes.getValue("MainModule"))
-        .setRequiredJDKVersion(
-          Long.parseUnsignedLong(attributes.getValue("RequiredJDKVersion")))
-        .build();
+    final var builder = MJavaInfo.builder();
+    builder.setMainModule(
+      attributes.getValue("MainModule")
+    );
+    builder.setRequiredJDKVersion(
+      Long.parseUnsignedLong(attributes.getValue("RequiredJDKVersion"))
+    );
+    builder.setRuntimeImageKind(
+      MRuntimeImageKind.valueOf(attributes.getValue("RuntimeImageKind"))
+    );
+    this.info = builder.build();
   }
 
   @Override

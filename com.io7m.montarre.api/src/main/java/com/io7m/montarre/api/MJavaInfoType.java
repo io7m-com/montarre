@@ -42,4 +42,14 @@ public interface MJavaInfoType
    */
 
   String mainModule();
+
+  /**
+   * @return The required runtime image kind
+   */
+
+  @Value.Default
+  default MRuntimeImageKind runtimeImageKind()
+  {
+    return MRuntimeImageKind.JRE;
+  }
 }

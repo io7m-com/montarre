@@ -292,6 +292,10 @@ public final class MPackageDeclarationSerializer implements
       "MainModule",
       info.mainModule()
     );
+    this.output.writeAttribute(
+      "RuntimeImageKind",
+      info.runtimeImageKind().name()
+    );
     this.output.writeEndElement();
   }
 

@@ -124,6 +124,8 @@ public final class MNPackagerAppImage
     }
 
     LOG.info("Executing jpackage tool.");
+    LOG.trace("jpackage: {}", arguments);
+
     final var r =
       tool.run(System.out, System.err, arguments.toArray(new String[0]));
 

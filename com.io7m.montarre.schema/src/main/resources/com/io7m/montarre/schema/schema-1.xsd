@@ -262,6 +262,19 @@
     </xsd:complexType>
   </xsd:element>
 
+  <xsd:simpleType name="RuntimeImageKindType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        The type of JDK required by the application. Some applications may require a full JDK image with jdk.*
+        modules, whereas other applications can work with a reduced JRE image.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="JDK"/>
+      <xsd:enumeration value="JRE"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
   <xsd:element name="JavaInfo">
     <xsd:annotation>
       <xsd:documentation xml:lang="en">
@@ -275,6 +288,15 @@
         <xsd:annotation>
           <xsd:documentation xml:lang="en">
             The required JDK version.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="RuntimeImageKind"
+                     type="mp:RuntimeImageKindType"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The required JDK runtime kind.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
