@@ -17,51 +17,43 @@
 
 package com.io7m.montarre.tests;
 
-import com.io7m.lanark.core.RDottedName;
-import com.io7m.montarre.api.MApplicationKind;
 import com.io7m.montarre.api.MCaptions;
-import com.io7m.montarre.api.MCopying;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MFileName;
 import com.io7m.montarre.api.MHash;
 import com.io7m.montarre.api.MHashAlgorithm;
 import com.io7m.montarre.api.MHashValue;
-import com.io7m.montarre.api.MJavaInfo;
 import com.io7m.montarre.api.MLanguageCode;
-import com.io7m.montarre.api.MLink;
-import com.io7m.montarre.api.MLinkRole;
 import com.io7m.montarre.api.MManifest;
-import com.io7m.montarre.api.MMetadata;
-import com.io7m.montarre.api.MNames;
-import com.io7m.montarre.api.MPackageDeclaration;
-import com.io7m.montarre.api.MPackageName;
+import com.io7m.montarre.api.MModule;
 import com.io7m.montarre.api.MReservedNames;
 import com.io7m.montarre.api.MResource;
 import com.io7m.montarre.api.MResourceRole;
-import com.io7m.montarre.api.MShortName;
-import com.io7m.montarre.api.MVendor;
-import com.io7m.montarre.api.MVendorID;
-import com.io7m.montarre.api.MVendorName;
-import com.io7m.montarre.api.MVersion;
 import com.io7m.montarre.io.MPackageReaders;
 import com.io7m.montarre.io.MPackageWriters;
 import com.io7m.montarre.xml.MPackageDeclarationSerializers;
-import com.io7m.verona.core.Version;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.FileTime;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 import static com.io7m.montarre.api.io.MPackageReaderFactoryType.SOURCE_EPOCH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -100,9 +92,10 @@ public final class MPackageReadersTest
     }
 
     final var ex =
-      assertThrows(MException.class, () -> {
-        this.readers.open(outFile);
-      });
+      assertThrows(
+        MException.class, () -> {
+          this.readers.open(outFile);
+        });
 
     assertEquals(
       "error-package-declaration-missing",
@@ -130,9 +123,10 @@ public final class MPackageReadersTest
     }
 
     final var ex =
-      assertThrows(MException.class, () -> {
-        this.readers.open(outFile);
-      });
+      assertThrows(
+        MException.class, () -> {
+          this.readers.open(outFile);
+        });
 
     assertEquals(
       "error-package-declaration-unparseable",
@@ -150,9 +144,10 @@ public final class MPackageReadersTest
     Files.writeString(outFile, "THIS IS NOT A ZIP FILE");
 
     final var ex =
-      assertThrows(MException.class, () -> {
-        this.readers.open(outFile);
-      });
+      assertThrows(
+        MException.class, () -> {
+          this.readers.open(outFile);
+        });
 
     assertEquals(
       "error-io",
@@ -170,7 +165,10 @@ public final class MPackageReadersTest
       this.directory.resolve("out.mpk.tmp");
 
     try (final var writer =
-           this.writers.create(outFile, outFileTmp, MExamplePackages.EMPTY_PACKAGE)) {
+           this.writers.create(
+             outFile,
+             outFileTmp,
+             MExamplePackages.EMPTY_PACKAGE)) {
 
     }
 
@@ -248,7 +246,7 @@ public final class MPackageReadersTest
       );
 
     try (final var zipFile = new ZipArchiveOutputStream(outFile)) {
-      final ZipArchiveEntry entry =
+      final var entry =
         new ZipArchiveEntry(MReservedNames.montarrePackage().name());
       entry.setLastAccessTime(FileTime.from(SOURCE_EPOCH));
       entry.setLastModifiedTime(FileTime.from(SOURCE_EPOCH));
@@ -259,12 +257,184 @@ public final class MPackageReadersTest
     }
 
     final var ex =
-      assertThrows(MException.class, () -> {
-        try (final var reader = this.readers.open(outFile)) {
-          assertEquals(p, reader.packageDeclaration());
-        }
-      });
+      assertThrows(
+        MException.class, () -> {
+          try (final var reader = this.readers.open(outFile)) {
+            assertEquals(p, reader.packageDeclaration());
+          }
+        });
 
     assertEquals("error-file-missing", ex.errorCode());
+  }
+
+  @Test
+  public void testFileExtra()
+    throws Exception
+  {
+    final var empty =
+      this.directory.resolve("empty");
+    final var outFile =
+      this.directory.resolve("out.mpk");
+    final var outFileTmp =
+      this.directory.resolve("out.mpk.tmp");
+
+    final var p =
+      MExamplePackages.EMPTY_PACKAGE.withManifest(
+        MManifest.builder()
+          .addItems(
+            new MResource(
+              new MFileName("meta/bom.xml"),
+              new MHash(
+                new MHashAlgorithm("SHA-256"),
+                new MHashValue(
+                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")),
+              MResourceRole.BOM,
+              Optional.of(MCaptions.ofTranslations(
+                Map.entry(new MLanguageCode("en"), "A bill of materials."),
+                Map.entry(new MLanguageCode("fr"), "Une nomenclature.")
+              ))
+            ))
+          .build()
+      );
+
+    Files.createFile(empty);
+
+    try (final var writer =
+           this.writers.create(outFile, outFileTmp, p)) {
+      writer.addFile(new MFileName("meta/bom.xml"), empty);
+    }
+
+    addFileToZip(outFile, "ZZZ", new byte[3]);
+
+    final var ex =
+      assertThrows(
+        MException.class, () -> {
+          this.readers.open(outFile);
+        });
+
+    assertEquals("error-zip-entries-extra", ex.errorCode());
+  }
+
+  @Test
+  public void testFileDisordered()
+    throws Exception
+  {
+    final var file =
+      this.directory.resolve("file");
+    final var outFile =
+      this.directory.resolve("out.mpk");
+    final var outFileTmp =
+      this.directory.resolve("out.mpk.tmp");
+
+    final var p =
+      MExamplePackages.EMPTY_PACKAGE.withManifest(
+        MManifest.builder()
+          .addItems(
+            new MModule(
+              new MFileName("lib/a.jar"),
+              new MHash(
+                new MHashAlgorithm("SHA-256"),
+                new MHashValue("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824")
+              )
+            ),
+            new MModule(
+              new MFileName("lib/b.jar"),
+              new MHash(
+                new MHashAlgorithm("SHA-256"),
+                new MHashValue("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824")
+              )
+            ),
+            new MModule(
+              new MFileName("lib/c.jar"),
+              new MHash(
+                new MHashAlgorithm("SHA-256"),
+                new MHashValue("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824")
+              )
+            )
+          )
+          .build()
+      );
+
+    Files.writeString(file, "hello");
+
+    try (final var writer = this.writers.create(outFile, outFileTmp, p)) {
+      writer.addFile(new MFileName("lib/a.jar"), file);
+      writer.addFile(new MFileName("lib/b.jar"), file);
+      writer.addFile(new MFileName("lib/c.jar"), file);
+    }
+
+    shuffleZip(outFile);
+
+    final var ex =
+      assertThrows(
+        MException.class, () -> {
+          this.readers.open(outFile);
+        });
+
+    assertEquals("error-zip-entries-not-sorted", ex.errorCode());
+  }
+
+  private static void addFileToZip(
+    final Path zipPath,
+    final String entryName,
+    final byte[] data)
+    throws Exception
+  {
+    final var tempZip =
+      Files.createTempFile("zip-temp", ".zip");
+
+    try (final var zipFile = new ZipFile(zipPath.toFile());
+         final var zos = new ZipOutputStream(Files.newOutputStream(tempZip))) {
+
+      zipFile.stream()
+        .forEach(entry -> {
+          try (final var inputStream = zipFile.getInputStream(entry)) {
+            zos.putNextEntry(entry);
+            inputStream.transferTo(zos);
+            zos.closeEntry();
+          } catch (final IOException e) {
+            throw new UncheckedIOException(e);
+          }
+        });
+
+      final var entry = new ZipEntry(entryName);
+      entry.setLastAccessTime(FileTime.from(SOURCE_EPOCH));
+      entry.setLastModifiedTime(FileTime.from(SOURCE_EPOCH));
+      entry.setCreationTime(FileTime.from(SOURCE_EPOCH));
+
+      zos.putNextEntry(entry);
+      zos.write(data);
+      zos.closeEntry();
+    }
+
+    Files.move(tempZip, zipPath, StandardCopyOption.REPLACE_EXISTING);
+  }
+
+  private static void shuffleZip(
+    final Path zipPath)
+    throws Exception
+  {
+    final var tempZip =
+      Files.createTempFile("zip-temp", ".zip");
+
+    try (final var zipFile = new ZipFile(zipPath.toFile());
+         final var zos = new ZipOutputStream(Files.newOutputStream(tempZip))) {
+
+      final var entries = new ArrayList<ZipEntry>();
+      entries.addAll(zipFile.stream().toList());
+      Collections.reverse(entries);
+
+      entries.forEach(entry -> {
+        try (final var inputStream = zipFile.getInputStream(entry)) {
+          zos.putNextEntry(entry);
+          inputStream.transferTo(zos);
+          zos.closeEntry();
+        } catch (final IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      });
+    }
+
+    Files.move(tempZip, zipPath, StandardCopyOption.REPLACE_EXISTING);
   }
 }

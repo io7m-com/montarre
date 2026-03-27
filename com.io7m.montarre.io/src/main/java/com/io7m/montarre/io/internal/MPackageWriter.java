@@ -42,7 +42,6 @@ import java.nio.file.attribute.FileTime;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.HexFormat;
 import java.util.Locale;

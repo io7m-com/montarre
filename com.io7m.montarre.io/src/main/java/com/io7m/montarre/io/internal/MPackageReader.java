@@ -21,6 +21,7 @@ import com.io7m.anethum.api.ParsingException;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MFileName;
 import com.io7m.montarre.api.MHash;
+import com.io7m.montarre.api.MManifestItemType;
 import com.io7m.montarre.api.MModule;
 import com.io7m.montarre.api.MPackageDeclaration;
 import com.io7m.montarre.api.MPlatformDependentModule;
@@ -47,12 +48,16 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HexFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -105,6 +110,16 @@ public final class MPackageReader implements MPackageReaderType
     this.entries = new HashMap<>();
   }
 
+  private static void setFakeTime(
+    final Path outFile)
+    throws IOException
+  {
+    Files.setLastModifiedTime(
+      outFile,
+      SOURCE_EPOCH_FILETIME
+    );
+  }
+
   /**
    * Open the package declaration and parse it.
    *
@@ -121,7 +136,7 @@ public final class MPackageReader implements MPackageReaderType
       throw this.errorNoPackage();
     }
 
-    this.checkEntryInvariants(packageEntry);
+    this.checkEntryTimeInvariants(packageEntry);
 
     try (final var stream = this.zipFile.getInputStream(packageEntry)) {
       this.packageV =
@@ -134,6 +149,9 @@ public final class MPackageReader implements MPackageReaderType
     } catch (final ParsingException e) {
       throw this.errorParsing(e);
     }
+
+    this.checkZipEntriesSorted();
+    this.checkZipEntriesNoExtras(this.packageV.manifest().items());
 
     for (final var item : this.packageV.manifest().items()) {
       final var itemFile =
@@ -149,12 +167,101 @@ public final class MPackageReader implements MPackageReaderType
         throw this.errorMissingPackageEntry();
       }
 
-      this.checkEntryInvariants(entry);
+      this.checkEntryTimeInvariants(entry);
       this.entries.put(itemFile, entry);
     }
   }
 
-  private void checkEntryInvariants(
+  /**
+   * There must be no extra entries in the ZIP file outside of what the
+   * manifest specifies.
+   */
+
+  private void checkZipEntriesNoExtras(
+    final List<MManifestItemType> items)
+    throws MException
+  {
+    final var entryMap =
+      new HashMap<String, ZipArchiveEntry>();
+    final var enumeration =
+      this.zipFile.getEntries();
+    while (enumeration.hasMoreElements()) {
+      final var entry = enumeration.nextElement();
+      entryMap.put(entry.getName(), entry);
+    }
+
+    entryMap.remove(MReservedNames.montarrePackage().name());
+    for (final var item : items) {
+      final var nameUpper = item.file().name().toUpperCase(Locale.ROOT);
+      entryMap.remove(nameUpper);
+    }
+
+    if (!entryMap.isEmpty()) {
+      throw this.errorExtraUnlistedEntries(entryMap.keySet());
+    }
+  }
+
+  private MException errorExtraUnlistedEntries(
+    final Set<String> names)
+  {
+    final var iter = names.iterator();
+    for (int index = 0; index < names.size(); ++index) {
+      this.attributes.put(
+        "Extra Entry (%s)".formatted(index),
+        iter.next()
+      );
+    }
+
+    return new MException(
+      "The ZIP archive contains entries not listed in the manifest.",
+      "error-zip-entries-extra",
+      this.copyAttributes()
+    );
+  }
+
+  /**
+   * Package entries must be written in alphabetical order.
+   */
+
+  private void checkZipEntriesSorted()
+    throws MException
+  {
+    final var entryList =
+      new ArrayList<ZipArchiveEntry>();
+    final var enumeration =
+      this.zipFile.getEntriesInPhysicalOrder();
+
+    while (enumeration.hasMoreElements()) {
+      entryList.add(enumeration.nextElement());
+    }
+    if (!entryList.isEmpty()) {
+      entryList.removeFirst();
+    }
+
+    final var entriesSorted =
+      entryList.stream()
+        .sorted(Comparator.comparing(ZipArchiveEntry::getName))
+        .toList();
+
+    if (!entryList.equals(entriesSorted)) {
+      throw this.errorNotSorted();
+    }
+  }
+
+  private MException errorNotSorted()
+  {
+    return new MException(
+      "The ZIP archive entries are not sorted.",
+      "error-zip-entries-not-sorted",
+      this.copyAttributes()
+    );
+  }
+
+  /**
+   * The specification requires specific time values for entries.
+   */
+
+  private void checkEntryTimeInvariants(
     final ZipArchiveEntry entry)
     throws MException
   {
@@ -447,16 +554,6 @@ public final class MPackageReader implements MPackageReaderType
       }
       setFakeTime(outFile);
     }
-  }
-
-  private static void setFakeTime(
-    final Path outFile)
-    throws IOException
-  {
-    Files.setLastModifiedTime(
-      outFile,
-      SOURCE_EPOCH_FILETIME
-    );
   }
 
   private void checkDigest(
