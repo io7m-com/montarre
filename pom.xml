@@ -14,7 +14,7 @@
 
   <groupId>com.io7m.montarre</groupId>
   <artifactId>com.io7m.montarre</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0-beta0001</version>
 
   <packaging>pom</packaging>
   <name>com.io7m.montarre</name>
@@ -40,7 +40,7 @@
     <io7m.workID>7c9e6b84-0d04-46b1-bc66-2f5b1e6f10dc</io7m.workID>
 
     <!-- Configuration. -->
-    <io7m.api.previousVersion>0.0.7-SNAPSHOT</io7m.api.previousVersion>
+    <io7m.api.previousVersion>1.0.0-beta0001</io7m.api.previousVersion>
     <io7m.java.targetJavaVersion>21</io7m.java.targetJavaVersion>
 
     <!-- io7m dependencies. -->
