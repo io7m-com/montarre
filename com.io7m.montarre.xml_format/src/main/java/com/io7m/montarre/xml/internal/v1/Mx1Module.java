@@ -54,6 +54,7 @@ public final class Mx1Module
   {
     this.data = new MModule(
       new MFileName(attributes.getValue("File")),
+      Long.parseUnsignedLong(attributes.getValue("Size")),
       new MHash(
         new MHashAlgorithm(
           attributes.getValue("HashAlgorithm")

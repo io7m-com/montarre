@@ -107,10 +107,12 @@ public final class MPackageTest
             MManifest.builder()
               .addItems(new MModule(
                 new MFileName("lib/file.jar"),
+                0L,
                 hashOf("lib/file.jar"))
               )
               .addItems(new MModule(
                 new MFileName("lib/FILE.jar"),
+                0L,
                 hashOf("lib/file.jar"))
               )
               .build())

@@ -92,7 +92,9 @@ public final class MPackageWritersTest
               new MHash(
                 new MHashAlgorithm("SHA-256"),
                 new MHashValue(
-                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")),
+                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+              ),
+              23L,
               MResourceRole.BOM,
               Optional.empty()
             ))
@@ -129,7 +131,9 @@ public final class MPackageWritersTest
               new MHash(
                 new MHashAlgorithm("SHA-256"),
                 new MHashValue(
-                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")),
+                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+              ),
+              2L,
               MResourceRole.BOM,
               Optional.empty()
             ))
@@ -168,7 +172,9 @@ public final class MPackageWritersTest
               new MHash(
                 new MHashAlgorithm("SHA-256"),
                 new MHashValue(
-                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")),
+                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+              ),
+              0L,
               MResourceRole.BOM,
               Optional.empty()
             ))
@@ -209,7 +215,9 @@ public final class MPackageWritersTest
               new MHash(
                 new MHashAlgorithm("SHA-256"),
                 new MHashValue(
-                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")),
+                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+              ),
+              0L,
               MResourceRole.BOM,
               Optional.empty()
             ))
@@ -249,7 +257,9 @@ public final class MPackageWritersTest
               new MHash(
                 new MHashAlgorithm("SMASH-1"),
                 new MHashValue(
-                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")),
+                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+              ),
+              0L,
               MResourceRole.BOM,
               Optional.empty()
             ))
@@ -289,7 +299,9 @@ public final class MPackageWritersTest
               new MHash(
                 new MHashAlgorithm("SHA-256"),
                 new MHashValue(
-                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")),
+                  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+              ),
+              0L,
               MResourceRole.BOM,
               Optional.empty()
             ))

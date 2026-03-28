@@ -23,13 +23,9 @@ import com.io7m.montarre.api.io.MPackageReaderType;
 import com.io7m.montarre.api.parsers.MPackageDeclarationParserFactoryType;
 import com.io7m.montarre.io.internal.MPackageReader;
 import com.io7m.montarre.xml.MPackageDeclarationParsers;
-import org.apache.commons.compress.archivers.zip.ZipFile;
 
-import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Package readers.
@@ -69,29 +65,19 @@ public final class MPackageReaders implements MPackageReaderFactoryType
     Objects.requireNonNull(file, "file");
 
     try {
-      final var zipFile =
-        ZipFile.builder()
-          .setPath(file)
-          .get();
-
-      final var reader = new MPackageReader(file, zipFile, this.parsers);
+      final var reader = new MPackageReader(file, this.parsers);
       reader.start();
       return reader;
-    } catch (final IOException e) {
-      throw this.errorIO(file, e);
+    } catch (final Exception e) {
+      throw MException.wrap(e);
     }
   }
 
-  private MException errorIO(
-    final Path file,
-    final IOException e)
+  @Override
+  public byte[] extractManifest(
+    final Path file)
+    throws MException
   {
-    return new MException(
-      Objects.requireNonNullElse(e.getMessage(), e.getClass().getName()),
-      e,
-      "error-io",
-      Map.of("File", file.toString()),
-      Optional.empty()
-    );
+    return MPackageReader.extractManifest(file);
   }
 }

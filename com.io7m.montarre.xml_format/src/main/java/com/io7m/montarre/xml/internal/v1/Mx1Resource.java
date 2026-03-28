@@ -46,6 +46,7 @@ public final class Mx1Resource
   private MFileName fileName;
   private MHash hash;
   private MResourceRole role;
+  private long size;
 
   /**
    * A parser.
@@ -87,6 +88,8 @@ public final class Mx1Resource
   {
     this.fileName =
       new MFileName(attributes.getValue("File"));
+    this.size =
+      Long.parseUnsignedLong(attributes.getValue("Size"));
     this.hash =
       new MHash(
         new MHashAlgorithm(
@@ -107,6 +110,7 @@ public final class Mx1Resource
     return new MResource(
       this.fileName,
       this.hash,
+      this.size,
       this.role,
       this.captionOpt
     );

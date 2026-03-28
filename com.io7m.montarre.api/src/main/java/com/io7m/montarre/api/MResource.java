@@ -25,6 +25,7 @@ import java.util.Optional;
  *
  * @param file    The file
  * @param hash    The hash
+ * @param size    The file size in octets
  * @param role    The role
  * @param caption The resource caption
  */
@@ -32,6 +33,7 @@ import java.util.Optional;
 public record MResource(
   MFileName file,
   MHash hash,
+  long size,
   MResourceRole role,
   Optional<MCaption> caption)
   implements MManifestItemType
@@ -41,6 +43,7 @@ public record MResource(
    *
    * @param file    The file
    * @param hash    The hash
+   * @param size    The file size in octets
    * @param role    The role
    * @param caption The resource caption
    */

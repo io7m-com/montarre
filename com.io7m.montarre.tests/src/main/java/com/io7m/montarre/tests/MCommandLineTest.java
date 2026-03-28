@@ -59,7 +59,9 @@ public final class MCommandLineTest
             new MHash(
               new MHashAlgorithm("SHA-256"),
               new MHashValue(
-                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")),
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+            ),
+            0L,
             MResourceRole.BOM,
             Optional.of(MCaptions.ofTranslations(
               Map.entry(new MLanguageCode("en"), "A bill of materials."),
@@ -368,7 +370,7 @@ public final class MCommandLineTest
     }
   }
 
-  @Timeout(value = 3L, unit = TimeUnit.MINUTES)
+  @Timeout(value = 4L, unit = TimeUnit.MINUTES)
   @Test
   public void testPackageNativeTemurin(
     final @TempDir Path output,

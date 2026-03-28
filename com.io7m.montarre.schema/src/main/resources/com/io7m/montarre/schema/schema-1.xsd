@@ -596,6 +596,15 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
+      <xsd:attribute name="Size"
+                     type="xsd:unsignedLong"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The size of the file in octets.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="HashAlgorithm"
                      type="mp:HashAlgorithmNameType"
                      use="required">
@@ -649,6 +658,15 @@
         <xsd:annotation>
           <xsd:documentation xml:lang="en">
             The file name within the package.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="Size"
+                     type="xsd:unsignedLong"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The size of the file in octets.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
@@ -709,6 +727,15 @@
         <xsd:annotation>
           <xsd:documentation xml:lang="en">
             The file name within the package.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="Size"
+                     type="xsd:unsignedLong"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The size of the file in octets.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
