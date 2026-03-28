@@ -14,7 +14,7 @@
 
   <groupId>com.io7m.montarre</groupId>
   <artifactId>com.io7m.montarre</artifactId>
-  <version>0.0.7-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
 
   <packaging>pom</packaging>
   <name>com.io7m.montarre</name>
