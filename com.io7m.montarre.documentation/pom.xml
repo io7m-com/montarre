@@ -122,7 +122,7 @@
           </execution>
 
           <execution>
-            <id>copy-documentation-coq</id>
+            <id>copy-documentation-rocq</id>
             <goals>
               <goal>copy-resources</goal>
             </goals>
@@ -131,7 +131,7 @@
               <outputDirectory>${project.build.directory}/documentation/Montarre/</outputDirectory>
               <resources>
                 <resource>
-                  <directory>src/main/coq/Montarre/</directory>
+                  <directory>src/main/rocq/Montarre/</directory>
                   <filtering>false</filtering>
                   <includes>
                     <include>**/*.v</include>
@@ -142,7 +142,7 @@
           </execution>
 
           <execution>
-            <id>copy-epub-coq</id>
+            <id>copy-epub-rocq</id>
             <goals>
               <goal>copy-resources</goal>
             </goals>
@@ -151,7 +151,7 @@
               <outputDirectory>${project.build.directory}/epub/Montarre/</outputDirectory>
               <resources>
                 <resource>
-                  <directory>src/main/coq/Montarre/</directory>
+                  <directory>src/main/rocq/Montarre/</directory>
                   <filtering>false</filtering>
                   <includes>
                     <include>**/*.v</include>
@@ -277,8 +277,8 @@
             <configuration>
               <mainClass>com.io7m.montarre.documentation.Excerpts</mainClass>
               <arguments>
-                <argument>${project.basedir}/src/main/coq</argument>
-                <argument>${project.basedir}/src/main/coq/excerpts.txt</argument>
+                <argument>${project.basedir}/src/main/rocq</argument>
+                <argument>${project.basedir}/src/main/rocq/excerpts.txt</argument>
                 <argument>${project.build.directory}/documentation/</argument>
               </arguments>
             </configuration>
@@ -293,8 +293,8 @@
             <configuration>
               <mainClass>com.io7m.montarre.documentation.Excerpts</mainClass>
               <arguments>
-                <argument>${project.basedir}/src/main/coq</argument>
-                <argument>${project.basedir}/src/main/coq/excerpts.txt</argument>
+                <argument>${project.basedir}/src/main/rocq</argument>
+                <argument>${project.basedir}/src/main/rocq/excerpts.txt</argument>
                 <argument>${project.build.directory}/epub/</argument>
               </arguments>
             </configuration>

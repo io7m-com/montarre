@@ -272,7 +272,7 @@ public final class MPackageReadersTest
       writer.addFile(new MFileName("meta/bom.xml"), empty);
     }
 
-    MPackageReadersTest.removeFileFromArchive(outFile, new MFileName("meta/bom.xml"));
+    removeFileFromArchive(outFile, new MFileName("meta/bom.xml"));
 
     final var ex =
       assertThrows(
@@ -324,7 +324,7 @@ public final class MPackageReadersTest
       writer.addFile(new MFileName("meta/bom.xml"), empty);
     }
 
-    MPackageReadersTest.addFileToArchive(outFile, new byte[3]);
+    addFileToArchive(outFile, new byte[3]);
     MHexDump.dumpTo(outFile, System.out);
 
     final var ex =
