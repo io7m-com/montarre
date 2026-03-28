@@ -28,7 +28,7 @@ MONTARRE_MODULE_PATH=$(/usr/bin/env java -jar "${MONTARRE_HOME}/bin/launch.jar" 
 # Run the application.
 #
 
-exec /usr/bin/env java \
+/usr/bin/env java \
   -p "${MONTARRE_MODULE_PATH}" \
   -m com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain \
   "$@"

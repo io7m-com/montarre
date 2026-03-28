@@ -114,7 +114,7 @@ public final class MNPackagerShell
       );
 
       final var outName =
-        "%s-%s-any.tgz".formatted(
+        "%s-%s-any.txz".formatted(
           metadata.names().packageName(),
           metadata.version().version().toString()
         );

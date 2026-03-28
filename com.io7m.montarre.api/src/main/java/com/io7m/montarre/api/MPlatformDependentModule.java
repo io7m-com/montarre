@@ -24,6 +24,7 @@ import java.util.Objects;
  *
  * @param file            The file
  * @param hash            The hash
+ * @param size            The file size in octets
  * @param operatingSystem An operating system name
  * @param architecture    An architecture name
  */
@@ -31,6 +32,7 @@ import java.util.Objects;
 public record MPlatformDependentModule(
   MFileName file,
   MHash hash,
+  long size,
   MOperatingSystemName operatingSystem,
   MArchitectureName architecture)
   implements MManifestItemType
@@ -40,6 +42,7 @@ public record MPlatformDependentModule(
    *
    * @param file            The file
    * @param hash            The hash
+   * @param size            The file size in octets
    * @param operatingSystem An operating system name
    * @param architecture    An architecture name
    */

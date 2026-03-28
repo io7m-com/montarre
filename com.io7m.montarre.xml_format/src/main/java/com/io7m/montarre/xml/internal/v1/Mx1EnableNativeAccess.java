@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 Mark Raynsford <code@io7m.com> https://www.io7m.com
+ * Copyright © 2026 Mark Raynsford <code@io7m.com> https://www.io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,26 +14,20 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-
 package com.io7m.montarre.xml.internal.v1;
 
 import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
-import com.io7m.montarre.api.MFileName;
-import com.io7m.montarre.api.MHash;
-import com.io7m.montarre.api.MHashAlgorithm;
-import com.io7m.montarre.api.MHashValue;
-import com.io7m.montarre.api.MModule;
 import org.xml.sax.Attributes;
 
 /**
  * A parser.
  */
 
-public final class Mx1Module
-  implements BTElementHandlerType<Object, MModule>
+public final class Mx1EnableNativeAccess
+  implements BTElementHandlerType<Object, Mx1EnableNativeAccess.EnableNativeAccess>
 {
-  private MModule data;
+  private String text;
 
   /**
    * A parser.
@@ -41,8 +35,20 @@ public final class Mx1Module
    * @param context The context
    */
 
-  public Mx1Module(
+  public Mx1EnableNativeAccess(
     final BTElementParsingContextType context)
+  {
+
+  }
+
+  /**
+   * The module name.
+   *
+   * @param value The name
+   */
+
+  public record EnableNativeAccess(
+    String value)
   {
 
   }
@@ -51,24 +57,16 @@ public final class Mx1Module
   public void onElementStart(
     final BTElementParsingContextType context,
     final Attributes attributes)
+    throws Exception
   {
-    this.data = new MModule(
-      new MFileName(attributes.getValue("File")),
-      new MHash(
-        new MHashAlgorithm(
-          attributes.getValue("HashAlgorithm")
-        ),
-        new MHashValue(
-          attributes.getValue("HashValue")
-        )
-      )
-    );
+    this.text = attributes.getValue("Module");
   }
 
   @Override
-  public MModule onElementFinished(
+  public EnableNativeAccess onElementFinished(
     final BTElementParsingContextType context)
+    throws Exception
   {
-    return this.data;
+    return new EnableNativeAccess(this.text);
   }
 }

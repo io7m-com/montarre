@@ -21,17 +21,11 @@ import com.io7m.blackthorne.core.BTElementHandlerConstructorType;
 import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
 import com.io7m.blackthorne.core.BTQualifiedName;
-import com.io7m.montarre.api.MCaption;
-import com.io7m.montarre.api.MFileName;
-import com.io7m.montarre.api.MHash;
-import com.io7m.montarre.api.MHashAlgorithm;
-import com.io7m.montarre.api.MHashValue;
-import com.io7m.montarre.api.MResource;
-import com.io7m.montarre.api.MResourceRole;
+import com.io7m.montarre.api.MJavaInfo;
+import com.io7m.montarre.api.MRuntimeImageKind;
 import org.xml.sax.Attributes;
 
 import java.util.Map;
-import java.util.Optional;
 
 import static com.io7m.montarre.xml.internal.v1.Mx1.element;
 
@@ -39,13 +33,10 @@ import static com.io7m.montarre.xml.internal.v1.Mx1.element;
  * A parser.
  */
 
-public final class Mx1Resource
-  implements BTElementHandlerType<MCaption, MResource>
+public final class Mx1JavaInfo
+  implements BTElementHandlerType<Object, MJavaInfo>
 {
-  private Optional<MCaption> captionOpt = Optional.empty();
-  private MFileName fileName;
-  private MHash hash;
-  private MResourceRole role;
+  private MJavaInfo.Builder info;
 
   /**
    * A parser.
@@ -53,31 +44,42 @@ public final class Mx1Resource
    * @param context The context
    */
 
-  public Mx1Resource(
+  public Mx1JavaInfo(
     final BTElementParsingContextType context)
   {
-
+    this.info = MJavaInfo.builder();
   }
 
   @Override
-  public Map<BTQualifiedName, BTElementHandlerConstructorType<?, ? extends MCaption>>
+  public Map<BTQualifiedName, BTElementHandlerConstructorType<?, ?>>
   onChildHandlersRequested(
     final BTElementParsingContextType context)
   {
     return Map.ofEntries(
-      Map.entry(
-        element("Caption"),
-        Mx1Caption::new
-      )
+      Map.entry(element("ExtraOption"), Mx1ExtraOption::new),
+      Map.entry(element("EnableNativeAccess"), Mx1EnableNativeAccess::new)
     );
   }
 
   @Override
   public void onChildValueProduced(
     final BTElementParsingContextType context,
-    final MCaption result)
+    final Object result)
+    throws Exception
   {
-    this.captionOpt = Optional.of(result);
+    switch (result) {
+      case final Mx1ExtraOption.ExtraOption o -> {
+        this.info.addExtraOptions(o.value());
+      }
+      case final Mx1EnableNativeAccess.EnableNativeAccess a -> {
+        this.info.addNativeAccessModules(a.value());
+      }
+      default -> {
+        throw new IllegalStateException(
+          "Unrecognized child element: %s".formatted(result)
+        );
+      }
+    }
   }
 
   @Override
@@ -85,30 +87,21 @@ public final class Mx1Resource
     final BTElementParsingContextType context,
     final Attributes attributes)
   {
-    this.fileName =
-      new MFileName(attributes.getValue("File"));
-    this.hash =
-      new MHash(
-        new MHashAlgorithm(
-          attributes.getValue("HashAlgorithm")
-        ),
-        new MHashValue(
-          attributes.getValue("HashValue")
-        )
-      );
-    this.role =
-      MResourceRole.valueOf(attributes.getValue("Role"));
+    this.info.setMainModule(
+      attributes.getValue("MainModule")
+    );
+    this.info.setRequiredJDKVersion(
+      Long.parseUnsignedLong(attributes.getValue("RequiredJDKVersion"))
+    );
+    this.info.setRuntimeImageKind(
+      MRuntimeImageKind.valueOf(attributes.getValue("RuntimeImageKind"))
+    );
   }
 
   @Override
-  public MResource onElementFinished(
+  public MJavaInfo onElementFinished(
     final BTElementParsingContextType context)
   {
-    return new MResource(
-      this.fileName,
-      this.hash,
-      this.role,
-      this.captionOpt
-    );
+    return this.info.build();
   }
 }

@@ -20,7 +20,6 @@ package com.io7m.montarre.cmdline.internal;
 import com.io7m.montarre.adoptium.MEARuntimeSearch;
 import com.io7m.montarre.adoptium.MEAdoptiumConfiguration;
 import com.io7m.montarre.adoptium.MEAdoptiumFactory;
-import com.io7m.montarre.adoptium.METImageKind;
 import com.io7m.montarre.api.MArchitectureName;
 import com.io7m.montarre.api.MArchiveFormat;
 import com.io7m.montarre.api.MException;
@@ -28,6 +27,8 @@ import com.io7m.montarre.api.MHash;
 import com.io7m.montarre.api.MHashAlgorithm;
 import com.io7m.montarre.api.MHashValue;
 import com.io7m.montarre.api.MOperatingSystemName;
+import com.io7m.montarre.api.MPackageDeclaration;
+import com.io7m.montarre.api.MRuntimeImageKind;
 import com.io7m.montarre.api.http.MHTTPClients;
 import com.io7m.montarre.api.natives.MNativePackagerDirectoryType;
 import com.io7m.montarre.api.natives.MNativePackagerServiceType;
@@ -148,6 +149,16 @@ public final class MCNativeCreate implements QCommandType
       Runtime.Version.class
     );
 
+  private static final QParameterNamed01<MRuntimeImageKind> ADOPTIUM_JDK_TYPE =
+    new QParameterNamed01<>(
+      "--adoptium-runtime-type",
+      List.of(),
+      new QStringType.QConstant(
+        "The type of the Adoptium Temurin runtime to use."),
+      Optional.empty(),
+      MRuntimeImageKind.class
+    );
+
   /**
    * Construct a command.
    */
@@ -166,6 +177,7 @@ public final class MCNativeCreate implements QCommandType
   {
     return Stream.concat(
       Stream.of(
+        ADOPTIUM_JDK_TYPE,
         ADOPTIUM_TEMURIN_VERSION,
         INCLUDE_PACKAGERS,
         INPUT_PACKAGE,
@@ -194,44 +206,48 @@ public final class MCNativeCreate implements QCommandType
   {
     QLogback.configure(newContext);
 
-    final RuntimeParameters runtimeParameters;
-    try {
-      runtimeParameters = this.handleRuntimeParameters(newContext);
-    } catch (final MException e) {
-      MCSLogging.logStructuredError(LOG, e);
-      return QCommandStatus.FAILURE;
-    }
-
-    final var httpClients =
-      new MHTTPClients();
-    final var readers =
-      new MPackageReaders();
-    final var workspaces =
-      new MNWorkspaces();
-    final var packagers =
-      MNPackagers.createFromServiceLoader();
-
     final var packageFile =
       newContext.parameterValue(INPUT_PACKAGE);
+    final var readers =
+      new MPackageReaders();
     final var outputDirectory =
       newContext.parameterValue(OUTPUT_DIRECTORY);
-
-    final var workspaceConfig =
-      MNativeWorkspaceConfiguration.builder()
-        .setBaseDirectory(
-          newContext.parameterValue(WORK_DIRECTORY))
-        .setJavaRuntimeDownloadURI(
-          runtimeParameters.runtimeURI)
-        .setJavaRuntimeDownloadSHA256(
-          runtimeParameters.runtimeHash.value().value())
-        .setJavaRuntimeDownloadFormat(
-          runtimeParameters.format)
-        .build();
 
     LOG.info("Opening package {}.", packageFile);
     try (final var packageReader = readers.open(packageFile)) {
       LOG.info("Creating output directory {}", outputDirectory);
       Files.createDirectories(outputDirectory);
+
+      final RuntimeParameters runtimeParameters;
+      try {
+        runtimeParameters =
+          this.handleRuntimeParameters(
+            newContext,
+            packageReader.packageDeclaration()
+          );
+      } catch (final MException e) {
+        MCSLogging.logStructuredError(LOG, e);
+        return QCommandStatus.FAILURE;
+      }
+
+      final var httpClients =
+        new MHTTPClients();
+      final var workspaces =
+        new MNWorkspaces();
+      final var packagers =
+        MNPackagers.createFromServiceLoader();
+
+      final var workspaceConfig =
+        MNativeWorkspaceConfiguration.builder()
+          .setBaseDirectory(
+            newContext.parameterValue(WORK_DIRECTORY))
+          .setJavaRuntimeDownloadURI(
+            runtimeParameters.runtimeURI)
+          .setJavaRuntimeDownloadSHA256(
+            runtimeParameters.runtimeHash.value().value())
+          .setJavaRuntimeDownloadFormat(
+            runtimeParameters.format)
+          .build();
 
       LOG.info("Creating workspace {}.", workspaceConfig.baseDirectory());
       try (final var workspace = workspaces.open(
@@ -292,7 +308,8 @@ public final class MCNativeCreate implements QCommandType
   }
 
   private RuntimeParameters handleRuntimeParameters(
-    final QCommandContextType newContext)
+    final QCommandContextType newContext,
+    final MPackageDeclaration packageDeclaration)
     throws QException, MException
   {
     final var uriOpt =
@@ -328,13 +345,23 @@ public final class MCNativeCreate implements QCommandType
       );
     }
 
+    final var runtimeImageKind =
+      packageDeclaration.metadata()
+        .javaInfo()
+        .runtimeImageKind();
+
+    final var runtimeImageKindOverride =
+      newContext.parameterValue(ADOPTIUM_JDK_TYPE);
+
     return this.handleAdoptium(
-      newContext.parameterValueRequireNow(ADOPTIUM_TEMURIN_VERSION)
+      newContext.parameterValueRequireNow(ADOPTIUM_TEMURIN_VERSION),
+      runtimeImageKindOverride.orElse(runtimeImageKind)
     );
   }
 
   private RuntimeParameters handleAdoptium(
-    final Runtime.Version requiredVersion)
+    final Runtime.Version requiredVersion,
+    final MRuntimeImageKind imageKind)
     throws MException
   {
     final var adoptiums = new MEAdoptiumFactory();
@@ -346,7 +373,7 @@ public final class MCNativeCreate implements QCommandType
       final var runtimes =
         adoptium.runtimes(
           MEARuntimeSearch.builder()
-            .setImageKind(METImageKind.JRE)
+            .setImageKind(imageKind)
             .setOperatingSystem(os())
             .setArchitecture(arch())
             .setFeatureVersion(requiredVersion.feature())

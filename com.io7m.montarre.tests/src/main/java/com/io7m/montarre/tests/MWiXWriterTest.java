@@ -75,7 +75,7 @@ public final class MWiXWriterTest
     this.inputMpk =
       directory.resolve("input.mpk");
     this.resource(
-      "com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk",
+      "com.io7m.montarre.distribution-0.0.7-SNAPSHOT.mpk",
       this.inputMpk
     );
 

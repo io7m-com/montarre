@@ -32,6 +32,7 @@ import com.io7m.montarre.io.MPackageWriters;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
@@ -40,6 +41,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -57,7 +59,9 @@ public final class MCommandLineTest
             new MHash(
               new MHashAlgorithm("SHA-256"),
               new MHashValue(
-                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")),
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+            ),
+            0L,
             MResourceRole.BOM,
             Optional.of(MCaptions.ofTranslations(
               Map.entry(new MLanguageCode("en"), "A bill of materials."),
@@ -187,6 +191,7 @@ public final class MCommandLineTest
     assertEquals(0, r);
   }
 
+  @Timeout(value = 10L, unit = TimeUnit.SECONDS)
   @Test
   public void testPackageUnpackPack(
     final @TempDir Path directory,
@@ -194,11 +199,11 @@ public final class MCommandLineTest
     throws Exception
   {
     final var inputFile =
-      directory.resolve("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk");
+      directory.resolve("com.io7m.montarre.distribution-0.0.7-SNAPSHOT.mpk");
     final var outputFile =
       directory.resolve("packed.mpk");
 
-    this.resource("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk", inputFile);
+    this.resource("com.io7m.montarre.distribution-0.0.7-SNAPSHOT.mpk", inputFile);
 
     final var r0 = MMain.mainExitless(
       new String[]{
@@ -224,10 +229,14 @@ public final class MCommandLineTest
     );
     assertEquals(0, r1);
 
-    assertEquals(
-      -1L,
-      Files.mismatch(inputFile, outputFile)
-    );
+    final var expectedHex =
+      MHexDump.dump(inputFile);
+    final var receivedHex =
+      MHexDump.dump(outputFile);
+
+    for (int index = 0; index < expectedHex.size(); ++index) {
+      assertEquals(expectedHex.get(index), receivedHex.get(index));
+    }
   }
 
   @Test
@@ -236,9 +245,9 @@ public final class MCommandLineTest
     throws Exception
   {
     final var inputFile =
-      directory.resolve("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk");
+      directory.resolve("com.io7m.montarre.distribution-0.0.7-SNAPSHOT.mpk");
 
-    this.resource("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk", inputFile);
+    this.resource("com.io7m.montarre.distribution-0.0.7-SNAPSHOT.mpk", inputFile);
 
     final var r0 = MMain.mainExitless(
       new String[]{
@@ -301,6 +310,7 @@ public final class MCommandLineTest
     assertEquals(0, r);
   }
 
+  @Timeout(value = 10L, unit = TimeUnit.SECONDS)
   @Test
   public void testMavenCentralDownload(
     final @TempDir Path directory)
@@ -360,6 +370,7 @@ public final class MCommandLineTest
     }
   }
 
+  @Timeout(value = 4L, unit = TimeUnit.MINUTES)
   @Test
   public void testPackageNativeTemurin(
     final @TempDir Path output,
@@ -368,9 +379,9 @@ public final class MCommandLineTest
     throws Exception
   {
     final var inputFile =
-      directory.resolve("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk");
+      directory.resolve("com.io7m.montarre.distribution-0.0.7-SNAPSHOT.mpk");
 
-    this.resource("com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk", inputFile);
+    this.resource("com.io7m.montarre.distribution-0.0.7-SNAPSHOT.mpk", inputFile);
 
     final var r0 = MMain.mainExitless(
       new String[]{

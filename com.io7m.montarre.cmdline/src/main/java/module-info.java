@@ -33,12 +33,14 @@ module com.io7m.montarre.cmdline
   requires com.io7m.montarre.xml;
 
   requires com.io7m.jdownload.core;
+  requires com.io7m.junreachable.core;
   requires com.io7m.jxe.core;
   requires com.io7m.lanark.core;
   requires com.io7m.quarrel.core;
   requires com.io7m.quarrel.ext.logback;
   requires com.io7m.streamtime.core;
   requires java.net.http;
+  requires jul.to.slf4j;
   requires org.apache.commons.compress;
   requires org.apache.commons.io;
 

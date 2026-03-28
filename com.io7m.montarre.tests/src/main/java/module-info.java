@@ -53,6 +53,11 @@ open module com.io7m.montarre.tests
   requires java.xml;
   requires org.apache.commons.compress;
   requires org.apache.commons.lang3;
+  requires org.tukaani.xz;
+  requires org.apache.commons.io;
+  requires com.io7m.entomos.core;
+  requires com.io7m.jbssio.vanilla;
+  requires com.io7m.jbssio.api;
 
   exports com.io7m.montarre.tests;
 }

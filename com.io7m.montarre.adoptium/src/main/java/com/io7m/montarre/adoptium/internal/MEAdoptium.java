@@ -17,8 +17,6 @@
 
 package com.io7m.montarre.adoptium.internal;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.io7m.montarre.adoptium.MEARuntime;
 import com.io7m.montarre.adoptium.MEARuntimeSearch;
 import com.io7m.montarre.adoptium.MEAdoptiumConfiguration;
@@ -34,6 +32,8 @@ import com.io7m.montarre.api.MHashValue;
 import com.io7m.montarre.api.MOperatingSystemName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -216,6 +216,9 @@ public final class MEAdoptium
     }
     if (link.endsWith(".tgz")) {
       return MArchiveFormat.TAR_GZ;
+    }
+    if (link.endsWith(".txz")) {
+      return MArchiveFormat.TAR_XZ;
     }
     return MArchiveFormat.ZIP;
   }

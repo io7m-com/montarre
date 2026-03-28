@@ -9,7 +9,7 @@
   <parent>
     <artifactId>com.io7m.montarre</artifactId>
     <groupId>com.io7m.montarre</groupId>
-    <version>0.0.6</version>
+    <version>1.0.0-beta0001</version>
   </parent>
 
   <artifactId>com.io7m.montarre.cmdline</artifactId>
@@ -41,7 +41,7 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
-      <artifactId>com.io7m.montarre.xml</artifactId>
+      <artifactId>com.io7m.montarre.xml_format</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -75,8 +75,8 @@
       <artifactId>commons-io</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-compress</artifactId>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

@@ -64,6 +64,7 @@ public final class Mx1PlatformDependentModule
           attributes.getValue("HashValue")
         )
       ),
+      Long.parseUnsignedLong(attributes.getValue("Size")),
       new MOperatingSystemName(
         attributes.getValue("OperatingSystem")
       ),

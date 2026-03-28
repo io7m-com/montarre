@@ -50,3 +50,9 @@
 502 ! Inductive PlatformT :=
 600 ! Inductive ManifestT :=
 601 ! Definition manifesItemsFilenamesUnique :=
+700 ! Inductive JavaImageT :=
+
+1000 ! Definition binaryExpFileHeader : binaryExp :=
+1001 ! Definition binaryEndSection : binaryExp :=
+1002 ! Definition binaryManifestSection (m : ManifestT) : binaryExp :=
+1003 ! Definition binaryFileSection (i : ItemT) : binaryExp :=

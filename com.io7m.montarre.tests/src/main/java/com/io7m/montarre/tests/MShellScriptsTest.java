@@ -58,6 +58,96 @@ public final class MShellScriptsTest
     }
   }
 
+  @Test
+  public void testScriptWithNative()
+    throws IOException
+  {
+    final var info =
+      MJavaInfo.builder()
+        .setRequiredJDKVersion(21)
+        .setMainModule("com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain")
+        .addNativeAccessModules("com.example.native0")
+        .addNativeAccessModules("com.example.native1")
+        .build();
+
+    final var receivedLines =
+      MShellScripts.shellScript(info, new MShortName("montarre"));
+    final var expectedLines =
+      linesOf("expected-native.sh").toList();
+
+    assertEquals(
+      expectedLines.size(),
+      receivedLines.size()
+    );
+
+    for (int index = 0; index < receivedLines.size(); ++index) {
+      assertEquals(
+        expectedLines.get(index),
+        receivedLines.get(index)
+      );
+    }
+  }
+
+  @Test
+  public void testScriptWithExtras()
+    throws IOException
+  {
+    final var info =
+      MJavaInfo.builder()
+        .setRequiredJDKVersion(21)
+        .setMainModule("com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain")
+        .addExtraOptions("-XX:+UseG1GC")
+        .build();
+
+    final var receivedLines =
+      MShellScripts.shellScript(info, new MShortName("montarre"));
+    final var expectedLines =
+      linesOf("expected-options.sh").toList();
+
+    assertEquals(
+      expectedLines.size(),
+      receivedLines.size()
+    );
+
+    for (int index = 0; index < receivedLines.size(); ++index) {
+      assertEquals(
+        expectedLines.get(index),
+        receivedLines.get(index)
+      );
+    }
+  }
+
+  @Test
+  public void testScriptWithBoth()
+    throws IOException
+  {
+    final var info =
+      MJavaInfo.builder()
+        .setRequiredJDKVersion(21)
+        .setMainModule("com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain")
+        .addExtraOptions("-XX:+UseG1GC")
+        .addNativeAccessModules("com.example.native0")
+        .addNativeAccessModules("com.example.native1")
+        .build();
+
+    final var receivedLines =
+      MShellScripts.shellScript(info, new MShortName("montarre"));
+    final var expectedLines =
+      linesOf("expected-both.sh").toList();
+
+    assertEquals(
+      expectedLines.size(),
+      receivedLines.size()
+    );
+
+    for (int index = 0; index < receivedLines.size(); ++index) {
+      assertEquals(
+        expectedLines.get(index),
+        receivedLines.get(index)
+      );
+    }
+  }
+
   private static Stream<String> linesOf(
     final String name)
     throws IOException

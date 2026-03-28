@@ -31,6 +31,12 @@ public sealed interface MManifestItemType
   MFileName file();
 
   /**
+   * @return The file size in octets
+   */
+
+  long size();
+
+  /**
    * @return The hash
    */
 

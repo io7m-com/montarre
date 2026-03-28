@@ -40,4 +40,19 @@ public interface MPackageReaderFactoryType
   MPackageReaderType open(
     Path file)
     throws MException;
+
+  /**
+   * Perform the minimum steps required to extract the bytes of the manifest
+   * from the given file. This method is provided to assist with extracting
+   * data from damaged files and performs no validation.
+   *
+   * @param file The file
+   *
+   * @return The manifest bytes
+   *
+   * @throws MException On errors
+   */
+
+  byte[] extractManifest(Path file)
+    throws MException;
 }

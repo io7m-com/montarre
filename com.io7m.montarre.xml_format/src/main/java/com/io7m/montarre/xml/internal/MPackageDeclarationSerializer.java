@@ -153,6 +153,7 @@ public final class MPackageDeclarationSerializer implements
   {
     this.output.writeStartElement(NS, "PlatformDependentModule");
     this.output.writeAttribute("File", i.file().name());
+    this.output.writeAttribute("Size", Long.toUnsignedString(i.size()));
     this.output.writeAttribute("HashAlgorithm", i.hash().algorithm().name());
     this.output.writeAttribute("HashValue", i.hash().value().value());
     this.output.writeAttribute("OperatingSystem", i.operatingSystem().name());
@@ -166,6 +167,7 @@ public final class MPackageDeclarationSerializer implements
   {
     this.output.writeStartElement(NS, "Module");
     this.output.writeAttribute("File", i.file().name());
+    this.output.writeAttribute("Size", Long.toUnsignedString(i.size()));
     this.output.writeAttribute("HashAlgorithm", i.hash().algorithm().name());
     this.output.writeAttribute("HashValue", i.hash().value().value());
     this.output.writeEndElement();
@@ -177,6 +179,7 @@ public final class MPackageDeclarationSerializer implements
   {
     this.output.writeStartElement(NS, "Resource");
     this.output.writeAttribute("File", i.file().name());
+    this.output.writeAttribute("Size", Long.toUnsignedString(i.size()));
     this.output.writeAttribute("HashAlgorithm", i.hash().algorithm().name());
     this.output.writeAttribute("HashValue", i.hash().value().value());
     this.output.writeAttribute("Role", i.role().name());
@@ -292,6 +295,23 @@ public final class MPackageDeclarationSerializer implements
       "MainModule",
       info.mainModule()
     );
+    this.output.writeAttribute(
+      "RuntimeImageKind",
+      info.runtimeImageKind().name()
+    );
+
+    for (final var extraOption : info.extraOptions()) {
+      this.output.writeStartElement(NS, "ExtraOption");
+      this.output.writeAttribute("Value", extraOption);
+      this.output.writeEndElement();
+    }
+
+    for (final var nativeAccess : info.nativeAccessModules()) {
+      this.output.writeStartElement(NS, "EnableNativeAccess");
+      this.output.writeAttribute("Module", nativeAccess);
+      this.output.writeEndElement();
+    }
+
     this.output.writeEndElement();
   }
 

@@ -33,5 +33,11 @@ public enum MArchiveFormat
    * A gzip-compressed tar archive.
    */
 
-  TAR_GZ
+  TAR_GZ,
+
+  /**
+   * An xz-compressed tar archive.
+   */
+
+  TAR_XZ
 }

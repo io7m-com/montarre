@@ -15,4 +15,8 @@
 
   <suppress files=".*\.java"
             checks="RedundantModifier"/>
+
+  <!-- Constructing a string from UTF-8 bytes. -->
+  <suppress files="MPackageReader.java"
+            checks="IllegalInstantiation"/>
 </suppressions>

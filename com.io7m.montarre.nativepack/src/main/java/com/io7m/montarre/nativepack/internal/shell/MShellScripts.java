@@ -52,10 +52,15 @@ public final class MShellScripts
     Objects.requireNonNull(javaInfo, "javaInfo");
     Objects.requireNonNull(name, "name");
 
+    final var upperName =
+      name.name()
+        .toUpperCase(Locale.ROOT)
+        .replace('-', '_');
+
     final var homeName =
-      name.name().toUpperCase(Locale.ROOT) + "_HOME";
+      upperName + "_HOME";
     final var pathName =
-      name.name().toUpperCase(Locale.ROOT) + "_MODULE_PATH";
+      upperName + "_MODULE_PATH";
 
     final var out = new ArrayList<String>();
     out.add("#!/bin/sh");
@@ -96,9 +101,19 @@ public final class MShellScripts
     out.add("# Run the application.");
     out.add("#");
     out.add("");
-    out.add("exec /usr/bin/env java \\");
+    out.add("/usr/bin/env java \\");
     out.add("  -p \"${%s}\" \\".formatted(pathName));
     out.add("  -m %s \\".formatted(javaInfo.mainModule()));
+
+    for (final var extraOption : javaInfo.extraOptions()) {
+      out.add("  " + extraOption + " \\");
+    }
+
+    final var nativeAccessModules = javaInfo.nativeAccessModules();
+    if (!nativeAccessModules.isEmpty()) {
+      out.add("  --enable-native-access=" + String.join(",", nativeAccessModules) + " \\");
+    }
+
     out.add("  \"$@\"");
     out.add("");
 

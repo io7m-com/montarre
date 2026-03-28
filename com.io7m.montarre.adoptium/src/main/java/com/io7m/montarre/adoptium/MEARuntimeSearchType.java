@@ -20,6 +20,7 @@ package com.io7m.montarre.adoptium;
 import com.io7m.immutables.styles.ImmutablesStyleType;
 import com.io7m.montarre.api.MArchitectureName;
 import com.io7m.montarre.api.MOperatingSystemName;
+import com.io7m.montarre.api.MRuntimeImageKind;
 import org.immutables.value.Value;
 
 /**
@@ -53,8 +54,8 @@ public interface MEARuntimeSearchType
    */
 
   @Value.Default
-  default METImageKind imageKind()
+  default MRuntimeImageKind imageKind()
   {
-    return METImageKind.JRE;
+    return MRuntimeImageKind.JRE;
   }
 }

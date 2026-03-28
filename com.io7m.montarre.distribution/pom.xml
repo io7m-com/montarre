@@ -9,7 +9,7 @@
   <parent>
     <artifactId>com.io7m.montarre</artifactId>
     <groupId>com.io7m.montarre</groupId>
-    <version>0.0.6</version>
+    <version>1.0.0-beta0001</version>
   </parent>
 
   <artifactId>com.io7m.montarre.distribution</artifactId>
@@ -88,6 +88,7 @@
               <mainModule>com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain</mainModule>
 
               <requiredJDKVersion>${io7m.java.targetJavaVersion}</requiredJDKVersion>
+              <runtimeImageKind>JDK</runtimeImageKind>
 
               <flatpak>
                 <runtimes>

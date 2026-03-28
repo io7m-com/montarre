@@ -14,8 +14,8 @@
     </Paragraph>
     <Paragraph>
       This specification is divided into an abstract model and a
-      separate <Link target="79f206ac-7d1c-41b9-86f9-f8478237e311">serialization</Link>. The purpose of the model is
-      to describe the semantics of <Term type="package">montarre</Term> packages; the actual
+      separate <Link target="79f206ac-7d1c-41b9-86f9-f8478237e311">serialization</Link>. The purpose of the model is to
+      describe the semantics of <Term type="package">montarre</Term> packages; the actual
       <Term type="term">meaning</Term>
       of the data within, and to describe properties and invariants that must be true for all valid
       <Term type="package">montarre</Term>
@@ -23,7 +23,7 @@
     </Paragraph>
     <Paragraph>
       The formal specification described here is written in the
-      <LinkExternal target="https://coq.github.io/doc/master/refman/">Gallina specification language of the Coq theorem
+      <LinkExternal target="https://rocq-prover.org/">Gallina specification language of the Rocq theorem
         prover</LinkExternal>. The language is a total, pure-functional, dependently-typed language allowing for
       describing systems in rigorous detail including machine-checked proofs of various chosen properties.
     </Paragraph>
@@ -170,7 +170,7 @@
     <Paragraph>
       An <Term type="term">architecture name</Term> is a unique name for a particular
       <Term type="term">hardware architecture</Term>. It represents an attempt to provide a consistent naming convention
-      for hardware types <LinkFootnote target="f0348952-f520-492a-af1b-6f7a50ade779"/>.
+      for hardware types<LinkFootnote target="f0348952-f520-492a-af1b-6f7a50ade779"/>.
     </Paragraph>
     <Paragraph>
       An architecture name is a string conforming to the regular expression
@@ -356,9 +356,9 @@
       </Table>
     </FormalItem>
     <Paragraph>
-      The special name <Term type="constant">unknown</Term> is assigned to unrecognized hardware architectures. The <Term type="constant">
-      unknown
-    </Term> name is not permitted to appear in package declarations.
+      The special name <Term type="constant">unknown</Term> is assigned to unrecognized hardware architectures. The
+      <Term type="constant">unknown</Term>
+      name is not permitted to appear in package declarations.
     </Paragraph>
   </Subsection>
 
@@ -722,10 +722,14 @@
                 id="f55a177d-e226-49d8-a78d-41dae66e1710">
       <Subsection title="Overview">
         <Paragraph>
-          The <Term type="term">java info</Term> information for a package is a record consisting of a
-          <Link target="8b2d6ace-8cda-45bc-9cf4-59e6d47b7f94">required JDK version</Link>
-          and a
-          <Link target="0c2456eb-bc8f-4a7c-9148-bcb4c5369824">main module</Link>.
+          The <Term type="term">java info</Term> information for a package is a record consisting of metadata describing
+          the application's
+          <Link target="8b2d6ace-8cda-45bc-9cf4-59e6d47b7f94">required JDK version</Link>,
+          <Link target="0c2456eb-bc8f-4a7c-9148-bcb4c5369824">main module</Link>,
+          <Link target="8d86a704-0ec3-4b14-8bba-48cdd926e483">JDK runtime image type</Link>, and any
+          <Link target="443dd584-d704-4d61-8d55-def2ce154dbb">native access</Link>
+          and
+          <Link target="5c581695-8080-47d6-9ebc-51118797659a">extra options</Link>.
         </Paragraph>
         <FormalItem title="Java Info">
           <Verbatim>
@@ -750,6 +754,43 @@
         <Paragraph>
           An example <Term type="term">main module</Term> value is:
           <Term type="constant">"com.io7m.montarre.cmdline/com.io7m.montarre.cmdline.MMain"</Term>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="JDK Runtime Image Type"
+                  id="8d86a704-0ec3-4b14-8bba-48cdd926e483">
+        <Paragraph>
+          The <Term type="term">JDK runtime image type</Term> specifies the type of runtime image the application needs
+          in order to run.
+        </Paragraph>
+        <FormalItem title="JavaImageT">
+          <Verbatim>
+            <xi:include href="700.txt"
+                        parse="text"/>
+          </Verbatim>
+        </FormalItem>
+        <Paragraph>
+          A value of <Term type="constant">JDK</Term> indicates the application requires the full set of
+          <Term type="package">jdk.*</Term>
+          modules to be present.
+        </Paragraph>
+        <Paragraph>
+          A value of <Term type="constant">JRE</Term> indicates the application can work without the
+          <Term type="package">jdk.*</Term>
+          modules.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Native Access"
+                  id="443dd584-d704-4d61-8d55-def2ce154dbb">
+        <Paragraph>
+          The <Term type="term">enableNativeAccess</Term> list specifies a list of modules that are permitted to use the <LinkExternal target="https://docs.oracle.com/en/java/javase/25/core/restricted-methods.html">
+          Java FFI</LinkExternal>.
+        </Paragraph>
+      </Subsection>
+      <Subsection title="Extra Options"
+                  id="5c581695-8080-47d6-9ebc-51118797659a">
+        <Paragraph>
+          The <Term type="term">extraOptions</Term> list specifies a list of extra options that will be passed to the
+          Java runtime on application startup.
         </Paragraph>
       </Subsection>
     </Subsection>
@@ -1074,9 +1115,13 @@
         Items within a manifest must have unique <Link target="38e9b475-8259-447f-a6e4-e72146d45fc0">file names</Link>.
         More formally, for a manifest
         <Term type="variable">m</Term>, there cannot exist two different items
-        <Term type="variable">i0</Term> and <Term type="variable">i1</Term> in
-        <Term type="variable">m</Term> such that
-        <Term type="variable">i0</Term> and <Term type="variable">i1</Term>
+        <Term type="variable">i0</Term>
+        and <Term type="variable">i1</Term> in
+        <Term type="variable">m</Term>
+        such that
+        <Term type="variable">i0</Term>
+        and
+        <Term type="variable">i1</Term>
         have filenames that are
         <Link target="dd24070c-13f3-424a-bb7c-cd94199660a2">the same</Link>.
       </Paragraph>
@@ -1113,11 +1158,11 @@
         with trailing slashes, and cannot contain sequences of repeating slashes.
       </Paragraph>
       <Paragraph>
-        The specification axiomatizes the concept of converting a string to <Term type="term">uppercase</Term>. The <Term type="term">
-        uppercase transform
-      </Term> of a string should be understood to be a string where every character has been converted to its <Term type="term">
-        uppercase equivalent
-      </Term> in a neutral locale.
+        The specification axiomatizes the concept of converting a string to
+        <Term type="term">uppercase</Term>. The <Term type="term">uppercase transform</Term> of a string should be
+        understood to be a string where every character has been converted to its
+        <Term type="term">uppercase equivalent</Term>
+        in a neutral locale.
       </Paragraph>
       <FormalItem title="Uppercase Transform">
         <Verbatim>
@@ -1144,6 +1189,13 @@
                       parse="text"/>
         </Verbatim>
       </FormalItem>
+    </Subsection>
+
+    <Subsection title="Size"
+                id="ebe70b76-d041-446c-a015-42d2a343c844">
+      <Paragraph>
+        A <Term type="term">size</Term> is a non-negative integer value denoting the size in octets of an item.
+      </Paragraph>
     </Subsection>
 
     <Subsection title="Modules"
@@ -1214,7 +1266,9 @@
           </Columns>
           <Row>
             <Cell>BOM</Cell>
-            <Cell>A bill-of-materials. Recommended to be in <LinkExternal target="https://cyclonedx.org/">CycloneDX</LinkExternal> format.</Cell>
+            <Cell>A bill-of-materials. Recommended to be in <LinkExternal target="https://cyclonedx.org/">CycloneDX
+            </LinkExternal> format.
+            </Cell>
           </Row>
           <Row>
             <Cell>LICENSE</Cell>
@@ -1267,9 +1321,8 @@
         </Table>
       </FormalItem>
       <Paragraph>
-        A resource has an associated <Term type="term">caption</Term> that provides a human-readable description
-        of the resource. This is used, for example, to describe the contents of screenshots for use in
-        Flatpak listings.
+        A resource has an associated <Term type="term">caption</Term> that provides a human-readable description of the
+        resource. This is used, for example, to describe the contents of screenshots for use in Flatpak listings.
       </Paragraph>
       <FormalItem title="Resource Caption">
         <Verbatim>
@@ -1284,61 +1337,194 @@
               id="79f206ac-7d1c-41b9-86f9-f8478237e311">
     <Subsection title="Overview">
       <Paragraph>
-        <Term type="package">montarre</Term> package declarations are serialized to an XML format with
-        a strict <LinkExternal target="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XSD</LinkExternal>
-        schema. The serialized package declaration, and all the package contents, are collected into
-        a <LinkExternal target="https://en.wikipedia.org/wiki/ZIP_(file_format)">ZIP</LinkExternal> file
-        with some extra restrictions on the entries. Extra restrictions are applied to the ZIP container and
-        the XML data to assist with ensuring that <Term type="package">montarre</Term> packages are
+        <Term type="package">montarre</Term>
+        package declarations are serialized to an XML format with a strict
+        <LinkExternal target="https://en.wikipedia.org/wiki/XML_Schema_(W3C)">XSD</LinkExternal>
+        schema. The serialized package declaration, and all the package contents, are collected into binary file format
+        based on the
+        <LinkExternal target="https://github.com/io7m-com/entomos">Entomos</LinkExternal>
+        file format specification. Restrictions are applied to the XML data to assist with ensuring that
+        <Term type="package">montarre</Term>
+        packages are
         <LinkExternal target="https://reproducible-builds.org/">reproducible</LinkExternal>.
       </Paragraph>
     </Subsection>
-    <Subsection title="ZIP">
+    <Subsection title="Entomos">
       <Paragraph>
-        <Term type="package">montarre</Term> packages are ZIP files with the file extension
-        <Term type="constant">.mpk</Term>. The following restrictions are applied to the entries of
-        the ZIP file:
+        <Term type="package">montarre</Term>
+        packages are
+        <Term type="package">entomos</Term>
+        files with the file extension
+        <Term type="constant">.mpk</Term>.
       </Paragraph>
-      <FormalItem title="ZIP Entry Restrictions">
+      <Paragraph>
+        All <Term type="package">entomos</Term> files have the following structure:
+      </Paragraph>
+      <FormalItem title="Entomos Structure">
         <ListUnordered>
           <Item>
-            All entry names in the ZIP file must be valid
-            <Link target="38e9b475-8259-447f-a6e4-e72146d45fc0">file names</Link>.
+            Files start with a 64-bit format-specific <Term type="term">tag</Term> for easy identification.
           </Item>
           <Item>
-            All entry names in the ZIP file must be transformed to uppercase in a neutral locale.
+            The file <Term type="term">tag</Term> is followed by a 32-bit <Term type="term">major</Term>
+            and <Term type="term">minor</Term> version.
           </Item>
           <Item>
-            All entries must be written with creation, modification, and last access dates
-            of <Term type="constant">2024-10-14T00:00:00Z</Term>.
+            The rest of the file is divided into a flat array of <Term type="term">sections</Term>.
           </Item>
           <Item>
-            All entries, except for the first entry, must be written such that their names appear in ascending
-            alphabetical order.
+            Each <Term type="term">section</Term> is aligned to a 16-byte boundary.
           </Item>
           <Item>
-            The first entry in the file must be
-            <Term type="constant">META-INF/MONTARRE/PACKAGE.XML</Term>.
+            Each <Term type="term">section</Term> starts with a 64-bit format-specific <Term type="term">tag</Term>.
+          </Item>
+          <Item>
+            The section <Term type="term">tag</Term> is followed by a 64-bit <Term type="term">size</Term> value,
+            specifying the length of the data within the section.
+          </Item>
+          <Item>
+            The section then contains <Term type="expression">size</Term> bytes of data, followed by up to 15 bytes of
+            padding in order to ensure that any data that follows is aligned to a 16-byte boundary.
+          </Item>
+          <Item>
+            The file ends with an <Term type="term">end</Term> section. This is a normal section where the section has a
+            format-specific end tag, and a size of 0.
+          </Item>
+          <Item>
+            Readers are required to stop reading at the end section. Trailing data is ignored.
+          </Item>
+          <Item>
+            Readers are required to fail if there is no end section, and treat the file as corrupted and truncated.
+          </Item>
+          <Item>
+            All values are in <Term type="term">big-endian</Term> order. The data within sections can be in any byte
+            order as required by specific formats.
           </Item>
         </ListUnordered>
       </FormalItem>
       <Paragraph>
-        The package declaration is serialized to <Link target="e518631a-c925-4623-be95-b0f1aaca2ef9">XML</Link>
-        and stored in the <Term type="constant">META-INF/MONTARRE/PACKAGE.XML</Term> entry in the ZIP file.
+        The file format is <Term type="term">versioned</Term> according to the following rules:
+      </Paragraph>
+      <FormalItem title="Versioning">
+        <ListUnordered>
+          <Item>
+            The specification is versioned via a restricted subset of the Semantic Versioning specification. The
+            specification has a major and minor version number, with major version increments denoting incompatible
+            changes, and minor version increments denoting new functionality. There is no patch version number. A
+            version of the specification with major version <Term type="expression">m</Term> and minor version
+            <Term type="expression">n</Term>
+            is denoted as specification version <Term type="expression">(m, n)</Term>.
+          </Item>
+          <Item>Assuming a version of the specification <Term type="expression">m</Term>, an update to the specification
+            that yields version <Term type="expression">n</Term> such that <Term type="expression">n > m</Term> is
+            considered to be forwards compatible if a parser that supports format version
+            <Term type="expression">m</Term>
+            can read files that were written using format version <Term type="expression">n</Term>.
+          </Item>
+          <Item>Assuming a version of the specification <Term type="expression">m</Term>, an update to the specification
+            that yields version <Term type="expression">n</Term> such that <Term type="expression">n > m</Term> is
+            considered to be backwards compatible if a parser that supports format version
+            <Term type="expression">n</Term>
+            can read files that were written using format version <Term type="expression">m</Term>.
+          </Item>
+          <Item>
+            The specification is designed such that a correctly-written parser implementation that supports a major
+            version <Term type="expression">m</Term> is able to support the set of versions
+            <Term type="expression">∀n. (m, n)</Term>. This implies full forwards and backwards compatibility for
+            parsers when the major version is unchanged.
+          </Item>
+          <Item>
+            Changes that would cause a parser supporting an older version of the specification to fail to read a file
+            written according to a newer version of the specification MUST imply an increment in the major version of
+            the specification.
+          </Item>
+          <Item>
+            Changes that would cause a parser supporting a newer version of the specification to fail to read a file
+            written according to an older version of the specification MUST imply an increment in the major version of
+            the specification.
+          </Item>
+        </ListUnordered>
+      </FormalItem>
+      <Paragraph>
+        Every <Term type="package">montarre</Term> package file starts with the given fixed-size header:
+      </Paragraph>
+      <FormalItem title="File Header">
+        <Verbatim>
+          <xi:include href="1000.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+      <Paragraph>
+        This version of the specification defines major version <Term type="constant">1</Term>,
+        minor version <Term type="constant">0</Term>.
       </Paragraph>
       <Paragraph>
-        An example valid ZIP listing of a package is as follows:
+        The package declaration is serialized to
+        <Link target="e518631a-c925-4623-be95-b0f1aaca2ef9">XML</Link>
+        and stored in the <Term type="term">manifest section</Term> of the file. There must be exactly one
+        <Term type="term">manifest section</Term>, and it must be the first section in the file.
       </Paragraph>
-      <FormalItem title="Example ZIP Listing">
-        <Verbatim><xi:include href="package-listing.txt" parse="text"/></Verbatim>
+      <FormalItem title="Manifest Section">
+        <Verbatim>
+          <xi:include href="1002.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+      <Paragraph>
+        Each file listed in the manifest is stored in its own
+        <Term type="term">file section</Term>. A <Term type="term">file</Term> section starts with the name of the file
+        and is followed directly by the file data.
+      </Paragraph>
+      <FormalItem title="File Section">
+        <Verbatim>
+          <xi:include href="1003.txt"
+                      parse="text"/>
+        </Verbatim>
+      </FormalItem>
+      <Paragraph>
+        File sections are subject to the following restrictions and observations:
+      </Paragraph>
+      <FormalItem title="File Section Restrictions / Observations">
+        <ListUnordered>
+          <Item>
+            File sections must be serialized such that the names in each section appear in ascending alphabetical order.
+            We specify a serialization order to ensure that implementations produce reproducible files.
+          </Item>
+          <Item>
+            For every file section, there must be a corresponding item declared in the
+            <Link target="2ca47572-5e33-43ba-94ba-1902b3c6ba2f">manifest</Link>. It is not permitted to place "extra"
+            file sections in the file.
+          </Item>
+          <Item>
+            For every item declared in the <Link target="2ca47572-5e33-43ba-94ba-1902b3c6ba2f">manifest</Link>, there
+            must be a corresponding file section. It is not permitted to omit file sections.
+          </Item>
+          <Item>
+            The size of the data in a file section is equal to the declared size of the corresponding item in the
+            <Link target="2ca47572-5e33-43ba-94ba-1902b3c6ba2f">manifest</Link>, minus the length of the UTF-8 encoded
+            file name, and four octets to store the length of the name, and any padding required to align the following
+            section.
+          </Item>
+        </ListUnordered>
+      </FormalItem>
+      <Paragraph>
+        Every <Term type="package">montarre</Term> package file ends with an <Term type="term">end section</Term>.
+      </Paragraph>
+      <FormalItem title="End Section">
+        <Verbatim>
+          <xi:include href="1001.txt"
+                      parse="text"/>
+        </Verbatim>
       </FormalItem>
     </Subsection>
-    <Subsection title="XML" id="e518631a-c925-4623-be95-b0f1aaca2ef9">
+    <Subsection title="XML"
+                id="e518631a-c925-4623-be95-b0f1aaca2ef9">
       <Paragraph>
         Package declarations must be serialized according to the included
-        <Link target="349a0e9d-7378-44b8-ae4e-6f39c0d90fc2">schema</Link> with the following restrictions:
+        <Link target="349a0e9d-7378-44b8-ae4e-6f39c0d90fc2">schema</Link>
+        with the following restrictions:
       </Paragraph>
-      <FormalItem title="ZIP Entry Restrictions">
+      <FormalItem title="XML Restrictions">
         <ListUnordered>
           <Item>
             XML must be serialized indented to four spaces.
@@ -1360,7 +1546,8 @@
         </ListUnordered>
       </FormalItem>
     </Subsection>
-    <Subsection title="XML Schema" id="349a0e9d-7378-44b8-ae4e-6f39c0d90fc2">
+    <Subsection title="XML Schema"
+                id="349a0e9d-7378-44b8-ae4e-6f39c0d90fc2">
       <Paragraph>
         The package declaration schema is as follows:
       </Paragraph>

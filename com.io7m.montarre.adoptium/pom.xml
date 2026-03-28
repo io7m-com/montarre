@@ -9,7 +9,7 @@
   <parent>
     <artifactId>com.io7m.montarre</artifactId>
     <groupId>com.io7m.montarre</groupId>
-    <version>0.0.6</version>
+    <version>1.0.0-beta0001</version>
   </parent>
 
   <artifactId>com.io7m.montarre.adoptium</artifactId>
@@ -30,11 +30,11 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
+      <groupId>tools.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
+      <groupId>tools.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
     </dependency>
     <dependency>

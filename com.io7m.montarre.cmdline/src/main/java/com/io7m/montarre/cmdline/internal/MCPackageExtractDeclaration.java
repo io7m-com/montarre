@@ -17,7 +17,7 @@
 
 package com.io7m.montarre.cmdline.internal;
 
-import com.io7m.montarre.api.MReservedNames;
+import com.io7m.montarre.io.MPackageReaders;
 import com.io7m.quarrel.core.QCommandContextType;
 import com.io7m.quarrel.core.QCommandMetadata;
 import com.io7m.quarrel.core.QCommandStatus;
@@ -26,11 +26,7 @@ import com.io7m.quarrel.core.QParameterNamed1;
 import com.io7m.quarrel.core.QParameterNamedType;
 import com.io7m.quarrel.core.QStringType;
 import com.io7m.quarrel.ext.logback.QLogback;
-import org.apache.commons.compress.archivers.zip.ZipFile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -42,9 +38,6 @@ import java.util.stream.Stream;
 
 public final class MCPackageExtractDeclaration implements QCommandType
 {
-  private static final Logger LOG =
-    LoggerFactory.getLogger(MCPackageExtractDeclaration.class);
-
   private static final QParameterNamed1<Path> INPUT_FILE =
     new QParameterNamed1<>(
       "--file",
@@ -81,33 +74,17 @@ public final class MCPackageExtractDeclaration implements QCommandType
   @Override
   public QCommandStatus onExecute(
     final QCommandContextType newContext)
+    throws Exception
   {
     QLogback.configure(newContext);
 
     final var inputFile =
       newContext.parameterValue(INPUT_FILE);
 
-    try (var zipFile = ZipFile.builder()
-      .setPath(inputFile)
-      .get()) {
+    final var readers =
+      new MPackageReaders();
 
-      final var entryName =
-        MReservedNames.montarrePackage().name();
-
-      final var entry = zipFile.getEntry(entryName);
-      if (entry == null) {
-        LOG.error("No {} entry in the given file.", entryName);
-        return QCommandStatus.FAILURE;
-      }
-
-      try (var stream = zipFile.getInputStream(entry)) {
-        stream.transferTo(System.out);
-      }
-    } catch (IOException e) {
-      LOG.error("I/O error: ", e);
-      return QCommandStatus.FAILURE;
-    }
-
+    System.out.write(readers.extractManifest(inputFile));
     return QCommandStatus.SUCCESS;
   }
 

@@ -70,7 +70,7 @@ public final class MNPackagerMSITest
     this.inputMpk =
       directory.resolve("input.mpk");
     this.resource(
-      "com.io7m.montarre.distribution-0.0.1-SNAPSHOT.mpk",
+      "com.io7m.montarre.distribution-0.0.7-SNAPSHOT.mpk",
       this.inputMpk
     );
 
@@ -162,9 +162,9 @@ public final class MNPackagerMSITest
       )
     );
     assertTrue(
-      name.contains("0.0.1-SNAPSHOT"),
+      name.contains("0.0.7-SNAPSHOT"),
       "%s must contain %s".formatted(
-        name, "0.0.1-SNAPSHOT"
+        name, "0.0.7-SNAPSHOT"
       )
     );
     assertTrue(

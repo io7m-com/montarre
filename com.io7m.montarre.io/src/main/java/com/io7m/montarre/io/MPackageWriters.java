@@ -31,7 +31,6 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -92,9 +91,6 @@ public final class MPackageWriters implements MPackageWriterFactoryType
       final var writer =
         new MPackageWriter(
           this.serializers,
-          new HashMap<>(),
-          stream,
-          buffered,
           file,
           fileTmp,
           packageV

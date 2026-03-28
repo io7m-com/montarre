@@ -262,6 +262,45 @@
     </xsd:complexType>
   </xsd:element>
 
+  <xsd:simpleType name="RuntimeImageKindType">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        The type of JDK required by the application. Some applications may require a full JDK image with jdk.* modules,
+        whereas other applications can work with a reduced JRE image.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="JDK"/>
+      <xsd:enumeration value="JRE"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:element name="ExtraOption">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        An extra option passed to the Java runtime.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="Value"
+                     type="xsd:string"
+                     use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="EnableNativeAccess">
+    <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+        A Java module name.
+      </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="Module"
+                     type="xsd:string"
+                     use="required"/>
+    </xsd:complexType>
+  </xsd:element>
+
   <xsd:element name="JavaInfo">
     <xsd:annotation>
       <xsd:documentation xml:lang="en">
@@ -269,12 +308,28 @@
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
+      <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+        <xsd:choice>
+          <xsd:element ref="mp:EnableNativeAccess"/>
+          <xsd:element ref="mp:ExtraOption"/>
+        </xsd:choice>
+      </xsd:sequence>
+
       <xsd:attribute name="RequiredJDKVersion"
                      type="xsd:unsignedLong"
                      use="required">
         <xsd:annotation>
           <xsd:documentation xml:lang="en">
             The required JDK version.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="RuntimeImageKind"
+                     type="mp:RuntimeImageKindType"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The required JDK runtime kind.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
@@ -541,6 +596,15 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
+      <xsd:attribute name="Size"
+                     type="xsd:unsignedLong"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The size of the file in octets.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="HashAlgorithm"
                      type="mp:HashAlgorithmNameType"
                      use="required">
@@ -597,6 +661,15 @@
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>
+      <xsd:attribute name="Size"
+                     type="xsd:unsignedLong"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The size of the file in octets.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
       <xsd:attribute name="HashAlgorithm"
                      type="mp:HashAlgorithmNameType"
                      use="required">
@@ -643,7 +716,9 @@
 
     <xsd:complexType>
       <xsd:sequence>
-        <xsd:element ref="mp:Caption" minOccurs="0" maxOccurs="1"/>
+        <xsd:element ref="mp:Caption"
+                     minOccurs="0"
+                     maxOccurs="1"/>
       </xsd:sequence>
 
       <xsd:attribute name="File"
@@ -652,6 +727,15 @@
         <xsd:annotation>
           <xsd:documentation xml:lang="en">
             The file name within the package.
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="Size"
+                     type="xsd:unsignedLong"
+                     use="required">
+        <xsd:annotation>
+          <xsd:documentation xml:lang="en">
+            The size of the file in octets.
           </xsd:documentation>
         </xsd:annotation>
       </xsd:attribute>

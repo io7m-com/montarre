@@ -20,6 +20,9 @@ package com.io7m.montarre.api;
 import com.io7m.immutables.styles.ImmutablesStyleType;
 import org.immutables.value.Value;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * Information involving the Java runtime.
  */
@@ -42,4 +45,28 @@ public interface MJavaInfoType
    */
 
   String mainModule();
+
+  /**
+   * @return Extra options passed to the runtime
+   */
+
+  List<String> extraOptions();
+
+  /**
+   * @return The set of modules permitted to use native access
+   *
+   * @see "https://docs.oracle.com/en/java/javase/25/core/restricted-methods.html"
+   */
+
+  Set<String> nativeAccessModules();
+
+  /**
+   * @return The required runtime image kind
+   */
+
+  @Value.Default
+  default MRuntimeImageKind runtimeImageKind()
+  {
+    return MRuntimeImageKind.JRE;
+  }
 }

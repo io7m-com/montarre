@@ -43,6 +43,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.spi.ToolProvider;
 
+import static com.io7m.montarre.api.io.MPackageReaderType.PlatformDependentModulePolicy.IGNORE;
+import static com.io7m.montarre.api.io.MPackageReaderType.PlatformDependentModulePolicy.MERGE;
+
 /**
  * A native packager that produces jpackage "app-images".
  */
@@ -82,6 +85,32 @@ public final class MNPackagerAppImage
     arguments.add("--verbose");
     arguments.add("--type");
     arguments.add("app-image");
+
+    /*
+     * We make the assumption that the world is closed and that all included
+     * modules _MUST_ be loaded. This is useful for applications that use,
+     * for example, LWJGL. LWJGL includes jar files containing native modules
+     * that no module depends on directly but nevertheless must be placed
+     * into the module graph for native library unpacking to work.
+     */
+
+    arguments.add("--java-options");
+    arguments.add("--add-modules=ALL-MODULE-PATH");
+
+    for (final var extraOption : metadata.javaInfo().extraOptions()) {
+      arguments.add("--java-options");
+      arguments.add(extraOption);
+    }
+
+    final var nativeAccessModules = metadata.javaInfo().nativeAccessModules();
+    if (!nativeAccessModules.isEmpty()) {
+      arguments.add("--java-options");
+      arguments.add(
+        "--enable-native-access=%s".formatted(
+          String.join(",", nativeAccessModules))
+      );
+    }
+
     arguments.add("--runtime-image");
     arguments.add(jdkPath.toString());
     arguments.add("--name");
@@ -109,6 +138,8 @@ public final class MNPackagerAppImage
     }
 
     LOG.info("Executing jpackage tool.");
+    LOG.trace("jpackage: {}", arguments);
+
     final var r =
       tool.run(System.out, System.err, arguments.toArray(new String[0]));
 
@@ -179,7 +210,15 @@ public final class MNPackagerAppImage
           .get();
 
       LOG.info("Unpacking application to {}.", appDirectory);
-      packageV.unpackInto(appDirectory);
+      packageV.unpackInto(
+        appDirectory,
+        module -> {
+          if (workspace.matchesModule(module)) {
+            return MERGE;
+          } else {
+            return IGNORE;
+          }
+        });
 
       final var iconFile =
         this.unpackIcon(workspace, packageV, directory);
@@ -250,7 +289,7 @@ public final class MNPackagerAppImage
 
     return MNArchives.packTar(
       this.appImageRoot,
-      outDirectory.resolve(baseName + ".tgz"),
+      outDirectory.resolve(baseName + ".txz"),
       entry -> entry.startsWith("bin/"),
       shortName
     );

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 Mark Raynsford <code@io7m.com> https://www.io7m.com
+ * Copyright © 2026 Mark Raynsford <code@io7m.com> https://www.io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,27 +14,27 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-
-package com.io7m.montarre.adoptium;
+package com.io7m.montarre.api;
 
 import java.util.Objects;
 
 /**
- * Image type names in the Adoptium API.
+ * Runtime image types.
  */
 
-public enum METImageKind
+public enum MRuntimeImageKind
 {
   /**
-   * jdk
+   * A full JDK with all jdk.* modules.
    */
+
   JDK("jdk"),
 
   /**
-   * jre
+   * A reduced JRE without jdk.* modules.
    */
-  JRE("jre");
 
+  JRE("jre");
 
   private String adoptiumName;
 
@@ -47,7 +47,7 @@ public enum METImageKind
     return this.adoptiumName;
   }
 
-  METImageKind(
+  MRuntimeImageKind(
     final String name)
   {
     this.adoptiumName = Objects.requireNonNull(name, "name");

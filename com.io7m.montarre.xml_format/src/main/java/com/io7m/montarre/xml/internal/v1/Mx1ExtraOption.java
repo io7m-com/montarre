@@ -1,5 +1,5 @@
 /*
- * Copyright © 2024 Mark Raynsford <code@io7m.com> https://www.io7m.com
+ * Copyright © 2026 Mark Raynsford <code@io7m.com> https://www.io7m.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,22 +14,20 @@
  * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-
 package com.io7m.montarre.xml.internal.v1;
 
 import com.io7m.blackthorne.core.BTElementHandlerType;
 import com.io7m.blackthorne.core.BTElementParsingContextType;
-import com.io7m.montarre.api.MJavaInfo;
 import org.xml.sax.Attributes;
 
 /**
  * A parser.
  */
 
-public final class Mx1JavaInfo
-  implements BTElementHandlerType<Object, MJavaInfo>
+public final class Mx1ExtraOption
+  implements BTElementHandlerType<Object, Mx1ExtraOption.ExtraOption>
 {
-  private MJavaInfo info;
+  private String text;
 
   /**
    * A parser.
@@ -37,8 +35,21 @@ public final class Mx1JavaInfo
    * @param context The context
    */
 
-  public Mx1JavaInfo(
+  public Mx1ExtraOption(
     final BTElementParsingContextType context)
+  {
+
+  }
+
+  /**
+   * The option.
+   * @param value The value
+   */
+
+
+
+  public record ExtraOption(
+    String value)
   {
 
   }
@@ -47,20 +58,16 @@ public final class Mx1JavaInfo
   public void onElementStart(
     final BTElementParsingContextType context,
     final Attributes attributes)
+    throws Exception
   {
-    this.info =
-      MJavaInfo.builder()
-        .setMainModule(
-          attributes.getValue("MainModule"))
-        .setRequiredJDKVersion(
-          Long.parseUnsignedLong(attributes.getValue("RequiredJDKVersion")))
-        .build();
+    this.text = attributes.getValue("Value");
   }
 
   @Override
-  public MJavaInfo onElementFinished(
+  public ExtraOption onElementFinished(
     final BTElementParsingContextType context)
+    throws Exception
   {
-    return this.info;
+    return new ExtraOption(this.text);
   }
 }

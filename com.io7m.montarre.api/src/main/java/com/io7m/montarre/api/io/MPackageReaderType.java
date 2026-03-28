@@ -20,9 +20,11 @@ package com.io7m.montarre.api.io;
 import com.io7m.montarre.api.MException;
 import com.io7m.montarre.api.MFileName;
 import com.io7m.montarre.api.MPackageDeclaration;
+import com.io7m.montarre.api.MPlatformDependentModule;
 
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.function.Function;
 
 /**
  * A package being read.
@@ -31,6 +33,34 @@ import java.nio.file.Path;
 public interface MPackageReaderType
   extends AutoCloseable
 {
+  /**
+   * The policy for platform-dependent modules.
+   */
+
+  enum PlatformDependentModulePolicy
+  {
+
+    /**
+     * Ignore the module; do not unpack it at all.
+     */
+
+    IGNORE,
+
+    /**
+     * Include the module and merge it into the same directory as the
+     * platform-independent modules.
+     */
+
+    MERGE,
+
+    /**
+     * Include the module and leave it in a platform-dependent module
+     * directory.
+     */
+
+    INCLUDE
+  }
+
   /**
    * @return The package declaration
    */
@@ -45,6 +75,8 @@ public interface MPackageReaderType
    * @param file The file
    *
    * @return A stream for the given file
+   *
+   * @throws MException On errors
    */
 
   InputStream readFile(
@@ -72,7 +104,27 @@ public interface MPackageReaderType
    * @throws MException On errors
    */
 
+  default void unpackInto(
+    final Path output)
+    throws MException
+  {
+    this.unpackInto(
+      output,
+      m -> PlatformDependentModulePolicy.INCLUDE
+    );
+  }
+
+  /**
+   * Unpack all files into the given output directory.
+   *
+   * @param filterPlatform The filter for platform-dependent modules
+   * @param output         The output directory
+   *
+   * @throws MException On errors
+   */
+
   void unpackInto(
-    Path output)
+    Path output,
+    Function<MPlatformDependentModule, PlatformDependentModulePolicy> filterPlatform)
     throws MException;
 }
