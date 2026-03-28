@@ -17,14 +17,12 @@
 
   <Subsection title="Packages">
     <Paragraph>
-      In a similar manner to how a
-      <LinkExternal target="https://en.wikipedia.org/wiki/JAR_(file_format)">jar</LinkExternal>
-      file is simply a
-      <LinkExternal target="https://en.wikipedia.org/wiki/Zip_(file_format)">zip</LinkExternal>
-      file containing the Java bytecode of an application along with some metadata, a
+      A
       <Term type="package">montarre</Term>
       <Term type="term">package</Term>
-      is simply a zip file containing the jar files that comprise an application along with detailed metadata that
+      is simply an
+      <LinkExternal target="https://www.io7m.com/software/entomos">entomos</LinkExternal>
+      file containing the jar files that comprise an application along with detailed metadata that
       provides enough information to allow for easily transforming that package to any number of
       <Term type="term">platform-specific</Term>
       package formats. A
@@ -77,9 +75,8 @@
       </ListUnordered>
     </FormalItem>
     <Paragraph>
-      In a <Term type="package">montarre</Term> package, the package declaration is always stored in the
-      zip file entry named <Term type="file">META-INF/MONTARRE/PACKAGE.XML</Term>, which is also expected to be
-      the first entry in the file. As a concrete example, this is the package declaration taken from the
+      In a <Term type="package">montarre</Term> package, the package declaration is always stored in a special
+      section at the start of the file. As a concrete example, this is the package declaration taken from the
       <Term type="package">montarre</Term> package itself:
     </Paragraph>
     <FormalItem title="Montarre Package Declaration">
