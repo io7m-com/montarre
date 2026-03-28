@@ -172,11 +172,13 @@ public final class MPackageParsersTest
         MManifest.builder()
           .addItems(new MModule(
             new MFileName("lib/file.jar"),
+            0L,
             hashOf("lib/file.jar"))
           )
           .addItems(new MPlatformDependentModule(
             new MFileName("lib/x64/windows/file.jar"),
             hashOf("lib/x64/windows/file.jar"),
+            0L,
             new MOperatingSystemName("windows"),
             new MArchitectureName("x64"))
           )
@@ -184,6 +186,7 @@ public final class MPackageParsersTest
             new MResource(
               new MFileName("meta/bom.xml"),
               hashOf("meta/bom.xml"),
+              0L,
               MResourceRole.BOM,
               Optional.of(MCaptions.ofTranslations(
                 Map.entry(new MLanguageCode("en"), "A bill of materials."),

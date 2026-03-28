@@ -20,7 +20,6 @@ package com.io7m.montarre.api.io;
 import com.io7m.montarre.api.MException;
 
 import java.nio.file.Path;
-import java.time.Instant;
 
 /**
  * A provider of readers for packages.
@@ -28,13 +27,6 @@ import java.time.Instant;
 
 public interface MPackageReaderFactoryType
 {
-  /**
-   * The specification-mandated created/modified/accessed time in package entries.
-   */
-
-  Instant SOURCE_EPOCH =
-    Instant.parse("2024-10-14T00:00:00+00:00");
-
   /**
    * Open a package for reading.
    *
@@ -47,5 +39,20 @@ public interface MPackageReaderFactoryType
 
   MPackageReaderType open(
     Path file)
+    throws MException;
+
+  /**
+   * Perform the minimum steps required to extract the bytes of the manifest
+   * from the given file. This method is provided to assist with extracting
+   * data from damaged files and performs no validation.
+   *
+   * @param file The file
+   *
+   * @return The manifest bytes
+   *
+   * @throws MException On errors
+   */
+
+  byte[] extractManifest(Path file)
     throws MException;
 }

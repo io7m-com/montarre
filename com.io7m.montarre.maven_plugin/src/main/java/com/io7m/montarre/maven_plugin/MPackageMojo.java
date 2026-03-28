@@ -761,13 +761,16 @@ public final class MPackageMojo extends AbstractMojo
     for (final var resource : this.resources) {
       final var entryName =
         "meta/%s".formatted(resource.getEntryName());
+      final Path path =
+        Paths.get(resource.getFile());
       final var sha256 =
-        hashOf(Paths.get(resource.getFile()).toFile());
+        hashOf(path.toFile());
 
       manifestBuilder.addItems(
         new MResource(
           new MFileName(entryName),
           sha256,
+          Files.size(path),
           resource.getRole(),
           captionOf(resource.getCaption())
         )
@@ -807,6 +810,7 @@ public final class MPackageMojo extends AbstractMojo
           new MPlatformDependentModule(
             new MFileName(entryName),
             sha256,
+            Files.size(file.toPath()),
             platform.operatingSystem(),
             platform.architecture()
           )
@@ -824,7 +828,13 @@ public final class MPackageMojo extends AbstractMojo
       final var fileName = file.getName();
       final var entryName = "lib/" + fileName;
       final var sha256 = hashOf(file);
-      manifestBuilder.addItems(new MModule(new MFileName(entryName), sha256));
+      manifestBuilder.addItems(
+        new MModule(
+          new MFileName(entryName),
+          Files.size(file.toPath()),
+          sha256
+        )
+      );
     }
   }
 

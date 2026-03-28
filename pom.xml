@@ -218,6 +218,28 @@
         <artifactId>com.io7m.jaffirm.core</artifactId>
         <version>${com.io7m.jaffirm.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.io7m.jbssio</groupId>
+        <artifactId>com.io7m.jbssio.bom</artifactId>
+        <version>3.0.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.entomos</groupId>
+        <artifactId>com.io7m.entomos.core</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.io7m.wendover</groupId>
+        <artifactId>com.io7m.wendover.core</artifactId>
+        <version>1.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jul-to-slf4j</artifactId>
+        <version>2.0.17</version>
+      </dependency>
 
       <!-- Temurin -->
       <dependency>

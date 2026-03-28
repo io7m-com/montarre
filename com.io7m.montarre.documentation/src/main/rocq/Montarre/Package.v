@@ -1,10 +1,30 @@
-Require Import Coq.Unicode.Utf8_core.
-Require Import Coq.Strings.String.
-Require Import Coq.Strings.Ascii.
-Require Import Coq.FSets.FMapInterface.
-Require Import Coq.FSets.FMapWeakList.
-Require Import Coq.FSets.FMapFacts.
-Require Import Coq.Structures.Equalities.
+(*
+ * Copyright © 2026 Mark Raynsford <code@io7m.com> https://www.io7m.com
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+ * SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR
+ * IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *)
+
+From Stdlib Require Import Strings.String.
+From Stdlib Require Import Strings.Ascii.
+From Stdlib Require Import FSets.FMapInterface.
+From Stdlib Require Import FSets.FMapWeakList.
+From Stdlib Require Import FSets.FMapFacts.
+From Stdlib Require Import Structures.Equalities.
+
+Require Import com.io7m.entomos.Binary.
+
+Import ListNotations.
+Local Open Scope string_scope.
 
 (** A mini decidable type module to instantiate maps. *)
 Module StringMiniDec : MiniDecidableType
@@ -253,6 +273,11 @@ Inductive FileNameT :=
     matches s (regex "([\p{L}\p{N}_\-.+]+)(/[\p{L}\p{N}_\-.+]+)*")
       -> FileNameT.
 
+Definition fileNameString (i : FileNameT) : string :=
+  match i with
+  | FileName s _ => s
+  end.
+
 (** A proposition that states that two file names are the same if their
     uppercase transformations are the same. *)
 Definition fileNamesSame (s t : FileNameT) :=
@@ -279,14 +304,26 @@ Inductive ResourceRoleT :=
 Definition CaptionT :=
   TranslatedTextT.
 
-Inductive ModuleT :=
-  Module : FileNameT -> HashT -> ModuleT.
+Inductive ModuleT := Module {
+  mFile : FileNameT;
+  mHash : HashT;
+  mSize : nat
+}.
 
-Inductive PlatformModuleT :=
-  PlatformModule : FileNameT -> HashT -> PlatformT -> PlatformModuleT.
+Inductive PlatformModuleT := PlatformModule {
+  pmFile     : FileNameT;
+  pmHash     : HashT;
+  pmPlatform : PlatformT;
+  pmSize     : nat
+}.
 
-Inductive ResourceT :=
-  Resource : FileNameT -> HashT -> ResourceRoleT -> CaptionT -> ResourceT.
+Inductive ResourceT := Resource {
+  rFile    : FileNameT;
+  rHash    : HashT;
+  rRole    : ResourceRoleT;
+  rCaption : CaptionT;
+  rSize    : nat
+}.
 
 Inductive ItemT :=
   | ItemModule         : ModuleT         -> ItemT
@@ -296,16 +333,23 @@ Inductive ItemT :=
 
 Definition itemFileName (i : ItemT) : FileNameT :=
   match i with
-  | ItemModule         (Module f _)           => f
-  | ItemPlatformModule (PlatformModule f _ _) => f
-  | ItemResource       (Resource f _ _ _)     => f
+  | ItemModule         x => mFile x
+  | ItemPlatformModule x => pmFile x
+  | ItemResource       x => rFile x
   end.
 
 Definition itemHash (i : ItemT) : HashT :=
   match i with
-  | ItemModule         (Module _ h)           => h
-  | ItemPlatformModule (PlatformModule _ h _) => h
-  | ItemResource       (Resource _ h _ _)     => h
+  | ItemModule         x => mHash x
+  | ItemPlatformModule x => pmHash x
+  | ItemResource       x => rHash x
+  end.
+
+Definition itemSize (i : ItemT) : nat :=
+  match i with
+  | ItemModule         x => mSize x
+  | ItemPlatformModule x => pmSize x
+  | ItemResource       x => rSize x
   end.
 
 Inductive ManifestT := Manifest {
@@ -320,4 +364,45 @@ Definition manifesItemsFilenamesUnique :=
                (In i1 (manifestItems m))
             /\ (i0 <> i1)
             /\ (fileNamesSame (itemFileName i0) (itemFileName i1))).
+
+(** A function that produces an XML serialization of the given manifest. *)
+Parameter xmlSerializationOf : ManifestT -> string.
+
+(** The file header. *)
+Definition binaryExpFileHeader : binaryExp :=
+  BiRecord [
+    ("id",           u64 0x894D54500D0A1A0A);
+    ("versionMajor", u32 1);
+    ("versionMinor", u32 0)
+  ].
+
+(** The MTP_END! section. *)
+Definition binaryEndSection : binaryExp :=
+  BiRecord [
+    ("id",   u64 0x4D54505F454E4421);
+    ("size", u64 0)
+  ].
+
+(** The MTP_MANI section. *)
+Definition binaryManifestSection (m : ManifestT) : binaryExp := 
+  let text := utf8 (xmlSerializationOf m) in
+    BiRecord [
+      ("id",   u64 0x4D54505F4D414E49);
+      ("size", u64 (binarySize text));
+      ("text", text)
+    ].
+
+(** The MTP_FILE section. *)
+Definition binaryFileSection (i : ItemT) : binaryExp := 
+  let nameText  := utf8 (uppercaseOf (fileNameString (itemFileName i))) in
+  let nameSize  := binarySize nameText in
+  let fileSize  := itemSize i in
+  let totalSize := 4 + nameSize + fileSize in
+    BiRecord [
+      ("id",         u64 0x4D54505F46494C45);
+      ("size",       u64 totalSize);
+      ("nameLength", u32 nameSize);
+      ("name",       nameText);
+      ("data",       BiReserve fileSize)
+    ].
 

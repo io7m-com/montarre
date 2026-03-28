@@ -18,6 +18,7 @@
 package com.io7m.montarre.api;
 
 import com.io7m.seltzer.api.SStructuredErrorExceptionType;
+import com.io7m.seltzer.api.SStructuredErrorType;
 
 import java.util.Map;
 import java.util.Objects;
@@ -219,6 +220,39 @@ public class MException
     final Map<String, String> inAttributes)
   {
     this(message, inErrorCode, inAttributes, Optional.empty());
+  }
+
+  /**
+   * Wrap an exception.
+   *
+   * @param e The exception
+   *
+   * @return The wrapped exception
+   */
+
+  public static MException wrap(
+    final Throwable e)
+  {
+    return switch (e) {
+      case final MException x -> x;
+      case final SStructuredErrorType<?> x -> {
+        yield new MException(
+          x.message(),
+          e,
+          x.errorCode().toString(),
+          x.attributes(),
+          x.remediatingAction()
+        );
+      }
+      default -> {
+        yield new MException(
+          Objects.requireNonNullElse(e.getMessage(), e.getClass().getName()),
+          "error-exception",
+          Map.of(),
+          Optional.empty()
+        );
+      }
+    };
   }
 
   @Override

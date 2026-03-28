@@ -23,11 +23,13 @@ import java.util.Objects;
  * A platform independent module item.
  *
  * @param file The file
+ * @param size The file size in octets
  * @param hash The hash
  */
 
 public record MModule(
   MFileName file,
+  long size,
   MHash hash)
   implements MManifestItemType
 {
@@ -35,6 +37,7 @@ public record MModule(
    * A platform independent module item.
    *
    * @param file The file
+   * @param size The file size in octets
    * @param hash The hash
    */
 

@@ -34,6 +34,7 @@ import com.io7m.quarrel.core.QCommandMetadata;
 import com.io7m.quarrel.core.QStringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.net.URI;
 import java.util.List;
@@ -161,6 +162,7 @@ public final class MMain implements Runnable
   public static int mainExitless(
     final String[] args)
   {
+    SLF4JBridgeHandler.install();
     final MMain cm = new MMain(args);
     cm.run();
     return cm.exitCode();

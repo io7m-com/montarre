@@ -117,15 +117,21 @@ public final class MHexDump
       }
     }
 
-    final var offsetText = Long.toUnsignedString(offset, 16);
+    final var offsetText =
+      Long.toUnsignedString(offset, 16);
+    final var offsetTextPad =
+      "%-8s".formatted(offsetText);
+    final var offsetText0 =
+      offsetTextPad.replace(' ', '0');
+
     final var lineBuffer = new StringBuilder();
-    lineBuffer.append("| ");
-    lineBuffer.append("0x%-8s".formatted(offsetText));
-    lineBuffer.append("| ");
+    lineBuffer.append("");
+    lineBuffer.append(offsetText0);
+    lineBuffer.append("  ");
     lineBuffer.append(hexBuffer);
-    lineBuffer.append("| ");
-    lineBuffer.append(charBuffer);
     lineBuffer.append(" |");
+    lineBuffer.append(charBuffer);
+    lineBuffer.append("|");
     return lineBuffer.toString();
   }
 }

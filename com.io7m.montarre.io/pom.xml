@@ -31,6 +31,22 @@
     </dependency>
 
     <dependency>
+      <groupId>com.io7m.jbssio</groupId>
+      <artifactId>com.io7m.jbssio.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jbssio</groupId>
+      <artifactId>com.io7m.jbssio.vanilla</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.entomos</groupId>
+      <artifactId>com.io7m.entomos.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.wendover</groupId>
+      <artifactId>com.io7m.wendover.core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.io7m.lanark</groupId>
       <artifactId>com.io7m.lanark.core</artifactId>
     </dependency>
@@ -41,14 +57,6 @@
     <dependency>
       <groupId>com.io7m.anethum</groupId>
       <artifactId>com.io7m.anethum.api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-compress</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

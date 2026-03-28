@@ -153,6 +153,7 @@ public final class MPackageDeclarationSerializer implements
   {
     this.output.writeStartElement(NS, "PlatformDependentModule");
     this.output.writeAttribute("File", i.file().name());
+    this.output.writeAttribute("Size", Long.toUnsignedString(i.size()));
     this.output.writeAttribute("HashAlgorithm", i.hash().algorithm().name());
     this.output.writeAttribute("HashValue", i.hash().value().value());
     this.output.writeAttribute("OperatingSystem", i.operatingSystem().name());
@@ -166,6 +167,7 @@ public final class MPackageDeclarationSerializer implements
   {
     this.output.writeStartElement(NS, "Module");
     this.output.writeAttribute("File", i.file().name());
+    this.output.writeAttribute("Size", Long.toUnsignedString(i.size()));
     this.output.writeAttribute("HashAlgorithm", i.hash().algorithm().name());
     this.output.writeAttribute("HashValue", i.hash().value().value());
     this.output.writeEndElement();
@@ -177,6 +179,7 @@ public final class MPackageDeclarationSerializer implements
   {
     this.output.writeStartElement(NS, "Resource");
     this.output.writeAttribute("File", i.file().name());
+    this.output.writeAttribute("Size", Long.toUnsignedString(i.size()));
     this.output.writeAttribute("HashAlgorithm", i.hash().algorithm().name());
     this.output.writeAttribute("HashValue", i.hash().value().value());
     this.output.writeAttribute("Role", i.role().name());
