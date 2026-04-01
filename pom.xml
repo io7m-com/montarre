@@ -66,7 +66,7 @@
     <io7m.maven-api.version>3.9.12</io7m.maven-api.version>
     <net.jqwik.version>1.9.3</net.jqwik.version>
     <org.immutables.value.version>2.12.1</org.immutables.value.version>
-    <org.junit.version>6.0.1</org.junit.version>
+    <org.junit.version>6.0.3</org.junit.version>
     <com.fasterxml.jackson.version>3.1.0</com.fasterxml.jackson.version>
   </properties>
 
