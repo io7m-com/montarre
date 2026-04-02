@@ -63,7 +63,7 @@
 
     <!-- Third-party dependencies. -->
     <io.helidon.version>4.4.0</io.helidon.version>
-    <io7m.maven-api.version>3.9.12</io7m.maven-api.version>
+    <io7m.maven-api.version>3.9.14</io7m.maven-api.version>
     <net.jqwik.version>1.9.3</net.jqwik.version>
     <org.immutables.value.version>2.12.1</org.immutables.value.version>
     <org.junit.version>6.0.3</org.junit.version>
